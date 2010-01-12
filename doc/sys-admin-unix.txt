@@ -1,0 +1,164 @@
+= Description
+A unified, cross-platform replacement for the Etc module that allows you to
+get information about users and groups.
+
+= Synopsis
+   require 'sys/admin'
+   include Sys
+
+   Admin.get_login           # -> 'djberge'
+   Admin.get_user('djberge') # -> Admin::User object
+   Admin.get_group(501)      # -> Admin::Group object
+
+   # Iterate over all users
+   Admin.users do |usr|
+      p usr
+   end
+
+   # Iterate over all groups
+   Admin.groups do |grp|
+      p grp
+   end
+
+= Constants
+
+= Class Methods
+== Sys::Admin
+Admin.get_group(name)
+Admin.get_group(gid)
+   Returns a Group object for the given name or gid. Raises an Admin::Error
+   if a group cannot be found for that name or GID.
+
+Admin.get_login
+   Returns the login for the process. If this is called from a process that
+   has no controlling terminal, then it resorts to returning the "LOGNAME"
+   or "USER" environment variable. If neither of those is defined, then nil
+   is returned.
+
+   Note that this method will probably return the real user login, but may
+   return the effective user login. YMMV depending on your platform and how
+   the program is run.
+
+Admin.get_user(name)
+Admin.get_user(uid)
+   Returns a User object for the given name or uid. Raises an Admin::Error if
+   a user cannot be found for that name or user ID.
+
+Admin.groups
+Admin.groups{ |grp| ... }
+   In block form, yields a Group object for each group on the system. In
+   non-block form, returns an Array of Group objects.
+
+Admin.users
+Admin.users{ |grp| ... }
+   In block form, yields a User object for each group on the system. In
+   non-block form, returns an Array of User objects.
+
+== Sys::Admin::Group
+Group.new
+Group.new{ |grp| ... }
+   Creates and returns a Group object, which encapsulates the information
+   typically found within an /etc/group entry, i.e. a struct group. If a
+   block is provided, yields the object back to the block.
+
+   At the moment this is only useful for MS Windows.
+
+== Sys::Admin::User
+User.new
+User.new{ |usr| ... }
+   Creates and returns a User object, which encapsulates the information
+   typically found within an /etc/passwd entry, i.e. a struct passwd. If a
+   block is provided, yields the object back to the block.
+
+   At the moment this is only useful for MS Windows.
+
+= Instance Methods
+== Sys::Admin::Group
+Group#gid
+   The group id.
+
+Group#members
+   An array of users that are members of the group.
+
+Group#name
+   The name of the group.
+
+Group#passwd
+   The group password, if any.
+
+== Sys::Admin::User
+User#age
+   Used in the past for password aging. Deprecated in favor of /etc/shadow.
+
+User#change
+   Next date a password change will be needed.
+
+User#class
+   The user's access class.
+
+User#comment
+   Another comment field. Rarely used.
+
+User#dir
+   The absolute pathname of the user's home directory.
+
+User#expire
+   Account expiration date.
+
+User#gecos
+   A comment field. Rarely used.
+
+User#gid
+   The user's primary group id.
+
+User#login_device
+   The name of the terminal device the user last logged on with.
+
+User#login_host
+   The hostname from which the user last logged in.
+
+User#login_time
+   The last time the user logged in.
+
+User#name
+   The user name associated with the account.
+
+User#passwd
+   The user's encrypted password. Deprecated in favor of /etc/shadow.
+
+User#quota
+   The user's alloted amount of disk space.
+
+User#shell
+   The user's login shell.
+
+User#uid
+   The user's user id.
+
+== Notes
+   Not all platforms support all of the User members. The only ones that are
+   supported on all platforms are name, uid, gid, dir and shell. The rest
+   will simply return nil if they aren't supported.
+   
+== Known Bugs
+   None that I am aware of. Please log any bugs you find on the project
+   website at http://www.rubyforge.org/projects/sysutils.
+
+== License
+   Artistic 2.0
+
+== Copyright
+   Copyright 2002-2009, Daniel J. Berger
+
+   All Rights Reserved. This module is free software. It may be used,
+   redistributed and/or modified under the same terms as Ruby itself.
+
+== Warranty
+   This library is provided "as is" and without any express or
+   implied warranties, including, without limitation, the implied
+   warranties of merchantability and fitness for a particular purpose.
+
+== Author
+   Daniel J. Berger
+   djberg96 at nospam at gmail dot com
+   imperator on IRC (Freenode)

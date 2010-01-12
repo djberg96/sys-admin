@@ -1,0 +1,336 @@
+= Description
+A unified, cross-platform replacement for the Etc module that allows you to
+get information about users and groups.
+
+= Synopsis
+   require 'sys/admin'
+   include Sys
+
+   Admin.get_login           # -> 'djberge'
+   Admin.get_user('djberge') # -> Admin::User object
+   Admin.get_group(501)      # -> Admin::Group object
+
+   # Iterate over all users
+   Admin.users do |usr|
+      p usr
+   end
+
+   # Iterate over all groups
+   Admin.groups do |grp|
+      p grp
+   end
+
+= Constants
+== Sys::Admin
+VERSION
+   The version of this library, returned as a String.
+
+== Sys::Admin::User
+TEMP_DUPLICATE
+   An account for users whose primary account is in another domain.
+
+NORMAL
+   Default account type that represents a typical user.
+
+INTERDOMAIN_TRUST
+   A permit to trust account for a domain that trusts other domains.
+      
+WORKSTATION_TRUST
+   An account for a Windows NT/2000 workstation or server that is a member
+   member of this domain.
+      
+SERVER_TRUST
+   A computer account for a backup domain controller that is a member of this
+   domain.
+
+= Class Methods
+== Sys::Admin
+Admin.add_global_group(group, domain)
+   Adds the global +group+ on +domain+.
+
+Admin.add_global_user(user, domain)
+   Adds the global +user+ on +domain+.
+
+Admin.add_local_group(group, host=localhost)
+   Adds the local +group+ on +host+, or the localhost if no host is specified.
+
+Admin.add_local_user(user, host=localhost)
+   Adds the local +user+ on +host+, or the localhost if no host is specified.
+
+Admin.config_global_group(user, option, domain)
+   Configures +group+ on +domain+ using +options+. There are too many options
+   to list here.
+
+   See http://tinyurl.com/cjkzl for a list of valid options.
+
+Admin.config_local_group(user, option, host=localhost)
+   Configures +group+ on +host+ using +options+. There are too many options
+   to list here.
+
+   See http://tinyurl.com/cjkzl for a list of valid options.
+
+Admin.config_global_user(user, option, domain)
+   Configures +user+ on +domain+ using +options+. There are too many options
+   to list here.
+
+   See http://tinyurl.com/3hjv9 for a list of valid options.
+
+Admin.config_local_user(user, options, host=localhost)
+   Configures the local +user+ on +host+ using +options+. If no host is
+   specified, the default is localhost.
+
+   See http://tinyurl.com/3hjv9 for a list of valid options.
+
+Admin.delete_global_group(group, domain)
+   Deletes the global +group+ from +domain+.
+
+Admin.delete_global_user(user, domain)
+   Deletes the global +user+ from +domain+.
+
+Admin.delete_local_group(group, host=localhost)
+   Deletes the local +group+ from +host+, or localhost if no host is specified.
+
+Admin.delete_local_user(user, host=localhost)
+   Deletes the local +user+ from +host+, or localhost if no host is specified.
+
+Admin.get_group(name, host=localhost, local=true)
+Admin.get_group(gid, host=localhost, local=true)
+   Returns a Group object for the given name or gid. Raises an Admin::Error
+   if a group cannot be found for that name or GID.
+
+   You may specify a host from which information is retrieved.
+   The default is the local machine. You can retrieve either a global or
+   local group, depending on the value of the +local+ argument.
+
+Admin.get_login
+   Returns the user name of the current login.
+
+Admin.get_user(name, host=localhost, local=true)
+Admin.get_user(uid, host=localhost, local=true)
+   Returns a User object for the given name or uid. Raises an Admin::Error if
+   a user cannot be found for that name or user ID.
+
+   You may specify a +host+ from which information is retrieved.  The
+   default is the local machine.  You may also specify whether to
+   retrieve a local or global account. The default is local.
+
+Admin.groups(host=localhost, local=true)
+Admin.groups(host=localhost, local=true){ |grp| ... }
+   In block form, yields a Group object for each group on the system. In
+   non-block form, returns an Array of Group objects.
+
+   You may specify a +host+ from which information is retrieved. The default
+   is the local machine. You can retrieve either a global or local groups,
+   depending on the value of the +local+ argument. The default is local.
+
+Admin.users(host=localhost, local=true)
+Admin.users(host=localhost, local=true){ |grp| ... }
+   In block form, yields a User object for each group on the system. In
+   non-block form, returns an Array of User objects.
+
+   You may specify a +host+ from which information is retrieved. The default
+   is the local machine. You can retrieve either a global or local users,
+   depending on the value of the +local+ argument. The default is local.
+
+== Sys::Admin::Group
+Group.new
+Group.new{ |grp| ... }
+   Creates and returns a Group object, which encapsulates the information
+   typically found within an /etc/group entry, i.e. a struct group. If a
+   block is provided, yields the object back to the block.
+
+== Sys::Admin::User
+User.new
+User.new{ |usr| ... }
+   Creates and returns a User object, which encapsulates the information
+   typically found within an /etc/passwd entry, i.e. a struct passwd. If a
+   block is provided, yields the object back to the block.
+
+= Instance Methods
+== Sys::Admin::Group
+Group#caption
+   Short description of the group.
+
+Group#caption=
+   Sets the caption for the group. Use only when creating a new group.
+
+Group#description
+   Description of the group.
+
+Group#description=
+   Sets the description of the group. Use only when creating a new group.
+
+Group#domain
+   The name of the Windows domain to which the group account belongs.
+
+Group#domain=
+   Sets the name of the Windows domain to which the group account belongs.
+   Use only when creating a new group.
+
+Group#install_date
+   The date the group was added.
+
+Group#gid
+   The group id.
+
+Group#local?
+   Returns whether or not the group is local (vs global).
+
+Group#local=
+   Sets whether or not the group is local (vs global).
+
+Group#name
+   The name of the Windows group account on the given domain.
+
+Group#name=
+   Sets the name of the Windows group account on the given domain.
+   Use only when creating a new group.
+
+Group#sid
+   The security identifer for the group.
+
+Group#sid=
+   Sets the security identifer for the group.
+
+Group#sid_type
+   The type of security identifier as a stringified value.
+
+Group#sid_type=
+   Sets the type of security identifier as a stringified value. Use only when
+   creating a new group.
+
+   See the +constants+ section for a list of valid sid types.
+
+Group#status
+   Current status for the group, such as "ok", "error", etc.
+
+Group#status=
+   Sets the status for the group.
+
+== Sys::Admin::User
+User#account_type
+   Returns the account type as a human readable string.
+
+User#account_type=
+   Sets the account type. See the +constants+ section for a list of valid
+   values you can set this to.
+
+User#caption
+   Domain and username of the account.
+
+User#caption=
+   Sets the domain and username of the account.
+      
+User#description
+   Description of the account.
+
+User#description=
+   Sets the description of the account.
+   
+User#dir
+   Returns the user's home directory.
+   
+User#dir=
+   Sets the user's home directory.
+
+User#disabled?
+   Returns whether or not the account is disabled.
+
+User#disabled=
+   Sets whether or not the account is disabled.
+      
+User#domain
+   Name of the Windows domain to which a user account belongs.
+
+User#domain=
+   Sets the name of the Windows domain to which a user account belongs.
+
+User#full_name
+   Full name of a local user.
+
+User#full_name=
+   Sets the full name of a local user.
+      
+User#install_date
+   Date the user account was created.
+
+User#local?
+   Returns whether or not the account is defined on the local computer.
+
+User#local=
+   Sets whether or not the account is defined on the local computer.
+
+User#lockout?
+   Returns whether or not the account is locked out of the OS.
+
+User#lockout=
+   Sets whether or not the account is locked out of the OS.
+      
+User#name
+   Name of the Windows user account on the domain that the User#domain
+   property specifies.
+
+User#name=
+   Sets the name of the Windows user account on the domain that the User#domain
+   property specifies.
+
+User#password
+   The user's password.
+
+User#password=
+   Sets the user's password.
+      
+User#password_changeable?
+   Returns whether or not the password for the account can be changed.
+
+User#password_changeable=
+   Sets whether or not the password for the account can be changed.
+
+User#password_expires?
+   Returns whether or not the password for the account expires.
+
+User#password_expires=
+   Sets whether or not the password for the account expires.
+
+User#password_required?
+   Returns whether or not a password is required for the account.
+
+User#password_required=
+   Sets whether or not a password is required for the account.
+
+User#sid
+   The user's security identifier.
+
+User#sid=
+   Sets the user's security identifier.
+      
+User#status
+   Current status for the user, such as "ok", "error", etc.
+
+== Notes
+   Not all platforms support all of the User members. The only ones that are
+   supported on all platforms are name, uid, gid, dir and shell. The rest
+   will simply return nil if they aren't supported.
+   
+== Known Bugs
+   None that I am aware of. Please log any bugs you find on the project
+   website at http://www.rubyforge.org/projects/sysutils.
+
+== License
+   Artistic 2.0
+
+== Copyright
+   Copyright 2002-2009, Daniel J. Berger
+
+   All Rights Reserved. This module is free software. It may be used,
+   redistributed and/or modified under the same terms as Ruby itself.
+
+== Warranty
+   This library is provided "as is" and without any express or
+   implied warranties, including, without limitation, the implied
+   warranties of merchantability and fitness for a particular purpose.
+
+== Author
+   Daniel J. Berger
+   djberg96 at nospam at gmail dot com
+   imperator on IRC (Freenode)

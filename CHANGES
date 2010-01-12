@@ -1,0 +1,105 @@
+== 1.5.2 - 2-Aug-2009
+* Now compatible with Ruby 1.9.x.
+* Added test-unit as a development dependency.
+
+== 1.5.1 - 23-Jul-2009
+* Added the User#dir attribute. This attribute contains a user's home
+  directory if set, or nil if it isn't.
+* User objects returned by the Admin.users method now include the uid.
+  Previously only the Admin.get_user method set it.
+* Added win32-security as a dependency.
+* Changed license to Artistic 2.0.
+
+== 1.5.0 - 29-Mar-2009
+* INTERFACE CHANGE (WINDOWS ONLY): The interface for MS Windows has undergone
+  a radical change. Most methods now accept a hash of options that are
+  passed directly to the underlying WMI class. Please see the documentation
+  for details.
+* Now works on various BSD flavors.
+* Added the User#groups method. This returns an array of groups that the
+  user belongs to. Suggestion inspired by Gonzalo Garramuno.
+* Added the Group#members method. The returns an array of users that the
+  group contains.
+* Changed User#class to User#access_class for UNIX flavors to avoid
+  conflicts with the Ruby core Object method. 
+* Added more tests and renamed the test files.
+* Removed an unnecessary function call where a platform might try to
+  get lastlog information even if the lastlog.h or utmp.h headers couldn't
+  be found.
+
+== 1.4.4 - 19-Nov-2008
+* Added the User#uid method for MS Windows (which is just the user's relative
+  identifier).
+* Now requires test-unit 2.x.
+* Some updates to the test suite to take advantage of test-unit 2.x features.
+* Some minor gemspec tweaks.
+
+== 1.4.3 - 2-Mar-2008
+* The block form of Admin.users now properly ensures that endpwent() is
+  called. Likewise, the block form of Admin.groups now properly ensures
+  that endgrent() is called. This would only have been an issue if you
+  broke out of the block before it terminated.
+* The AdminError class is now Admin::Error.
+* Some internal directory layout changes.
+
+== 1.4.2 - 26-Jun-2007
+* Fixed a bug in the Admin.get_login method where it would return junk
+  if the underlying getlogin() function failed (Unix). Thanks go to Gonzalo
+  Garramuno for the spot. This bug also resulted in some refactoring of the
+  underlying C code.
+* Removed the install.rb file. The logic in that file has been moved directly
+  into the Rakefile.
+
+== 1.4.1 - 21-Mar-2007
+* Bug fix for OS X. Thanks go to an anonymous user for the spot.
+* Added a Rakefile. Building, testing and installing should now use the
+  Rake tasks (for non-gem installs).
+* Much more inline documentation, especially for User and Group attributes.
+
+== 1.4.0 - 20-Jan-2007
+* Added the following methods: add_local_user, config_local_user,
+  delete_local_user, add_global_group, config_global_group, and
+  delete_global_group.  MS Windows only at the moment.
+* Added corresponding tests.
+* Added much more inline documentation.
+* Major refactoring of the get_lastlog_info helper function in admin.h.  This
+  fixed a major bug in some flavors of Linux where the Admin.users method
+  could go into an infinite loop.  It also fixed some minor bugs where console
+  and host values were sometimes filled with junk characters.
+* Added the User#change attribute, and a check for the pw_change struct member
+  in the extconf.rb file.
+* The User#expire attribute is now handled as a Time object instead of an
+  integer.
+* Renamed tc_win32.rb to tc_windows.rb
+
+== 1.3.1 - 29-Jun-2005
+* Fixed a bug where the inability to read the lastlog file caused an error.
+  From now on that error is ignored, and the lastlog attributes of the User
+  object are set to nil.
+* Added a beta version of Admin.delete_user (Windows only).
+
+== 1.3.0 - 3-Jun-2005
+* Bug fixes for Linux.
+* Removed the version.h file - no longer needed since the Win32 version is
+  pure Ruby.
+
+== 1.2.0 - 30-Apr-2005
+* Replaced the Win32 version with a pure Ruby version that uses Win32API and
+  win32ole + WMI.
+* The LocalGroup class no longer exists in the Win32 version.  Instead, it is
+  now an attribute of a Group object.  The issue was forced by WMI.
+* The default for users and groups on Win32 systems is now local rather than
+  global.  See the documentation for why you probably don't want to iterate
+  over global accounts.
+* Corresponding doc changes and test suite changes.
+
+== 1.1.0 - 1-Apr-2005
+* Fixed bug where a segfault could occur when trying to retrieve a user or
+  group by an ID that didn't exist (Unix).
+* Added tests for intentional failures.
+* Added lastlog information tothe User class (Unix).
+* Modified the way User objects are created internally (Unix).
+* Fixed a bug in the User#shell attribute (Unix).
+
+== 1.0.0 - 25-Mar-2005
+* Initial release

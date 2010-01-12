@@ -1,0 +1,14 @@
+* sys-admin.gemspec
+* CHANGES
+* MANIFEST
+* Rakefile
+* README
+* examples/groups.rb
+* examples/users.rb
+* ext/admin.c
+* ext/admin.h
+* ext/extconf.rb
+* lib/sys/admin.rb
+* test/test_sys_admin.rb
+* test/test_sys_admin_unix.rb
+* test/test_sys_admin_windows.rb
