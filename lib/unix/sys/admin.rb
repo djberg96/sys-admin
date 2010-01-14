@@ -6,6 +6,22 @@ module Sys
 
     class Error < StandardError; end
 
+    class FFI::Pointer
+      # Read an array of null separated strings.
+      def read_string_array
+        elements = []
+        psz = self.class.size
+        loc = self
+
+        until (element = loc.read_pointer).null?
+          elements << element.read_string_to_null
+          loc += psz
+        end
+
+        elements
+      end
+    end
+
     class PasswdStruct < FFI::Struct
       members = [
         :pw_name,   :string,
@@ -24,9 +40,28 @@ module Sys
       layout(*members)
     end
 
+    class GroupStruct < FFI::Struct
+      members = [
+        :gr_name,   :string,
+        :gr_passwd, :string,
+        :gr_gid,    :uint,
+        :gr_mem,    :pointer
+      ]
+
+      layout(*members)
+    end
+
     class User
       attr_accessor :name, :passwd, :uid, :gid, :change, :gecos
       attr_accessor :dir, :shell, :expire, :fields
+
+      def initialize
+        yield self if block_given?
+      end
+    end
+
+    class Group
+      attr_accessor :name, :gid, :members, :passwd
 
       def initialize
         yield self if block_given?
@@ -37,6 +72,8 @@ module Sys
     attach_function :getuid, [], :long
     attach_function :getpwnam, [:string], :pointer
     attach_function :getpwuid, [:long], :pointer
+    attach_function :getgrgid, [:long], :pointer
+    attach_function :getgrnam, [:string], :pointer
 
     attach_function :getlogin_r, [:string, :int], :string
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :ulong, :pointer], :int
@@ -79,6 +116,25 @@ module Sys
       end
 
       user
+    end
+
+    def self.get_group(gid)
+      if gid.is_a?(String)
+        grp = GroupStruct.new(getgrnam(gid))
+      else
+        grp = GroupStruct.new(getgrgid(gid))
+      end
+
+      if grp.nil?
+        raise Error, "no group found for: #{gid}"
+      end
+
+      group = Group.new do |g|
+        g.name    = grp[:gr_name]
+        g.passwd  = grp[:gr_passwd]
+        g.gid     = grp[:gr_gid]
+        g.members = grp[:gr_mem].read_string_array
+      end
     end
   end
 end
