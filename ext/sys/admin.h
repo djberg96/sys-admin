@@ -18,7 +18,7 @@
 #define __BSD__
 #endif
 
-#ifdef HAVE_UTMPX_H
+#if defined(HAVE_UTMPX_H) && defined(HAVE_GETLASTLOGX)
 #include <utmpx.h>
 #else
 #ifdef HAVE_LASTLOG_H
