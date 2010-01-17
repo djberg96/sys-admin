@@ -61,7 +61,10 @@ module Sys
     end
 
     class Group
-      attr_accessor :name, :gid, :members, :passwd
+      attr_accessor :name
+      attr_accessor :gid
+      attr_accessor :members
+      attr_accessor :passwd
 
       def initialize
         yield self if block_given?
@@ -74,6 +77,9 @@ module Sys
     attach_function :getpwuid, [:long], :pointer
     attach_function :getgrgid, [:long], :pointer
     attach_function :getgrnam, [:string], :pointer
+    attach_function :getgrent, [], :pointer
+    attach_function :endgrent, [], :void
+    attach_function :setgrent, [], :void
 
     attach_function :getlogin_r, [:string, :int], :string
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :ulong, :pointer], :int
@@ -89,6 +95,27 @@ module Sys
       buf = 1.chr * 256
       getlogin_r(buf, 256)
       buf.nstrip
+    end
+
+    def self.groups
+      groups = []
+
+      begin
+        setgrent()
+        until (grp_ptr = getgrent()).null?
+          grp = GroupStruct.new(grp_ptr)
+          groups << Group.new do |g|
+            g.name    = grp[:gr_name]
+            g.passwd  = grp[:gr_passwd]
+            g.gid     = grp[:gr_gid]
+            g.members = grp[:gr_mem].read_string_array
+          end
+        end
+      ensure
+        endgrent()
+      end
+
+      groups
     end
 
     def self.get_user(uid)
