@@ -3,7 +3,7 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'rbconfig'
 
-WINDOWS = Config::CONFIG['host_os'] =~ /msdos|mswin|win32|mingw|cygwin|/
+WINDOWS = Config::CONFIG['host_os'] =~ /msdos|mswin|win32|mingw|cygwin/i
 
 desc "Clean the build files for the sys-admin source for UNIX systems"
 task :clean do
