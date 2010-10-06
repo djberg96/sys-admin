@@ -1,3 +1,9 @@
+== 1.5.3 - 6-Oct-2010
+* Refactored the Rakefile. The old installation tasks have been replaced
+  with gem build and install tasks. In addition, the platform handling has
+  been updated for MS Windows.
+* Portions of the gemspec have been moved into the Rakefile gem tasks.
+
 == 1.5.2 - 2-Aug-2009
 * Now compatible with Ruby 1.9.x.
 * Added test-unit as a development dependency.
