@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <string.h>
 
-#define SYS_ADMIN_VERSION "1.5.2"
+#define SYS_ADMIN_VERSION "1.5.3"
 
 #if defined(__MACH__) || defined(__APPLE__)
 #define __BSD__
@@ -69,32 +69,32 @@ VALUE cUser, cGroup, cAdminError;
  * Helper function that returns a User object based on user ID.
  */
 static VALUE get_user_by_num(VALUE v_uid){
-   volatile VALUE v_user;
-   uid_t uid = NUM2INT(v_uid);
+  volatile VALUE v_user;
+  uid_t uid = NUM2INT(v_uid);
 
 #ifdef HAVE_GETPWUID_R
-   char buf[USER_BUF_SIZE];
-   struct passwd pwd;
-   struct passwd* pwdbuf;
+  char buf[USER_BUF_SIZE];
+  struct passwd pwd;
+  struct passwd* pwdbuf;
 
-   if(getpwuid_r(uid, &pwd, buf, sizeof(buf), &pwdbuf) != 0)
-      rb_raise(cAdminError, "%s", strerror(errno));
+  if(getpwuid_r(uid, &pwd, buf, sizeof(buf), &pwdbuf) != 0)
+    rb_raise(cAdminError, "%s", strerror(errno));
 
-   if(!pwdbuf)
-      rb_raise(cAdminError, "no user found for %i:", uid);
+  if(!pwdbuf)
+    rb_raise(cAdminError, "no user found for %i:", uid);
 
-   v_user = get_user(pwdbuf);
+  v_user = get_user(pwdbuf);
 #elif HAVE_GETPWUID
-   struct passwd* pwd;
-   if( (pwd = getpwuid(uid)) == NULL)
-      rb_raise(cAdminError, "no user found for: %i", uid);
+  struct passwd* pwd;
+  if( (pwd = getpwuid(uid)) == NULL)
+    rb_raise(cAdminError, "no user found for: %i", uid);
 
-   v_user = get_user(pwd);
+  v_user = get_user(pwd);
 #else
-   rb_raise(rb_eNotImpError, "getting user by user ID not supported");
+  rb_raise(rb_eNotImpError, "getting user by user ID not supported");
 #endif
 
-   return v_user;
+  return v_user;
 }
 
 /*
@@ -459,8 +459,8 @@ int get_lastlog_info(struct passwd* pwd, VALUE v_user){
  * that endpwent() is called in the block form of Admin.groups.
  */
 static VALUE admin_groups_cleanup(){
-   endgrent();
-   return Qnil;
+  endgrent();
+  return Qnil;
 }
 
 /*
@@ -470,6 +470,6 @@ static VALUE admin_groups_cleanup(){
  * that endpwent() is called in the block form of Admin.users.
  */
 static VALUE admin_users_cleanup(){
-   endpwent();
-   return Qnil;
+  endpwent();
+  return Qnil;
 }
