@@ -292,7 +292,8 @@ module Sys
    end
    
    class Admin
-      VERSION = '1.5.2'
+      # The version of the sys-admin library
+      VERSION = '1.5.3'
 
       # This is the error raised in the majority of cases if anything goes wrong
       # with any of the Sys::Admin methods.

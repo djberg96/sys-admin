@@ -9,13 +9,13 @@ gem 'test-unit'
 require 'test/unit'
 
 if File::ALT_SEPARATOR
-   require 'test_sys_admin_windows'
+  require 'test_sys_admin_windows'
 else
-   require 'test_sys_admin_unix'
+  require 'test_sys_admin_unix'
 end
 
 class TC_Sys_Admin_All < Test::Unit::TestCase
-   def test_version
-      assert_equal('1.5.2', Sys::Admin::VERSION)
-   end
+  def test_version
+    assert_equal('1.5.3', Sys::Admin::VERSION)
+  end
 end

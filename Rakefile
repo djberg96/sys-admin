@@ -7,6 +7,7 @@ WINDOWS = Config::CONFIG['host_os'] =~ /msdos|mswin|win32|mingw|cygwin|/
 
 desc "Clean the build files for the sys-admin source for UNIX systems"
 task :clean do
+  Dir['*.gem'].each{ |f| File.delete(f) } # Remove any .gem files
   unless WINDOWS
     Dir.chdir('ext') do
       build_file = 'admin.' + Config::CONFIG['DLEXT']
@@ -28,24 +29,33 @@ task :build => [:clean] do
   end
 end
 
-if WINDOWS
-  desc "Install the sys-admin library for MS Windows"
-  task :install do
-    install_dir = File.join(CONFIG['sitelibdir'], 'sys')
-    Dir.mkdir(install_dir) unless File.exists?(install_dir)
-    FileUtils.cp('lib/sys/admin.rb', install_dir, :verbose => true)
-  end
-else
-  desc "Install the sys-admin library for Unix platforms"
-  task :install => [:build] do
-    Dir.chdir('ext') do
-      sh 'make install'
+namespace :gem do
+  desc "Create a sys-admin gem file."
+  task :create => [:clean] do
+    spec = eval(IO.read('sys-admin.gemspec'))
+
+    if WINDOWS
+      spec.platform = Gem::Platform::CURRENT
+      spec.files = spec.files.reject{ |f| f.include?('ext') }
+      spec.add_dependency('win32-security', '>= 0.1.2')
+    else
+      spec.files = spec.files.reject{ |f| f.include?('lib') }
+      spec.extensions = ['ext/extconf.rb']
+      spec.extra_rdoc_files << 'ext/sys/admin.c'
     end
+
+    Gem::Builder.new(spec).build
+  end
+
+  desc "Install the sys-admin gem."
+  task :install => [:create] do
+    gem = Dir['*.gem'].first
+    sh "gem install #{gem}"
   end
 end
 
 desc "Run the test suite"
-Rake::TestTask.new("test") do |t|
+Rake::TestTask.new('test') do |t|
   if WINDOWS
     t.libs << 'lib'
   else
