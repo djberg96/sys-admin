@@ -1,3 +1,6 @@
+== 1.5.4 - ???
+* Prefer the getlastlogx() function over lastlog() where supported.
+
 == 1.5.3 - 6-Oct-2010
 * Refactored the Rakefile. The old installation tasks have been replaced
   with gem build and install tasks. In addition, the platform handling has
