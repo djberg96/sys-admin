@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <string.h>
 
-#define SYS_ADMIN_VERSION "1.5.3"
+#define SYS_ADMIN_VERSION "1.5.4"
 
 #if defined(__MACH__) || defined(__APPLE__)
 #define __BSD__
@@ -18,10 +18,14 @@
 #define __BSD__
 #endif
 
+#ifdef HAVE_UTMPX_H
+#include <utmpx.h>
+#else
 #ifdef HAVE_LASTLOG_H
 #include <lastlog.h>
 #else
 #include <utmp.h>
+#endif
 #endif
 
 #ifndef _POSIX_LOGIN_NAME_MAX
@@ -422,34 +426,44 @@ void get_group_from_value(VALUE v_group, struct group* grp){
  * still be empty or nil.
  */
 int get_lastlog_info(struct passwd* pwd, VALUE v_user){
-   int fd;
-   ssize_t bytes_read;
-   struct lastlog log;
-   int ll_size = sizeof(struct lastlog);
+#ifdef HAVE_GETLASTLOGX
+  struct lastlogx log;
 
-   /* The lastlog information is not necessarily readable by all users, so
-    * ignore open() errors if they occur.
-    */
-   if((fd = open(_PATH_LASTLOG, O_RDONLY)) == -1)
-      return -1;
+  if(getlastlogx(pwd->pw_uid, &log)){
+    rb_iv_set(v_user, "@login_time", rb_time_new(log.ll_tv.tv_sec, log.ll_tv.tv_usec));
+    rb_iv_set(v_user, "@login_device", rb_str_new2(log.ll_line));
+    rb_iv_set(v_user, "@login_host", rb_str_new2(log.ll_host));
+  }
+#else
+  int fd;
+  ssize_t bytes_read;
+  struct lastlog log;
+  int ll_size = sizeof(struct lastlog);
 
-   if((bytes_read = pread(fd, &log, ll_size, pwd->pw_uid * ll_size)) < 0){
-      close(fd);
-      rb_raise(cAdminError, "%s", strerror(errno));
-   }
+  /* The lastlog information is not necessarily readable by all users, so
+   * ignore open() errors if they occur.
+   */
+  if((fd = open(_PATH_LASTLOG, O_RDONLY)) == -1)
+    return -1;
 
-   close(fd);
+  if((bytes_read = pread(fd, &log, ll_size, pwd->pw_uid * ll_size)) < 0){
+    close(fd);
+    rb_raise(cAdminError, "%s", strerror(errno));
+  }
 
-   if(bytes_read > 0){
+  close(fd);
+
+  if(bytes_read > 0){
 #ifdef HAVE_ST_LL_TIME
-      if(log.ll_time != 0)
-         rb_iv_set(v_user, "@login_time", rb_time_new(log.ll_time, 0));
+    if(log.ll_time != 0)
+      rb_iv_set(v_user, "@login_time", rb_time_new(log.ll_time, 0));
 #endif
-      rb_iv_set(v_user, "@login_device", rb_str_new2(log.ll_line));
-      rb_iv_set(v_user, "@login_host", rb_str_new2(log.ll_host));
-   }
+    rb_iv_set(v_user, "@login_device", rb_str_new2(log.ll_line));
+    rb_iv_set(v_user, "@login_host", rb_str_new2(log.ll_host));
+  }
+#endif
 
-   return 0;
+  return 0;
 }
 
 /*
