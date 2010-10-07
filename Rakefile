@@ -10,6 +10,7 @@ task :clean do
   Dir['*.gem'].each{ |f| File.delete(f) } # Remove any .gem files
   unless WINDOWS
     Dir.chdir('ext') do
+      rm_rf('conftest.dSYM') if File.exists?('conftest.dSYM') # OS X
       build_file = 'admin.' + Config::CONFIG['DLEXT']
       sh 'make distclean' if File.exists?(build_file)
       File.delete("sys/#{build_file}") if File.exists?("sys/#{build_file}")
