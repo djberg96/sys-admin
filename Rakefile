@@ -8,6 +8,7 @@ WINDOWS = Config::CONFIG['host_os'] =~ /msdos|mswin|win32|mingw|cygwin/i
 desc "Clean the build files for the sys-admin source for UNIX systems"
 task :clean do
   Dir['*.gem'].each{ |f| File.delete(f) } # Remove any .gem files
+  Dir['**/*.rbc'].each{ |f| File.delete(f) } # Rubinius
   unless WINDOWS
     Dir.chdir('ext') do
       build_file = 'admin.' + Config::CONFIG['DLEXT']
