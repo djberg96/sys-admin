@@ -16,6 +16,6 @@ end
 
 class TC_Sys_Admin_All < Test::Unit::TestCase
   def test_version
-    assert_equal('1.5.3', Sys::Admin::VERSION)
+    assert_equal('1.5.4', Sys::Admin::VERSION)
   end
 end

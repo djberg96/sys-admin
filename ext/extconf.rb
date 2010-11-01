@@ -39,12 +39,16 @@ else
    utmp    = have_header("utmp.h")
    lastlog = have_header("lastlog.h")
 
+   if have_header("utmpx.h")
+     have_func("getlastlogx")
+   end 
+
    if utmp || lastlog
-      have_struct_member(
-         "struct lastlog",
-         "ll_time",
-         ["utmp.h", "time.h", "lastlog.h"]
-      )
+     have_struct_member(
+       "struct lastlog",
+       "ll_time",
+       ["utmp.h", "time.h", "lastlog.h"]
+     )
    end
 
    $CFLAGS += " -D_POSIX_PTHREAD_SEMANTICS"
