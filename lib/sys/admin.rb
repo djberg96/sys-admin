@@ -41,19 +41,19 @@ module Sys
     # Yields +self+ if a block is given.
     #
     def initialize
-       yield self if block_given?
+      yield self if block_given?
     end
     
     # Returns whether or not the group is a local group.
     #
     def local?
-       @local
+      @local
     end
     
     # Returns the type of SID (Security Identifier) as a stringified value.
     #
     def sid_type
-       @sid_type
+      @sid_type
     end
       
     # Sets the SID (Security Identifier) type to +stype+, which can be
@@ -70,33 +70,33 @@ module Sys
     # * Admin::SidTypeComputer
     #
     def sid_type=(stype)
-       if stype.kind_of?(String)
-          @sid_type = stype.downcase
-       else
-          case stype
-             when Admin::SidTypeUser
-                @sid_type = "user"
-             when Admin::SidTypeGroup
-                @sid_type = "group"
-             when Admin::SidTypeDomain
-                @sid_type = "domain"
-             when Admin::SidTypeAlias
-                @sid_type = "alias"
-             when Admin::SidTypeWellKnownGroup
-                @sid_type = "well_known_group"
-             when Admin::SidTypeDeletedAccount
-                @sid_type = "deleted_account"
-             when Admin::SidTypeInvalid
-                @sid_type = "invalid"
-             when Admin::SidTypeUnknown
-                @sid_type = "unknown"
-             when Admin::SidTypeComputer
-                @sid_type = "computer"
-             else
-                @sid_type = "unknown"
-          end
+      if stype.kind_of?(String)
+        @sid_type = stype.downcase
+      else
+        case stype
+          when Admin::SidTypeUser
+            @sid_type = "user"
+          when Admin::SidTypeGroup
+            @sid_type = "group"
+          when Admin::SidTypeDomain
+            @sid_type = "domain"
+          when Admin::SidTypeAlias
+            @sid_type = "alias"
+          when Admin::SidTypeWellKnownGroup
+            @sid_type = "well_known_group"
+          when Admin::SidTypeDeletedAccount
+            @sid_type = "deleted_account"
+          when Admin::SidTypeInvalid
+            @sid_type = "invalid"
+          when Admin::SidTypeUnknown
+            @sid_type = "unknown"
+          when Admin::SidTypeComputer
+            @sid_type = "computer"
+          else
+            @sid_type = "unknown"
+         end
        end
-       @sid_type
+      @sid_type
     end
   end
    
@@ -182,7 +182,7 @@ module Sys
     # Yields +self+ if a block is provided.
     #
     def initialize
-       yield self if block_given?
+      yield self if block_given?
     end
       
     # Sets the account type for the account.  Possible values are:
