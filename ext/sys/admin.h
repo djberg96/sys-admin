@@ -18,6 +18,9 @@
 #define __BSD__
 #endif
 
+#if defined(HAVE_USERSEC_H)
+#include <usersec.h>
+#else
 #if defined(HAVE_UTMPX_H) && defined(HAVE_GETLASTLOGX)
 #include <utmpx.h>
 #else
@@ -25,6 +28,7 @@
 #include <lastlog.h>
 #else
 #include <utmp.h>
+#endif
 #endif
 #endif
 
@@ -249,7 +253,7 @@ static VALUE get_user(struct passwd* pwd){
    rb_iv_set(v_user, "@change", rb_time_new(pwd->pw_change, 0));
 #endif
 
-#if defined(HAVE_LASTLOG_H) || defined(HAVE_UTMP_H)
+#if defined(HAVE_LASTLOG_H) || defined(HAVE_UTMP_H) || defined(HAVE_USERSEC_H)
    get_lastlog_info(pwd, v_user);
 #endif
 
@@ -426,6 +430,27 @@ void get_group_from_value(VALUE v_group, struct group* grp){
  * still be empty or nil.
  */
 int get_lastlog_info(struct passwd* pwd, VALUE v_user){
+#ifdef HAVE_USERSEC_H
+  char *lasthost;
+  int lasttime;
+  char *lasttty;
+
+  if (setuserdb(S_READ) == -1) {
+    return -1;
+  }
+
+  if (getuserattr(pwd->pw_name, S_LASTTIME, &lasttime, SEC_INT) == -1
+      || getuserattr(pwd->pw_name, S_LASTTTY, &lasttty, SEC_CHAR) == -1
+      || getuserattr(pwd->pw_name, S_LASTHOST, &lasthost, SEC_CHAR) == -1) {
+    enduserdb();
+    return -1;
+  }
+
+  rb_iv_set(v_user, "@login_time", rb_time_new(lasttime, 0));
+  rb_iv_set(v_user, "@login_device", rb_str_new2(lasttty));
+  rb_iv_set(v_user, "@login_host", rb_str_new2(lasthost));
+  enduserdb();
+#else
 #ifdef HAVE_GETLASTLOGX
   struct lastlogx log;
 
@@ -461,6 +486,7 @@ int get_lastlog_info(struct passwd* pwd, VALUE v_user){
     rb_iv_set(v_user, "@login_device", rb_str_new2(log.ll_line));
     rb_iv_set(v_user, "@login_host", rb_str_new2(log.ll_host));
   }
+#endif
 #endif
 
   return 0;
