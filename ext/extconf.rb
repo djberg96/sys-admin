@@ -1,11 +1,18 @@
 require "mkmf"
+require "rbconfig"
 
-if RUBY_PLATFORM.match('mswin')
+AIX = Config::CONFIG['host_os'] =~ /aix/i
+
+# TODO: Just run the rake install task.
+if File::ALT_SEPARATOR
   STDERR.puts "Use the 'rake install' task to install on MS Windows."
   STDERR.puts "Exiting. The sys-admin package was NOT installed."
   exit
 else
   dir_config('admin')
+
+  # Some versions of AIX apparently have buggy implementations of certain
+  # re-entrant functions, so they're skipped for now.
 
   have_func("getlogin_r")
   have_func("getlogin")
@@ -15,14 +22,14 @@ else
   have_func("getpwuid")
   have_func("getpwnam_r")
   have_func("getpwnam")
-  have_func("getpwent_r")
+  have_func("getpwent_r") unless AIX
   have_func("getpwent")
 
   have_func("getgrgid_r")
   have_func("getgrgid")
   have_func("getgrnam_r")
   have_func("getgrnam")
-  have_func("getgrent_r")
+  have_func("getgrent_r") unless AIX
   have_func("getgrent")
 
   have_struct_member("struct passwd", "pw_gecos", "pwd.h")
@@ -36,7 +43,7 @@ else
 
   have_struct_member("struct group", "gr_passwd", "grp.h")
 
-  if have_header("usersec.h")
+  if have_header("usersec.h") # AIX
     have_func("getuserattr", "usersec.h")
   else
     utmp    = have_header("utmp.h")
