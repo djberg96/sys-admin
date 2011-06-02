@@ -1,3 +1,8 @@
+== 1.5.5 - ???
+* Modified lastlog handling, and ignore getpwent_r and getgrent_r, on AIX.
+  Thanks go to Rick Ohnemus for the spot and patches.
+* Explicitly set spec.cpu on Windows to 'universal' in the gem creation task.
+
 == 1.5.4 - 7-Oct-2010
 * Prefer the getlastlogx() function over lastlog() where supported.
 

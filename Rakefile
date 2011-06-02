@@ -35,6 +35,7 @@ namespace :gem do
 
     if WINDOWS
       spec.platform = Gem::Platform::CURRENT
+      spec.cpu = 'universal'
       spec.files = spec.files.reject{ |f| f.include?('ext') }
       spec.add_dependency('win32-security', '>= 0.1.2')
     else
