@@ -43,7 +43,7 @@ module Sys
     def initialize
       yield self if block_given?
     end
-    
+
     # Returns whether or not the group is a local group.
     #
     def local?
@@ -867,7 +867,11 @@ module Sys
       if grp.kind_of?(Fixnum)
         query << " and sid like '%-#{grp}'"
       else
-        query << " and name = '#{grp}'"
+        if i > 0
+          query << " and name = '#{grp}'"
+        else
+          query << " where name = '#{grp}'"
+        end
       end
 
       domain = options[:domain] || host
