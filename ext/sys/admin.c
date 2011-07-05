@@ -414,6 +414,6 @@ void Init_admin(){
 
    /* Constants */
 
-   /* 1.5.2: The version of this library */
+   /* 1.5.5: The version of this library */
    rb_define_const(cAdmin, "VERSION", rb_str_new2(SYS_ADMIN_VERSION));
 }
