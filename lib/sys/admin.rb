@@ -676,7 +676,11 @@ module Sys
       if usr.kind_of?(Fixnum)
         query << " and sid like '%-#{usr}'"
       else
-        query << " and name = '#{usr}'"
+        if i > 0
+          query << " and name = '#{usr}'"
+        else
+          query << " where name = '#{usr}'"
+        end
       end
 
       domain = options[:domain] || host
