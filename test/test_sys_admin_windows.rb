@@ -158,6 +158,11 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
     assert_kind_of(Group, Admin.get_group(@group_name, :localaccount => true))
   end
 
+  def test_get_group_with_no_options
+    assert_nothing_raised{ Admin.get_group("Administrators") }
+    assert_kind_of(Group, Admin.get_group("Administrators"))
+  end
+
   def test_get_group_expected_errors
     assert_raise(ArgumentError){ Admin.get_group }
   end
