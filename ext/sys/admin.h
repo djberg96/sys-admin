@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <string.h>
 
-#define SYS_ADMIN_VERSION "1.5.5"
+#define SYS_ADMIN_VERSION "1.5.6"
 
 #if defined(__MACH__) || defined(__APPLE__)
 #define __BSD__
