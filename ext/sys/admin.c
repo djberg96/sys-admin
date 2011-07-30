@@ -167,7 +167,7 @@ static VALUE admin_groups_body(VALUE klass){
 #ifdef HAVE_GETGRENT_R
    struct group grp;
    char buf[GROUP_BUF_SIZE];
-#if defined _GNU_SOURCE && defined __GLIBC__
+#if defined _GNU_SOURCE && !defined __sunos && !defined __SUNPRO_C && !defined __SUNPRO_CC
    struct group* grp_p;
 
    while(!getgrent_r(&grp, buf, GROUP_BUF_SIZE, &grp_p)){
@@ -233,7 +233,7 @@ static VALUE admin_users_body(VALUE klass){
    struct passwd pwd;
    char buf[USER_BUF_SIZE];
 
-#if defined _GNU_SOURCE && defined __GLIBC__
+#if defined _GNU_SOURCE && !defined __sunos && !defined __SUNPRO_C && !defined __SUNPRO_CC
    struct passwd* pwd_p;
 
    while(!getpwent_r(&pwd, buf, USER_BUF_SIZE, &pwd_p)){
