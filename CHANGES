@@ -2,6 +2,7 @@
 * Fixed issue for non-gnu platforms where it would use the wrong function
   prototype because the Ruby core team took it upon themselves to explicitly
   defined _GNU_SOURCE in config.h in 1.8.7 and later for reasons that baffle me.
+* Some tests on Windows are now skipped unless run with elevated security.
 
 == 1.5.5 - 5-Jul-2011
 * Modified lastlog handling, and ignore getpwent_r and getgrent_r, on AIX.
@@ -44,7 +45,7 @@
 * Added the Group#members method. The returns an array of users that the
   group contains.
 * Changed User#class to User#access_class for UNIX flavors to avoid
-  conflicts with the Ruby core Object method. 
+  conflicts with the Ruby core Object method.
 * Added more tests and renamed the test files.
 * Removed an unnecessary function call where a platform might try to
   get lastlog information even if the lastlog.h or utmp.h headers couldn't
