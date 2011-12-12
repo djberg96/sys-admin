@@ -8,9 +8,9 @@ module Sys
     private
 
     # I'm making some aliases here to prevent potential conflicts
-    #attach_function :open_c, :open, [:string, :int], :int
-    #attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
-    #attach_function :close_c, :close, [:int], :int
+    attach_function :open_c, :open, [:string, :int], :int
+    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :close_c, :close, [:int], :int
 
     attach_function :getlogin_r, [:pointer, :size_t], :pointer
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t], :pointer
@@ -22,7 +22,7 @@ module Sys
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getpwent_r
     private_class_method :getgrent_r, :getgrnam_r, :getgrgid_r
-    #private_class_method :open_c, :pread_c, :close_c
+    private_class_method :open_c, :pread_c, :close_c
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -57,9 +57,6 @@ module Sys
         :ll_host, [:char, 256]
       )
     end
-
-    #p check_sizeof('struct lastlog', 'utmp.h')
-    #p LastlogStruct.size
 
     public
 
@@ -177,7 +174,6 @@ module Sys
         u.shell        = pwd[:pw_shell]
       end
 
-=begin
       log = get_lastlog_info(user.uid)
 
       if log
@@ -188,7 +184,6 @@ module Sys
         user.login_device = login_device unless login_device.empty?
         user.login_host   = login_host unless login_host.empty?
       end
-=end
 
       user
     end
@@ -200,7 +195,7 @@ module Sys
     # The use of pread was necessary here because it's a sparse file.
     #
     def self.get_lastlog_info(uid)
-      logfile = '/var/log/lastlog'
+      logfile = '/var/adm/lastlog'
       lastlog = LastlogStruct.new
 
       begin
@@ -222,3 +217,5 @@ module Sys
     end
   end
 end
+
+p Sys::Admin.get_user('djberge')
