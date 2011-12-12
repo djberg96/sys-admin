@@ -1,7 +1,7 @@
 require 'sys/admin/custom'
 require 'sys/admin/common'
 
-# The Linux specific code.
+# The Solaris specific code.
 
 module Sys
   class Admin
@@ -188,11 +188,9 @@ module Sys
       user
     end
 
-    # Note: it seems that Linux, or at least Ubuntu, does not track logins
-    # via GDM (Gnome Display Manager) for some reason, so this may not return
-    # anything useful.
-    #
-    # The use of pread was necessary here because it's a sparse file.
+    # The use of pread was necessary here because it's a sparse file. Note
+    # also that while Solaris supports the getuserattr function, it doesn't
+    # appear to store anything regarding login information.
     #
     def self.get_lastlog_info(uid)
       logfile = '/var/adm/lastlog'
@@ -217,5 +215,3 @@ module Sys
     end
   end
 end
-
-p Sys::Admin.get_user('djberge')
