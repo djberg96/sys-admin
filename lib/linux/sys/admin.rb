@@ -56,9 +56,6 @@ module Sys
       )
     end
 
-    #p check_sizeof('struct lastlog', 'utmp.h')
-    #p LastlogStruct.size
-
     public
 
     def self.get_login
