@@ -11,6 +11,8 @@ Rake::TestTask.new('test') do |t|
     t.libs << 'lib/darwin'
   when /linux/i
     t.libs << 'lib/linux'
+  when /sunos|solaris/i
+    t.libs << 'lib/sunos'
   end
 
   t.warning = true
