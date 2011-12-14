@@ -7,6 +7,11 @@ module Sys
   class Admin
     private
 
+    # I'm making some aliases here to prevent potential conflicts
+    attach_function :open_c, :open, [:string, :int], :int
+    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :close_c, :close, [:int], :int
+
     attach_function :getlogin_r, [:pointer, :int], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
@@ -15,6 +20,7 @@ module Sys
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r
     private_class_method :getgrgid_r
+    private_class_method :open_c, :pread_c, :close_c
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -43,10 +49,9 @@ module Sys
     end
 
     # I'm blending the timeval struct in directly here
-    class LastlogxStruct < FFI::Struct
+    class LastlogStruct < FFI::Struct
       layout(
-        :tv_sec, :long,
-        :tv_usec, :long,
+        :ll_time, :int32,
         :ll_line, [:char, 32],
         :ll_host, [:char, 256]
       )
@@ -173,25 +178,37 @@ module Sys
         u.expire       = Time.at(pwd[:pw_expire])
       end
 
-      #log = get_lastlog_info(user.uid)
+      log = get_lastlog_info(user.uid)
 
-      #if log
-      #  user.login_time = Time.at(log[:tv_sec])
-      #  user.login_device = log[:ll_line].to_s
-      #  user.login_host = log[:ll_host].to_s
-      #end
+      if log
+        user.login_time = Time.at(log[:ll_time])
+        user.login_device = log[:ll_line].to_s
+        user.login_host = log[:ll_host].to_s
+      end
 
       user
     end
 
     def self.get_lastlog_info(uid)
-      lastlog = LastlogxStruct.new
+      logfile = '/var/log/lastlog'
+      lastlog = LastlogStruct.new
 
-      # We don't check for failure here because most will fail due to
-      # lack of permissions and/or simple lack of information.
-      #ptr = getlastlogx(uid, lastlog)
+      begin
+        fd = open_c(logfile, File::RDONLY)
 
-      #ptr.null? ? nil : lastlog
+        if fd != -1
+          bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
+          if bytes < 0
+            raise Error, "pread function failed: " + strerror(FFI.errno)
+          end
+        else
+          nil # Ignore, improper permissions
+        end
+      ensure
+        close_c(fd) if fd && fd >= 0
+      end
+
+      lastlog
     end
   end
 end
