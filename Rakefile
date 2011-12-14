@@ -13,6 +13,8 @@ Rake::TestTask.new('test') do |t|
     t.libs << 'lib/linux'
   when /sunos|solaris/i
     t.libs << 'lib/sunos'
+  when /bsd/i
+    t.libs << 'lib/bsd'
   end
 
   t.warning = true
