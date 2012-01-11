@@ -1,18 +1,21 @@
 require 'sys/admin/custom'
 require 'sys/admin/common'
-#require 'mkmf/lite'
 
 # The Linux specific code.
 
 module Sys
   class Admin
-    #include Mkmf::Lite
-    #extend Mkmf::Lite
     private
+
+    # I'm making some aliases here to prevent potential conflicts
+    attach_function :open_c, :open, [:string, :int], :int
+    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :close_c, :close, [:int], :int
 
     attach_function :getlogin_r, [:pointer, :size_t], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getpwent_r, [:pointer, :pointer, :size_t, :pointer], :int
 =begin
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
@@ -53,8 +56,8 @@ module Sys
       )
     end
 
-    p check_sizeof('struct lastlog', 'utmp.h')
-    p LastlogStruct.size
+    #p check_sizeof('struct lastlog', 'utmp.h')
+    #p LastlogStruct.size
 
     public
 
@@ -121,10 +124,18 @@ module Sys
     def self.users
       users = []
 
+      buf  = FFI::MemoryPointer.new(:char, 1024)
+      pbuf = FFI::MemoryPointer.new(PasswdStruct)
+      temp = PasswdStruct.new
+
       begin
         setpwent()
 
-        until (ptr = getpwent()).null?
+        while getpwent_r(temp, buf, buf.size, pbuf) == 0
+          ptr = pbuf.read_pointer
+
+          break if ptr.null?
+
           pwd = PasswdStruct.new(ptr)
           users << get_user_from_struct(pwd)
         end
@@ -174,25 +185,46 @@ module Sys
         u.shell        = pwd[:pw_shell]
       end
 
-      #log = get_lastlog_info(user.uid)
+      log = get_lastlog_info(user.uid)
 
-      #if log
-      #  user.login_time = Time.at(log[:tv_sec])
-      #  user.login_device = log[:ll_line].to_s
-      #  user.login_host = log[:ll_host].to_s
-      #end
+      if log
+        login_device = log[:ll_line].to_s
+        login_host   = log[:ll_host].to_s
+
+        user.login_time   = Time.at(log[:ll_time]) if log[:ll_time] > 0
+        user.login_device = login_device unless login_device.empty?
+        user.login_host   = login_host unless login_host.empty?
+      end
 
       user
     end
 
+    # Note: it seems that Linux, or at least Ubuntu, does not track logins
+    # via GDM (Gnome Display Manager) for some reason, so this may not return
+    # anything useful.
+    #
+    # The use of pread was necessary here because it's a sparse file.
+    #
     def self.get_lastlog_info(uid)
+      logfile = '/var/log/lastlog'
       lastlog = LastlogStruct.new
 
-      # We don't check for failure here because most will fail due to
-      # lack of permissions and/or simple lack of information.
-      ptr = getlastlogx(uid, lastlog)
+      begin
+        fd = open_c(logfile, File::RDONLY)
 
-      ptr.null? ? nil : lastlog
+        if fd != -1
+          bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
+          if bytes < 0
+            raise Error, "pread function failed: " + strerror(FFI.errno)
+          end
+        else
+          nil # Ignore, improper permissions
+        end
+      ensure
+        close_c(fd) if fd && fd >= 0
+      end
+
+      lastlog
     end
   end
 end
