@@ -16,13 +16,13 @@ module Sys
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwent_r, [:pointer, :pointer, :size_t, :pointer], :int
-=begin
+    attach_function :getgrent_r, [:pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
-    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r
-    private_class_method :getgrgid_r, :getlastlogx
-=end
+    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getpwent_r
+    private_class_method :getgrent_r, :getgrnam_r, :getgrgid_r
+    private_class_method :open_c, :pread_c, :close_c
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -149,10 +149,18 @@ module Sys
     def self.groups
       groups = []
 
+      buf  = FFI::MemoryPointer.new(:char, 1024)
+      pbuf = FFI::MemoryPointer.new(GroupStruct)
+      temp = GroupStruct.new
+
       begin
         setgrent()
 
-        until (ptr = getgrent()).null?
+        while getgrent_r(temp, buf, buf.size, pbuf) == 0
+          ptr = pbuf.read_pointer
+
+          break if ptr.null?
+
           grp = GroupStruct.new(ptr)
           groups << get_group_from_struct(grp)
         end
