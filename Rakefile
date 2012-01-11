@@ -9,6 +9,8 @@ Rake::TestTask.new('test') do |t|
   case RbConfig::CONFIG['host_os']
   when /darwin|osx/i
     t.libs << 'lib/darwin'
+  when /linux/i
+    t.libs << 'lib/linux'
   end
 
   t.warning = true
