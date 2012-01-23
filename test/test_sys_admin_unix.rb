@@ -4,27 +4,33 @@
 # Test suite for the Unix version of sys-admin. This test should be run
 # via the 'rake test' task.
 ###############################################################################
+require 'rubygems'
+gem 'test-unit'
 require 'test/unit'
 require 'sys/admin'
 include Sys
 
 class TC_Sys_Admin_Unix < Test::Unit::TestCase
-   def setup
-      @user = 'nobody'
-      @user_id  = 0
+  def setup
+    @user = 'nobody'
+    @user_id  = 0
+    @group = 'sys'
+    @group_id = 3
+  end
 
-      @group = 'sys'
-      @group_id = 3
-   end
+  ## Admin singleton methods
 
-   ## Admin singleton methods
+  test "get_login basic functionality" do
+    assert_respond_to(Admin, :get_login)
+    assert_nothing_raised{ Admin.get_login }
+  end
 
-   def test_get_login
-      assert_respond_to(Admin, :get_login)
-      assert_nothing_raised{ Admin.get_login }
-      assert_kind_of(String, Admin.get_login)
-   end
+  test "get_login returns a string" do
+    assert_kind_of(String, Admin.get_login)
+    assert_true(Admin.get_login.length > 0)
+  end
 
+=begin
    def test_get_user_basic
       assert_respond_to(Admin, :get_user)
       assert_nothing_raised{ Admin.get_user(@user) }
@@ -44,27 +50,22 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
       assert_raise(TypeError){ Admin.get_user([]) }
       assert_raise(Admin::Error){ Admin.get_user('foofoofoo') }
    end
+=end
 
-   def test_users_basic
-      assert_respond_to(Admin, :users)
-      assert_nothing_raised{ Admin.users }
-   end
+  test "users basic functionality" do
+    assert_respond_to(Admin, :users)
+    assert_nothing_raised{ Admin.users }
+  end
 
-   def test_users
-      assert_kind_of(Array, Admin.users)
-      assert_kind_of(User, Admin.users.first)
-   end
+  test "users returns an array of User objects" do
+    assert_kind_of(Array, Admin.users)
+    assert_kind_of(Admin::User, Admin.users.first)
+  end
 
-   def test_users_block_form
-      array = []
-      assert_nothing_raised{ Admin.users{ |g| array << g } }
-      assert_equal(true, Admin.users.length == array.length)
-      assert_nothing_raised{ Admin.users{ |g| break } }
-   end
-
-   def test_users_expected_errors
-      assert_raise(ArgumentError){ Admin.users(@user_id) }
-   end
+  test "users does not accept any arguments" do
+    assert_raise(ArgumentError){ Admin.users(@user_id) }
+  end
+=begin
 
    def test_get_group_basic
       assert_respond_to(Admin, :get_group)
@@ -85,27 +86,23 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
       assert_raise(TypeError){ Admin.get_group([]) }
       assert_raise(Admin::Error){ Admin.get_group('foofoofoo') }
    end
+=end
 
-   def test_groups_basic
-      assert_respond_to(Admin, :groups)
-      assert_nothing_raised{ Admin.groups }
-   end
+  test "groups basic functionality" do
+    assert_respond_to(Admin, :groups)
+    assert_nothing_raised{ Admin.groups }
+  end
 
-   def test_groups
-      assert_kind_of(Array, Admin.groups)
-      assert_kind_of(Group, Admin.groups.first)
-   end
+  test "groups returns an array of Group objects" do
+    assert_kind_of(Array, Admin.groups)
+    assert_kind_of(Admin::Group, Admin.groups.first)
+  end
 
-   def test_groups_expected_errors
-      assert_raise(ArgumentError){ Admin.groups(@group_id) }
-   end
+  test "groups method does not accept any arguments" do
+    assert_raise(ArgumentError){ Admin.groups(@group_id) }
+  end
 
-   def test_groups_block_form
-      array = []
-      assert_nothing_raised{ Admin.groups{ |g| array << g } }
-      assert_equal(true, Admin.groups.length == array.length)
-      assert_nothing_raised{ Admin.groups{ |g| break } }
-   end
+=begin
 
    ## User Tests
 
@@ -236,6 +233,7 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
       assert_respond_to(@group, :passwd)
       assert_kind_of(String, @group.passwd)
    end
+=end
 
    def teardown
       @user     = nil
