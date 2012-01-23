@@ -26,11 +26,25 @@ module Sys
     class Error < StandardError; end
 
     class User
-      attr_accessor :name, :passwd, :uid, :gid, :change, :gecos
-      attr_accessor :dir, :shell, :expire, :fields, :access_class
+      attr_accessor :name, :passwd, :uid, :gid, :change, :gecos, :quota
+      attr_accessor :dir, :shell, :expire, :fields, :access_class, :comment
+      attr_accessor :age
+      attr_accessor :login_time
+      attr_accessor :login_host
+      attr_accessor :login_device
 
       def initialize
         yield self if block_given?
+      end
+
+      def groups
+        array = []
+
+        Sys::Admin.groups.each{ |grp|
+          array << grp.name if grp.members.include?(self.name)
+        }
+
+        array
       end
     end
 
