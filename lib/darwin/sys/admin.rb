@@ -8,6 +8,8 @@ module Sys
     attach_function :getlogin_r, [:pointer, :int], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -71,6 +73,31 @@ module Sys
       get_user_from_struct(pwd)
     end
 
+    def self.get_group(gid)
+      buf  = FFI::MemoryPointer.new(:char, 1024)
+      pbuf = FFI::MemoryPointer.new(PasswdStruct)
+      temp = GroupStruct.new
+
+      if gid.is_a?(String)
+        if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
+          raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+        end
+      else
+        if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
+          raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
+        end
+      end
+
+      ptr = pbuf.read_pointer
+
+      if ptr.null?
+        raise Error, "no group found for #{gid}"
+      end
+
+      grp = GroupStruct.new(ptr)
+      get_group_from_struct(grp)
+    end
+
     def self.users
       users = []
 
@@ -96,12 +123,7 @@ module Sys
 
         until (ptr = getgrent()).null?
           grp = GroupStruct.new(ptr)
-          groups << Group.new do |g|
-            g.name    = grp[:gr_name]
-            g.passwd  = grp[:gr_passwd]
-            g.gid     = grp[:gr_gid]
-            g.members = grp[:gr_mem].read_array_of_string
-          end
+          groups << get_group_from_struct(grp)
         end
       ensure
         endgrent()
@@ -111,6 +133,15 @@ module Sys
     end
 
     private
+
+    def self.get_group_from_struct(grp)
+      Group.new do |g|
+        g.name    = grp[:gr_name]
+        g.passwd  = grp[:gr_passwd]
+        g.gid     = grp[:gr_gid]
+        g.members = grp[:gr_mem].read_array_of_string
+      end
+    end
 
     def self.get_user_from_struct(pwd)
       User.new do |u|

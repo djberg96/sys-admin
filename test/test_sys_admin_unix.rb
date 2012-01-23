@@ -70,28 +70,33 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   test "users does not accept any arguments" do
     assert_raise(ArgumentError){ Admin.users(@user_id) }
   end
-=begin
 
-   def test_get_group_basic
-      assert_respond_to(Admin, :get_group)
-      assert_nothing_raised{ Admin.get_group(@group) }
-      assert_nothing_raised{ Admin.get_group(@group_id) }
-   end
+  test "get_group basic functionality" do
+    assert_respond_to(Admin, :get_group)
+    assert_nothing_raised{ Admin.get_group(@group) }
+    assert_nothing_raised{ Admin.get_group(@group_id) }
+  end
 
-   def test_get_group_by_name
-      assert_kind_of(Group, Admin.get_group(@group))
-   end
+  test "get_group accepts a string argument" do
+    assert_kind_of(Admin::Group, Admin.get_group(@group))
+  end
 
-   def test_get_group_by_id
-      assert_kind_of(Group, Admin.get_group(@group_id))
-   end
+  test "get_group accepts an integer argument" do
+    assert_kind_of(Admin::Group, Admin.get_group(@group_id))
+  end
 
-   def test_get_group_expected_errors
-      assert_raise(ArgumentError){ Admin.get_group }
-      assert_raise(TypeError){ Admin.get_group([]) }
-      assert_raise(Admin::Error){ Admin.get_group('foofoofoo') }
-   end
-=end
+  test "get_group requires one argument only" do
+    assert_raise(ArgumentError){ Admin.get_group }
+    assert_raise(ArgumentError){ Admin.get_group(@group_id, @group_id) }
+  end
+
+  test "get_group raises a TypeError if an invalid type is passed" do
+    assert_raise(TypeError){ Admin.get_group([]) }
+  end
+
+  test "get_group raises an Error if the group cannot be found" do
+    assert_raise(Admin::Error){ Admin.get_group('foofoofoo') }
+  end
 
   test "groups basic functionality" do
     assert_respond_to(Admin, :groups)
