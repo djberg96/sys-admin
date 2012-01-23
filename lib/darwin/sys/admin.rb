@@ -6,6 +6,8 @@ require 'sys/admin/common'
 module Sys
   class Admin
     attach_function :getlogin_r, [:pointer, :int], :int
+    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -44,30 +46,29 @@ module Sys
       buf.read_string
     end
 
-    def self.get_user(uid_or_string)
-      if uid_or_string.is_a?(String)
-        ptr = getpwnam(uid_or_string)
+    def self.get_user(uid)
+      buf  = FFI::MemoryPointer.new(:char, 1024)
+      pbuf = FFI::MemoryPointer.new(PasswdStruct)
+      temp = PasswdStruct.new
+
+      if uid.is_a?(String)
+        if getpwnam_r(uid, temp, buf, buf.size, pbuf) != 0
+          raise Error, "getpwnam_r function failed: " + strerror(FFI.errno)
+        end
       else
-        ptr = getpwuid(uid_or_string)
+        if getpwuid_r(uid, temp, buf, buf.size, pbuf) != 0
+          raise Error, "getpwuid_r function failed: " + strerror(FFI.errno)
+        end
       end
 
-      raise Error, strerror(FFI.errno) if ptr.null?
+      ptr = pbuf.read_pointer
+
+      if ptr.null?
+        raise Error, "no user found for #{uid}"
+      end
 
       pwd = PasswdStruct.new(ptr)
-
-      User.new do |u|
-        u.name         = pwd[:pw_name]
-        u.passwd       = pwd[:pw_passwd]
-        u.uid          = pwd[:pw_uid]
-        u.gid          = pwd[:pw_gid]
-        u.change       = Time.at(pwd[:pw_change])
-        u.access_class = pwd[:pw_class]
-        u.gecos        = pwd[:pw_gecos]
-        u.dir          = pwd[:pw_dir]
-        u.shell        = pwd[:pw_shell]
-        u.expire       = Time.at(pwd[:pw_expire])
-        u.fields       = pwd[:pw_fields]
-      end
+      get_user_from_struct(pwd)
     end
 
     def self.users
@@ -78,19 +79,7 @@ module Sys
 
         until (ptr = getpwent()).null?
           pwd = PasswdStruct.new(ptr)
-          users << User.new do |u|
-            u.name         = pwd[:pw_name]
-            u.passwd       = pwd[:pw_passwd]
-            u.uid          = pwd[:pw_uid]
-            u.gid          = pwd[:pw_gid]
-            u.change       = Time.at(pwd[:pw_change])
-            u.access_class = pwd[:pw_class]
-            u.gecos        = pwd[:pw_gecos]
-            u.dir          = pwd[:pw_dir]
-            u.shell        = pwd[:pw_shell]
-            u.expire       = Time.at(pwd[:pw_expire])
-            u.fields       = pwd[:pw_fields]
-          end
+          users << get_user_from_struct(pwd)
         end
       ensure
         endpwent()
@@ -119,6 +108,24 @@ module Sys
       end
 
       groups
+    end
+
+    private
+
+    def self.get_user_from_struct(pwd)
+      User.new do |u|
+        u.name         = pwd[:pw_name]
+        u.passwd       = pwd[:pw_passwd]
+        u.uid          = pwd[:pw_uid]
+        u.gid          = pwd[:pw_gid]
+        u.change       = Time.at(pwd[:pw_change])
+        u.access_class = pwd[:pw_class]
+        u.gecos        = pwd[:pw_gecos]
+        u.dir          = pwd[:pw_dir]
+        u.shell        = pwd[:pw_shell]
+        u.expire       = Time.at(pwd[:pw_expire])
+        u.fields       = pwd[:pw_fields]
+      end
     end
   end
 end
