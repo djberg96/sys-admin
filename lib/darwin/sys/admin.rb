@@ -44,6 +44,32 @@ module Sys
       buf.read_string
     end
 
+    def self.get_user(uid_or_string)
+      if uid_or_string.is_a?(String)
+        ptr = getpwnam(uid_or_string)
+      else
+        ptr = getpwuid(uid_or_string)
+      end
+
+      raise Error, strerror(FFI.errno) if ptr.null?
+
+      pwd = PasswdStruct.new(ptr)
+
+      User.new do |u|
+        u.name         = pwd[:pw_name]
+        u.passwd       = pwd[:pw_passwd]
+        u.uid          = pwd[:pw_uid]
+        u.gid          = pwd[:pw_gid]
+        u.change       = Time.at(pwd[:pw_change])
+        u.access_class = pwd[:pw_class]
+        u.gecos        = pwd[:pw_gecos]
+        u.dir          = pwd[:pw_dir]
+        u.shell        = pwd[:pw_shell]
+        u.expire       = Time.at(pwd[:pw_expire])
+        u.fields       = pwd[:pw_fields]
+      end
+    end
+
     def self.users
       users = []
 
@@ -54,7 +80,7 @@ module Sys
           pwd = PasswdStruct.new(ptr)
           users << User.new do |u|
             u.name         = pwd[:pw_name]
-            u.passwd       = pwd[:pw_name]
+            u.passwd       = pwd[:pw_passwd]
             u.uid          = pwd[:pw_uid]
             u.gid          = pwd[:pw_gid]
             u.change       = Time.at(pwd[:pw_change])

@@ -30,27 +30,32 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
     assert_true(Admin.get_login.length > 0)
   end
 
-=begin
-   def test_get_user_basic
-      assert_respond_to(Admin, :get_user)
-      assert_nothing_raised{ Admin.get_user(@user) }
-      assert_nothing_raised{ Admin.get_user(@user_id) }
-   end
+  test "get_user basic functionality" do
+    assert_respond_to(Admin, :get_user)
+    assert_nothing_raised{ Admin.get_user(@user) }
+    assert_nothing_raised{ Admin.get_user(@user_id) }
+  end
 
-   def test_get_user_by_name
-      assert_kind_of(User, Admin.get_user(@user))
-   end
+  test "get_user with a string argument works as expected" do
+    assert_kind_of(Admin::User, Admin.get_user(@user))
+  end
 
-   def test_get_user_by_id
-      assert_kind_of(User, Admin.get_user(@user_id))
-   end
+  test "get_user with an integer argument works as expected" do
+    assert_kind_of(Admin::User, Admin.get_user(@user_id))
+  end
 
-   def test_get_user_expected_errors
-      assert_raise(ArgumentError){ Admin.get_user }
-      assert_raise(TypeError){ Admin.get_user([]) }
-      assert_raise(Admin::Error){ Admin.get_user('foofoofoo') }
-   end
-=end
+  test "get_user requires one argument only" do
+    assert_raise(ArgumentError){ Admin.get_user }
+    assert_raise(ArgumentError){ Admin.get_user(@user, @user) }
+  end
+
+  test "get_user requires a string or integer argument" do
+    assert_raise(TypeError){ Admin.get_user([]) }
+  end
+
+  test "get_user raises an Error if the user cannot be found" do
+    assert_raise(Admin::Error){ Admin.get_user('foofoofoo') }
+  end
 
   test "users basic functionality" do
     assert_respond_to(Admin, :users)
