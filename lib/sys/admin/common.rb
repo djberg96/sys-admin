@@ -5,6 +5,8 @@ module Sys
     extend FFI::Library
     ffi_lib FFI::Library::LIBC
 
+    private
+
     attach_function :strerror, [:int], :string
 
     attach_function :getlogin, [], :string
@@ -20,6 +22,12 @@ module Sys
     attach_function :getgrent, [], :pointer
     attach_function :endgrent, [], :void
     attach_function :setgrent, [], :void
+
+    private_class_method :getlogin, :getuid, :getpwnam, :getpwuid, :getpwent
+    private_class_method :setpwent, :endpwent, :getgrgid, :getgrnam
+    private_class_method :getgrent, :endgrent, :setgrent, :strerror
+
+    public
 
     VERSION = '1.6.0'
 

@@ -11,6 +11,9 @@ module Sys
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
+    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r
+    private_class_method :getgrnam_r, :getgrgid_r
+
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
       layout(

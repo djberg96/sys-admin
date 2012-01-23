@@ -242,6 +242,15 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
     assert_kind_of(String, @group.passwd)
   end
 
+  ## FFI
+
+  test "ffi functions are private" do
+    methods = Admin.methods(false).map{ |e| e.to_s }
+    assert_false(Admin.methods.include?('getlogin'))
+    assert_false(Admin.methods.include?('getlogin_r'))
+    assert_false(Admin.methods.include?('strerror'))
+  end
+
   def teardown
     @user     = nil
     @user_id  = nil
