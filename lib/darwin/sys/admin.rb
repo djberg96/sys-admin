@@ -29,8 +29,7 @@ module Sys
         :pw_gecos, :string,
         :pw_dir, :string,
         :pw_shell, :string,
-        :pw_expire, :ulong,
-        :pw_fields, :int
+        :pw_expire, :ulong
       )
     end
 
@@ -45,7 +44,7 @@ module Sys
     end
 
     # I'm blending the timeval struct in directly here
-    class LastlogStruct < FFI::Struct
+    class LastlogxStruct < FFI::Struct
       layout(
         :tv_sec, :long,
         :tv_usec, :long,
@@ -173,7 +172,6 @@ module Sys
         u.dir          = pwd[:pw_dir]
         u.shell        = pwd[:pw_shell]
         u.expire       = Time.at(pwd[:pw_expire])
-        u.fields       = pwd[:pw_fields]
       end
 
       log = get_lastlog_info(user.uid)
@@ -188,7 +186,7 @@ module Sys
     end
 
     def self.get_lastlog_info(uid)
-      lastlog = LastlogStruct.new
+      lastlog = LastlogxStruct.new
 
       # We don't check for failure here because most will fail due to
       # lack of permissions and/or simple lack of information.
