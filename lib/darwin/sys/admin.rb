@@ -5,14 +5,17 @@ require 'sys/admin/common'
 
 module Sys
   class Admin
+    private
+
     attach_function :getlogin_r, [:pointer, :int], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getlastlogx, [:long, :pointer], :pointer
 
-    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r
-    private_class_method :getgrnam_r, :getgrgid_r
+    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r
+    private_class_method :getgrgid_r, :getlastlogx
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
@@ -40,6 +43,18 @@ module Sys
         :gr_mem, :pointer
       )
     end
+
+    # I'm blending the timeval struct in directly here
+    class LastlogStruct < FFI::Struct
+      layout(
+        :tv_sec, :long,
+        :tv_usec, :long,
+        :ll_line, [:char, 32],
+        :ll_host, [:char, 256]
+      )
+    end
+
+    public
 
     def self.get_login
       buf = FFI::MemoryPointer.new(:char, 256)
@@ -147,7 +162,7 @@ module Sys
     end
 
     def self.get_user_from_struct(pwd)
-      User.new do |u|
+      user = User.new do |u|
         u.name         = pwd[:pw_name]
         u.passwd       = pwd[:pw_passwd]
         u.uid          = pwd[:pw_uid]
@@ -160,6 +175,26 @@ module Sys
         u.expire       = Time.at(pwd[:pw_expire])
         u.fields       = pwd[:pw_fields]
       end
+
+      log = get_lastlog_info(user.uid)
+
+      if log
+        user.login_time = Time.at(log[:tv_sec])
+        user.login_device = log[:ll_line].to_s
+        user.login_host = log[:ll_host].to_s
+      end
+
+      user
+    end
+
+    def self.get_lastlog_info(uid)
+      lastlog = LastlogStruct.new
+
+      # We don't check for failure here because most will fail due to
+      # lack of permissions and/or simple lack of information.
+      ptr = getlastlogx(uid, lastlog)
+
+      ptr.null? ? nil : lastlog
     end
   end
 end
