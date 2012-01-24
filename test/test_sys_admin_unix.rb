@@ -63,8 +63,9 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   end
 
   test "users returns an array of User objects" do
-    assert_kind_of(Array, Admin.users)
-    assert_kind_of(Admin::User, Admin.users.first)
+    users = Admin.users
+    assert_kind_of(Array, users)
+    assert_kind_of(Admin::User, users.first)
   end
 
   test "users does not accept any arguments" do
@@ -104,8 +105,9 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   end
 
   test "groups returns an array of Group objects" do
-    assert_kind_of(Array, Admin.groups)
-    assert_kind_of(Admin::Group, Admin.groups.first)
+    groups = Admin.groups
+    assert_kind_of(Array, groups)
+    assert_kind_of(Admin::Group, groups.first)
   end
 
   test "groups method does not accept any arguments" do
@@ -115,103 +117,103 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   ## User Tests
 
   test "user.name behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :name)
     assert_kind_of(String, @user.name)
   end
 
   test "user.passwd behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :passwd)
     assert_kind_of(String, @user.passwd)
   end
 
   test "user.uid behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :uid)
     assert_kind_of(Fixnum, @user.uid)
   end
 
   test "user.gid behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :gid)
     assert_kind_of(Fixnum, @user.gid)
   end
 
   test "user.dir behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :dir)
     assert_kind_of(String, @user.dir)
   end
 
   test "user.shell behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :shell)
     assert_kind_of(String, @user.shell)
   end
 
   test "user.gecos behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :gecos)
     assert_kind_of(String, @user.gecos)
   end
 
   test "user.quota behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :quota)
     assert_true([Fixnum, NilClass].include?(@user.quota.class))
   end
 
   test "user.age behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :age)
     assert_true([Fixnum, NilClass].include?(@user.age.class))
   end
 
   test "user.access behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :access_class)
     assert_true([String, NilClass].include?(@user.access_class.class))
   end
 
   test "user.comment behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :comment)
     assert_true([String, NilClass].include?(@user.comment.class))
   end
 
   test "user.expire behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :expire)
     assert_true([Time, NilClass].include?(@user.expire.class))
   end
 
   test "user.change behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :change)
     assert_true([Time, NilClass].include?(@user.change.class))
   end
 
   test "user.login_time behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :login_time)
     assert_true([Time, NilClass].include?(@user.login_time.class))
   end
 
   test "user.login_device behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :login_device)
     assert_true([String, NilClass].include?(@user.login_device.class))
   end
 
   test "user.login_host behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :login_host)
     assert_true([String, NilClass].include?(@user.login_host.class))
   end
 
   test "user.groups behaves as expected" do
-    @user = Admin.users.first
+    @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :groups)
     assert_kind_of(Array, @user.groups)
   end
@@ -219,25 +221,25 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   ## Group Tests
 
   test "group.name behaves as expected" do
-    @group = Admin.groups.first
+    @group = Admin.get_group(@group_id)
     assert_respond_to(@group, :name)
     assert_kind_of(String, @group.name)
   end
 
   test "group.gid behaves as expected" do
-    @group = Admin.groups.first
+    @group = Admin.get_group(@group_id)
     assert_respond_to(@group, :gid)
     assert_kind_of(Fixnum, @group.gid)
   end
 
   test "group.members behaves as expected" do
-    @group = Admin.groups.first
+    @group = Admin.get_group(@group_id)
     assert_respond_to(@group, :members)
     assert_kind_of(Array, @group.members)
   end
 
   test "group.passwd behaves as expected" do
-    @group = Admin.groups.first
+    @group = Admin.get_group(@group_id)
     assert_respond_to(@group, :passwd)
     assert_kind_of(String, @group.passwd)
   end
