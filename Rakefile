@@ -15,6 +15,10 @@ Rake::TestTask.new('test') do |t|
     t.libs << 'lib/sunos'
   when /bsd/i
     t.libs << 'lib/bsd'
+  when /windows|win32|mingw|cygwin|dos/i
+    t.libs << 'lib/windows'
+  else
+    t.libs << 'lib/unix'
   end
 
   t.warning = true
