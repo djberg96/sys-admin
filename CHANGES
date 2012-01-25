@@ -1,3 +1,27 @@
+== 1.5.6 - 30-Jul-2011
+* Fixed issue for non-gnu platforms where it would use the wrong function
+  prototype because the Ruby core team took it upon themselves to explicitly
+  defined _GNU_SOURCE in config.h in 1.8.7 and later for reasons that baffle me.
+* Some tests on Windows are now skipped unless run with elevated security.
+
+== 1.5.5 - 5-Jul-2011
+* Modified lastlog handling, and ignore getpwent_r and getgrent_r, on AIX.
+  Thanks go to Rick Ohnemus for the spot and patches.
+* Explicitly set spec.cpu on Windows to 'universal' in the gem creation task.
+* Fixed a bug in the User.get_login and User.get_group methods where the query
+  being generated was incorrect if no options were passed. Thanks go to
+  Matthew Brown for the spot.
+
+== 1.5.4 - 7-Oct-2010
+* Prefer the getlastlogx() function over lastlog() where supported.
+
+== 1.5.3 - 6-Oct-2010
+* Refactored the Rakefile. The old installation tasks have been replaced
+  with gem build and install tasks. In addition, the platform handling has
+  been updated for MS Windows.
+* Portions of the gemspec have been moved into the Rakefile gem tasks.
+* Deploying the mingw gem by default for MS Windows now.
+
 == 1.5.2 - 2-Aug-2009
 * Now compatible with Ruby 1.9.x.
 * Added test-unit as a development dependency.
@@ -21,7 +45,7 @@
 * Added the Group#members method. The returns an array of users that the
   group contains.
 * Changed User#class to User#access_class for UNIX flavors to avoid
-  conflicts with the Ruby core Object method. 
+  conflicts with the Ruby core Object method.
 * Added more tests and renamed the test files.
 * Removed an unnecessary function call where a platform might try to
   get lastlog information even if the lastlog.h or utmp.h headers couldn't
