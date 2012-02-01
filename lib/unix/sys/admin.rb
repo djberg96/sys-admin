@@ -28,13 +28,7 @@ module Sys
     end
 
     def self.get_login
-      buf = FFI::MemoryPointer.new(:char, 256)
-
-      if getlogin_r(buf, buf.size) != 0
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
-      end
-
-      buf.read_string
+      getlogin()
     end
 
     def self.groups
@@ -65,7 +59,7 @@ module Sys
         pwd = PasswdStruct.new(getpwuid(uid))
       end
 
-      if pwd.nil?
+      if pwd.null?
         raise Error, "no user found for: #{uid}"
       end
 
@@ -89,7 +83,7 @@ module Sys
         grp = GroupStruct.new(getgrgid(gid))
       end
 
-      if grp.nil?
+      if grp.null?
         raise Error, "no group found for: #{gid}"
       end
 
@@ -97,8 +91,67 @@ module Sys
         g.name    = grp[:gr_name]
         g.passwd  = grp[:gr_passwd]
         g.gid     = grp[:gr_gid]
-        g.members = grp[:gr_mem].read_string_array
+        g.members = grp[:gr_mem].read_array_of_string
       end
+    end
+
+    def self.users
+      users = []
+
+      begin
+        setpwent()
+
+        until (ptr = getpwent()).null?
+          pwd = PasswdStruct.new(ptr)
+          users << get_user_from_struct(pwd)
+        end
+      ensure
+        endpwent()
+      end
+
+      users
+    end
+
+    def self.groups
+      groups = []
+
+      begin
+        setgrent()
+
+        until (ptr = getgrent()).null?
+          grp = GroupStruct.new(ptr)
+          groups << get_group_from_struct(grp)
+        end
+      ensure
+        endgrent()
+      end
+
+      groups
+    end
+
+    private
+
+    def self.get_group_from_struct(grp)
+      Group.new do |g|
+        g.name    = grp[:gr_name]
+        g.passwd  = grp[:gr_passwd]
+        g.gid     = grp[:gr_gid]
+        g.members = grp[:gr_mem].read_array_of_string
+      end
+    end
+
+    def self.get_user_from_struct(pwd)
+      user = User.new do |u|
+        u.name         = pwd[:pw_name]
+        u.passwd       = pwd[:pw_passwd]
+        u.uid          = pwd[:pw_uid]
+        u.gid          = pwd[:pw_gid]
+        u.gecos        = pwd[:pw_gecos]
+        u.dir          = pwd[:pw_dir]
+        u.shell        = pwd[:pw_shell]
+      end
+
+      user
     end
   end
 end

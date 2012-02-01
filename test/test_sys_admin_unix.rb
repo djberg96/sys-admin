@@ -155,7 +155,7 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   test "user.gecos behaves as expected" do
     @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :gecos)
-    assert_kind_of(String, @user.gecos)
+    assert_kind_of([String, NilClass], @user.gecos)
   end
 
   test "user.quota behaves as expected" do
