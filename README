@@ -149,7 +149,7 @@ Admin::Error < StandardError
   Artistic 2.0
 
 == Copyright
-  (C) 2005-2010, Daniel J. Berger
+  (C) 2005-2012, Daniel J. Berger
   All Rights Reserved
 
 == Author
