@@ -10,10 +10,10 @@ module Sys
 
     # Description of the group.
     attr_accessor :description
-    
+
     # Name of the Windows domain to which the group account belongs.
     attr_accessor :domain
-    
+
     # Date the group was added.
     attr_accessor :install_date
 
@@ -49,13 +49,13 @@ module Sys
     def local?
       @local
     end
-    
+
     # Returns the type of SID (Security Identifier) as a stringified value.
     #
     def sid_type
       @sid_type
     end
-      
+
     # Sets the SID (Security Identifier) type to +stype+, which can be
     # one of the following constant values:
     #
@@ -94,39 +94,40 @@ module Sys
             @sid_type = "computer"
           else
             @sid_type = "unknown"
-         end
-       end
+        end
+      end
+
       @sid_type
     end
   end
-   
+
   class User
     # An account for users whose primary account is in another domain.
     TEMP_DUPLICATE = 0x0100
-    
+
     # Default account type that represents a typical user.
     NORMAL = 0x0200
-    
+
     # A permit to trust account for a domain that trusts other domains.
     INTERDOMAIN_TRUST = 0x0800
-    
+
     # An account for a Windows NT/2000 workstation or server that is a
     # member of this domain.
     WORKSTATION_TRUST = 0x1000
-    
+
     # A computer account for a backup domain controller that is a member
     # of this domain.
     SERVER_TRUST = 0x2000
-    
+
     # Domain and username of the account.
     attr_accessor :caption
-    
+
     # Description of the account.
     attr_accessor :description
-    
+
     # Name of the Windows domain to which a user account belongs.
     attr_accessor :domain
-    
+
     # The user's password.
     attr_accessor :password
 
@@ -135,17 +136,17 @@ module Sys
 
     # An array of groups to which the user belongs.
     attr_accessor :groups
-    
+
     # Date the user account was created.
     attr_accessor :install_date
-    
+
     # Name of the Windows user account on the domain that the User#domain
     # property specifies.
     attr_accessor :name
-    
+
     # The user's security identifier.
     attr_accessor :sid
-    
+
     # Current status for the user, such as "ok", "error", etc.
     attr_accessor :status
 
@@ -157,10 +158,10 @@ module Sys
 
     # Used to set whether or not the account is disabled.
     attr_writer :disabled
-    
+
     # Sets whether or not the account is defined on the local computer.
     attr_writer :local
-    
+
     # Sets whether or not the account is locked out of the OS.
     attr_writer :lockout
 
@@ -175,7 +176,7 @@ module Sys
 
     # Returns the account type as a human readable string.
     attr_reader :account_type
-      
+
     # Creates an returns a new User object.  A User object encapsulates a
     # user account on the operating system.
     #
@@ -184,15 +185,15 @@ module Sys
     def initialize
       yield self if block_given?
     end
-      
+
     # Sets the account type for the account.  Possible values are:
-    # 
+    #
     # * User::TEMP_DUPLICATE
     # * User::NORMAL
     # * User::INTERDOMAIN_TRUST
     # * User::WORKSTATION_TRUST
     # * User::SERVER_TRUST
-    # 
+    #
     def account_type=(type)
       case type
         when TEMP_DUPLICATE
@@ -209,13 +210,13 @@ module Sys
           @account_type = 'unknown'
       end
     end
-     
+
     # Returns the SID type as a human readable string.
-    # 
+    #
     def sid_type
       @sid_type
     end
-     
+
     # Sets the SID (Security Identifier) type to +stype+, which can be
     # one of the following constant values:
     #
@@ -228,7 +229,7 @@ module Sys
     # * Admin::SidTypeInvalid
     # * Admin::SidTypeUnknown
     # * Admin::SidTypeComputer
-    # 
+    #
     def sid_type=(stype)
       case stype
         when Admin::SidTypeUser
@@ -253,51 +254,51 @@ module Sys
           @sid_type = 'unknown'
       end
     end
-      
+
     # Returns whether or not the account is disabled.
     #
     def disabled?
       @disabled
     end
-    
+
     # Returns whether or not the account is local.
     #
     def local?
       @local
     end
-    
+
     # Returns whether or not the account is locked out.
     #
     def lockout?
       @lockout
     end
-      
+
     # Returns whether or not the password for the account is changeable.
     #
     def password_changeable?
       @password_changeable
     end
-    
+
     # Returns whether or not the password for the account is changeable.
     #
     def password_expires?
       @password_expires
     end
-    
+
     # Returns whether or not the a password is required for the account.
     #
     def password_required?
       @password_required
     end
   end
-   
+
   class Admin
     # The version of the sys-admin library
     VERSION = '1.5.6'
 
     # This is the error raised in the majority of cases if anything goes wrong
     # with any of the Sys::Admin methods.
-    #  
+    #
     class Error < StandardError; end
 
     SidTypeUser           = 1
@@ -335,7 +336,7 @@ module Sys
         adsi = WIN32OLE.connect("WinNT://#{domain}/#{user},user")
         dir = adsi.get('HomeDirectory')
       end
-       
+
       dir
     end
 
@@ -372,7 +373,7 @@ module Sys
       adsi.members.each{ |g| array << g.name }
       array
     end
-      
+
     # Used by the get_login method
     GetUserName = Win32::API.new('GetUserName', 'PP', 'L', 'advapi32') # :nodoc:
 
@@ -410,20 +411,20 @@ module Sys
     #
     def self.add_user(options = {})
       options = munge_options(options)
-       
+
       name   = options.delete(:name) or raise ArgumentError, 'No user given'
       domain = options[:domain]
 
       if domain.nil?
         domain  = Socket.gethostname
-        moniker = "WinNT://#{domain},Computer"   
+        moniker = "WinNT://#{domain},Computer"
       else
         moniker = "WinNT://#{domain}"
       end
 
-      begin   
+      begin
         adsi = WIN32OLE.connect(moniker)
-        user = adsi.create('user', name)  
+        user = adsi.create('user', name)
         options.each{ |option, value|
           if option.to_s == 'password'
             user.setpassword(value)
@@ -473,7 +474,7 @@ module Sys
       name   = options.delete(:name) or raise ArgumentError, 'No name given'
       domain = options[:domain] || Socket.gethostname
 
-      begin     
+      begin
         adsi = WIN32OLE.connect("WinNT://#{domain}/#{name},user")
         options.each{ |option, value|
            if option.to_s == 'password'
@@ -495,14 +496,14 @@ module Sys
     def self.delete_user(user, domain = nil)
       if domain.nil?
         domain  = Socket.gethostname
-        moniker = "WinNT://#{domain},Computer"   
+        moniker = "WinNT://#{domain},Computer"
       else
         moniker = "WinNT://#{domain}"
       end
 
-      begin   
+      begin
         adsi = WIN32OLE.connect(moniker)
-        adsi.delete('user', user)  
+        adsi.delete('user', user)
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
@@ -573,7 +574,7 @@ module Sys
       group  = options.delete(:name) or raise ArgumentError, 'No name given'
       domain = options[:domain] || Socket.gethostname
 
-      begin                
+      begin
         adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
         options.each{ |option, value| adsi.put(option.to_s, value) }
         adsi.setinfo
@@ -595,12 +596,12 @@ module Sys
 
       begin
         adsi = WIN32OLE.connect(moniker)
-        obj = adsi.delete('group', group)
+        adsi.delete('group', group)
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
     end
-      
+
     # Returns the user name (only) of the current login.
     #
     def self.get_login
@@ -653,13 +654,13 @@ module Sys
       host = options.delete(:host) || Socket.gethostname
       cs = "winmgmts:{impersonationLevel=impersonate}!"
       cs << "//#{host}/root/cimv2"
-       
+
       begin
         wmi = WIN32OLE.connect(cs)
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
-       
+
       query = "select * from win32_useraccount"
 
       i = 0
@@ -684,7 +685,7 @@ module Sys
       end
 
       domain = options[:domain] || host
-       
+
       wmi.execquery(query).each{ |user|
         uid = user.sid.split('-').last.to_i
 
@@ -722,7 +723,7 @@ module Sys
       # If we're here, it means it wasn't found.
       raise Error, "no user found for '#{usr}'"
     end
-      
+
     # In block form, yields a User object for each user on the system. In
     # non-block form, returns an Array of User objects.
     #
@@ -753,13 +754,13 @@ module Sys
       host = options.delete(:host) || Socket.gethostname
       cs = "winmgmts:{impersonationLevel=impersonate}!"
       cs << "//#{host}/root/cimv2"
-       
+
       begin
         wmi = WIN32OLE.connect(cs)
       rescue WIN32OLERuntimeError => e
         raise Error, e
       end
-       
+
       query = "select * from win32_useraccount"
 
       i = 0
@@ -775,7 +776,7 @@ module Sys
 
       array = []
       domain = options[:domain] || host
-       
+
       wmi.execquery(query).each{ |user|
         uid = user.sid.split('-').last.to_i
 
@@ -800,7 +801,7 @@ module Sys
           u.uid                 = uid
           u.dir                 = get_home_dir(user.name, options[:localaccount], host)
         end
-        
+
         if block_given?
           yield usr
         else
@@ -810,7 +811,7 @@ module Sys
 
       return array unless block_given?
     end
-      
+
     # Returns a Group object based on either +name+ or +gid+.
     #
     # call-seq:
@@ -826,7 +827,7 @@ module Sys
     # All other options are passed as WQL parameters to the Win32_Group
     # WMI object. See http://tinyurl.com/bngc8s for a list of possible
     # options.
-    #  
+    #
     # Examples:
     #
     #  # Find a group by name
@@ -850,7 +851,7 @@ module Sys
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
-                
+
       query = "select * from win32_group"
 
       i = 0
@@ -863,7 +864,7 @@ module Sys
           query << " and #{opt} = '#{val}'"
         end
       }
-       
+
       if grp.kind_of?(Fixnum)
         query << " and sid like '%-#{grp}'"
       else
@@ -875,25 +876,25 @@ module Sys
       end
 
       domain = options[:domain] || host
-       
+
       wmi.execquery(query).each{ |group|
         gid = group.sid.split("-").last.to_i
-        
+
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if grp.kind_of?(Fixnum)              
+        if grp.kind_of?(Fixnum)
            next if grp != gid
         end
-        
+
         group_object = Group.new do |g|
           g.caption      = group.caption
-          g.description  = group.description              
+          g.description  = group.description
           g.domain       = group.domain
           g.gid          = gid
           g.install_date = group.installdate
           g.local        = group.localaccount
-          g.name         = group.name   
-          g.sid          = group.sid                         
+          g.name         = group.name
+          g.sid          = group.sid
           g.sid_type     = group.sidtype
           g.status       = group.status
           g.members      = get_members(domain, group.name)
@@ -905,7 +906,7 @@ module Sys
       # If we're here, it means it wasn't found.
       raise Error, "no group found for '#{grp}'"
     end
-   
+
     # In block form, yields a Group object for each user on the system.  In
     # non-block form, returns an Array of Group objects.
     #
@@ -937,13 +938,13 @@ module Sys
       host = options.delete(:host) || Socket.gethostname
       cs = "winmgmts:{impersonationLevel=impersonate}!"
       cs << "//#{host}/root/cimv2"
-      
+
       begin
         wmi = WIN32OLE.connect(cs)
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
-       
+
       query = "select * from win32_group"
 
       i = 0
@@ -963,13 +964,13 @@ module Sys
       wmi.execquery(query).each{ |group|
         grp = Group.new do |g|
           g.caption      = group.caption
-          g.description  = group.description              
+          g.description  = group.description
           g.domain       = group.domain
           g.gid          = group.sid.split("-").last.to_i
           g.install_date = group.installdate
           g.local        = group.localaccount
-          g.name         = group.name   
-          g.sid          = group.sid                         
+          g.name         = group.name
+          g.sid          = group.sid
           g.sid_type     = group.sidtype
           g.status       = group.status
           g.members      = get_members(domain, group.name)
