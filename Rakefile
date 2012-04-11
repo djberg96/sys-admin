@@ -2,9 +2,7 @@ require 'rake'
 require 'rake/clean'
 require 'rake/testtask'
 require 'rbconfig'
-include Config
-
-WINDOWS = CONFIG['host_os'] =~ /msdos|mswin|win32|mingw|cygwin|windows/i
+include RbConfig
 
 CLEAN.include(
   '**/*.gem',               # Gem files
@@ -18,7 +16,7 @@ CLEAN.include(
 
 desc "Build the sys-admin library on UNIX systems (but don't install it)"
 task :build => [:clean] do
-  unless WINDOWS
+  unless File::ALT_SEPARATOR
     Dir.chdir('ext') do
       ruby 'extconf.rb'
       sh 'make'
@@ -33,7 +31,7 @@ namespace :gem do
   task :create => [:clean] do
     spec = eval(IO.read('sys-admin.gemspec'))
 
-    if WINDOWS
+    if File::ALT_SEPARATOR
       spec.platform = Gem::Platform::CURRENT
       spec.platform.cpu = 'universal'
       spec.files = spec.files.reject{ |f| f.include?('ext') }
@@ -56,7 +54,7 @@ end
 
 desc "Run the test suite"
 Rake::TestTask.new('test') do |t|
-  if WINDOWS
+  if File::ALT_SEPARATOR
     t.libs << 'lib'
   else
     task :test => :build
