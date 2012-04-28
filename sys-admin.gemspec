@@ -4,7 +4,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name      = 'sys-admin'
-  spec.version   = '1.5.6'
+  spec.version   = '1.5.7'
   spec.author    = 'Daniel J. Berger'
   spec.license   = 'Artistic 2.0'
   spec.email     = 'djberg96@gmail.com'
@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files  = ['CHANGES', 'README', 'MANIFEST']
   spec.rubyforge_project = 'sysutils'
 	
-  spec.add_development_dependency('test-unit', '>= 2.1.1')
+  spec.add_development_dependency('test-unit', '>= 2.4.0')
 
   spec.description = <<-EOF
     The sys-admin library is a unified, cross platform replacement for the
