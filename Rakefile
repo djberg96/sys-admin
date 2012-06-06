@@ -20,7 +20,7 @@ task :build => [:clean] do
     Dir.chdir('ext') do
       ruby 'extconf.rb'
       sh 'make'
-      build_file = 'admin.' + Config::CONFIG['DLEXT']
+      build_file = 'admin.' + RbConfig::CONFIG['DLEXT']
       FileUtils.cp(build_file, 'sys')
     end
   end
