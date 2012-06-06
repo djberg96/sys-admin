@@ -1,7 +1,7 @@
 require "mkmf"
 require "rbconfig"
 
-AIX = Config::CONFIG['host_os'] =~ /aix/i
+AIX = RbConfig::CONFIG['host_os'] =~ /aix/i
 
 # TODO: Just run the rake install task.
 if File::ALT_SEPARATOR
