@@ -1,3 +1,6 @@
+== 1.5.7 - ???
+* Warning fixes for 1.9.3.
+
 == 1.5.6 - 30-Jul-2011
 * Fixed issue for non-gnu platforms where it would use the wrong function
   prototype because the Ruby core team took it upon themselves to explicitly
