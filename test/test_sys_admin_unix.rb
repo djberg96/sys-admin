@@ -4,9 +4,7 @@
 # Test suite for the Unix version of sys-admin. This test should be run
 # via the 'rake test' task.
 ###############################################################################
-require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
 require 'sys/admin'
 include Sys
 
@@ -248,9 +246,9 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
 
   test "ffi functions are private" do
     methods = Admin.methods(false).map{ |e| e.to_s }
-    assert_false(Admin.methods.include?('getlogin'))
-    assert_false(Admin.methods.include?('getlogin_r'))
-    assert_false(Admin.methods.include?('strerror'))
+    assert_false(methods.include?('getlogin'))
+    assert_false(methods.include?('getlogin_r'))
+    assert_false(methods.include?('strerror'))
   end
 
   def teardown
@@ -258,5 +256,5 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
     @user_id  = nil
     @group    = nil
     @group_id = nil
- end
+  end
 end
