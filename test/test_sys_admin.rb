@@ -4,9 +4,7 @@
 # This exists mostly for the sake of the gemspec, so that it calls the right
 # test suite based on the platform.
 ###############################################################################
-require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
 
 if File::ALT_SEPARATOR
   require 'test_sys_admin_windows'

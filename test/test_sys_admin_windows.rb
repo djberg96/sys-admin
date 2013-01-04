@@ -7,10 +7,7 @@
 # 
 # It is assumed that this test will be run via the 'rake test' task.
 ###############################################################################
-require 'rubygems'
-gem 'test-unit'
-
-require 'test/unit'
+require 'test-unit'
 require 'sys/admin'
 require 'socket'
 include Sys
