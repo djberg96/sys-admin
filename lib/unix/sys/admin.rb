@@ -31,27 +31,6 @@ module Sys
       getlogin()
     end
 
-    def self.groups
-      groups = []
-
-      begin
-        setgrent()
-        until (grp_ptr = getgrent()).null?
-          grp = GroupStruct.new(grp_ptr)
-          groups << Group.new do |g|
-            g.name    = grp[:gr_name]
-            g.passwd  = grp[:gr_passwd]
-            g.gid     = grp[:gr_gid]
-            g.members = grp[:gr_mem].read_string_array
-          end
-        end
-      ensure
-        endgrent()
-      end
-
-      groups
-    end
-
     def self.get_user(uid)
       if uid.is_a?(String)
         pwd = PasswdStruct.new(getpwnam(uid))
@@ -87,7 +66,7 @@ module Sys
         raise Error, "no group found for: #{gid}"
       end
 
-      group = Group.new do |g|
+      Group.new do |g|
         g.name    = grp[:gr_name]
         g.passwd  = grp[:gr_passwd]
         g.gid     = grp[:gr_gid]
