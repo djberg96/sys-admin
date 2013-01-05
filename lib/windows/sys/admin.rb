@@ -605,7 +605,7 @@ module Sys
 
       begin
         adsi = WIN32OLE.connect(moniker)
-        obj = adsi.delete('group', group)
+        adsi.delete('group', group)
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
@@ -622,10 +622,7 @@ module Sys
         raise Error, 'GetUserName() call failed in get_login'
       end
 
-      length = nsize.read_ulong * 2
-      username = buffer.strip.tr(0.chr, '')
-
-      username
+      buffer.strip.tr(0.chr, '')
     end
 
     # Returns a User object based on either +name+ or +uid+.
