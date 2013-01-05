@@ -8,18 +8,8 @@
   require 'sys/admin'
   include Sys
 
-  # Yields a User object for each user
-  Admin.users{ |user|
-    p user
-  }
-
   # Returns an Array of User objects
   a = Admin.users
-
-  # Yields a Group object for each group
-  Admin.groups{ |group|
-    p group
-  }
 
   # Returns an Array of Group objects
   g = Admin.groups
@@ -47,17 +37,13 @@ Admin.get_group(gid, options = {})
   options you provide, e.g. 'domain' or 'localaccount'.
 
 Admin.groups(options = {})
-Admin.groups(options = {}){ |group| ... }
-  In block form, yields a Group object for each user on the system.  In
-  non-block form, returns an Array of Group objects.
+  Returns an Array of Group objects.
 
   The +options+ hash is for MS Windows only, and allows you to restrict the
   search based on the options you provide, e.g. 'domain' or 'localaccount'.
 
 Admin.users(options = {})
-Admin.users(options = {}){ |user| ... }
-  In block form, yields a User object for each user on the system.  In
-  non-block form, returns an Array of User objects.
+  Returns an Array of User objects.
    
   The +options+ hash is for MS Windows only, and allows you to restrict the
   search based on the options you provide, e.g. 'domain' or 'localaccount'.
@@ -149,7 +135,7 @@ Admin::Error < StandardError
   Artistic 2.0
 
 == Copyright
-  (C) 2005-2012, Daniel J. Berger
+  (C) 2005-2013, Daniel J. Berger
   All Rights Reserved
 
 == Author

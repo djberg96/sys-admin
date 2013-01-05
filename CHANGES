@@ -1,3 +1,8 @@
+== 1.6.0 - 5-Jan-2013
+* Converted code to use FFI. This mostly only affects the unix flavors.
+* The Admin.users and Admin.groups methods no longer accept a block.
+* Some test suite updates.
+
 == 1.5.6 - 30-Jul-2011
 * Fixed issue for non-gnu platforms where it would use the wrong function
   prototype because the Ruby core team took it upon themselves to explicitly
