@@ -1,3 +1,4 @@
+require 'ffi'
 require 'win32ole'
 require 'win32/security'
 require 'win32/registry'
@@ -293,6 +294,8 @@ module Sys
   end
 
   class Admin
+    extend FFI::Library
+
     # The version of the sys-admin library.
     VERSION = '1.6.0'
 
@@ -375,7 +378,9 @@ module Sys
     end
 
     # Used by the get_login method
-    GetUserName = Win32::API.new('GetUserName', 'PP', 'L', 'advapi32') # :nodoc:
+    ffi_lib :advapi32
+    attach_function :GetUserNameW, [:buffer_out, :pointer], :bool
+    private_class_method :GetUserNameW
 
     public
 
@@ -610,14 +615,16 @@ module Sys
     #
     def self.get_login
       buffer = 0.chr * 256
-      nsize  = [buffer.size].pack("L")
+      nsize  = FFI::MemoryPointer.new(:ulong)
+      nsize.write_ulong(buffer.size)
 
-      if GetUserName.call(buffer, nsize) == 0
+      unless GetUserNameW(buffer, nsize)
         raise Error, 'GetUserName() call failed in get_login'
       end
 
-      length   = nsize.unpack('L')[0]
-      username = buffer[0 ... length].chop
+      length = nsize.read_ulong * 2
+      username = buffer.strip.tr(0.chr, '')
+
       username
     end
 
