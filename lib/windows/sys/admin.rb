@@ -42,7 +42,7 @@ module Sys
     # Yields +self+ if a block is given.
     #
     def initialize
-       yield self if block_given?
+      yield self if block_given?
     end
 
     # Returns whether or not the group is a local group.
@@ -184,7 +184,7 @@ module Sys
     # Yields +self+ if a block is provided.
     #
     def initialize
-       yield self if block_given?
+      yield self if block_given?
     end
 
     # Sets the account type for the account.  Possible values are:
@@ -731,12 +731,7 @@ module Sys
       raise Error, "no user found for '#{usr}'"
     end
 
-    # In block form, yields a User object for each user on the system. In
-    # non-block form, returns an Array of User objects.
-    #
-    # call-seq:
-    #    Sys::Admin.users(options = {})
-    #    Sys::Admin.users(options = {}){ |user| ... }
+    # Returns an array of User objects for each user on the system.
     #
     # You may specify a host from which information is retrieved. The
     # default is the local host.
@@ -809,14 +804,10 @@ module Sys
           u.dir                 = get_home_dir(user.name, options[:localaccount], host)
         end
 
-        if block_given?
-          yield usr
-        else
-          array.push(usr)
-        end
+        array.push(usr)
       }
 
-      return array unless block_given?
+      array
     end
 
     # Returns a Group object based on either +name+ or +gid+.
@@ -910,12 +901,7 @@ module Sys
       raise Error, "no group found for '#{grp}'"
     end
 
-    # In block form, yields a Group object for each user on the system.  In
-    # non-block form, returns an Array of Group objects.
-    #
-    # call-seq:
-    #    groups(options = {})
-    #    groups(options = {}){ |group| ... }
+    # Returns an array of Group objects for each user on the system.
     #
     # You may specify a host option from which information is retrieved.
     # The default is the local host.
@@ -979,14 +965,10 @@ module Sys
           g.members      = get_members(domain, group.name)
         end
 
-        if block_given?
-          yield grp
-        else
-          array.push(grp)
-        end
+        array.push(grp)
       }
 
-      return array unless block_given?
+      array
     end
   end
 end
