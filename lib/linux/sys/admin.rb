@@ -58,6 +58,8 @@ module Sys
 
     public
 
+    # Returns the login for the current process.
+    #
     def self.get_login
       buf = FFI::MemoryPointer.new(:char, 256)
 
@@ -68,6 +70,14 @@ module Sys
       buf.read_string
     end
 
+    # Returns a User object for the given name or uid. Raises an error
+    # if a user cannot be found.
+    #
+    # Examples:
+    #
+    #    Sys::Admin.get_user('joe')
+    #    Sys::Admin.get_user(501)
+    #
     def self.get_user(uid)
       buf  = FFI::MemoryPointer.new(:char, 1024)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
@@ -93,6 +103,14 @@ module Sys
       get_user_from_struct(pwd)
     end
 
+    # Returns a Group object for the given name or uid. Raises an error
+    # if a group cannot be found.
+    #
+    # Examples:
+    #
+    #    Sys::Admin.get_group('admin')
+    #    Sys::Admin.get_group(101)
+    #
     def self.get_group(gid)
       buf  = FFI::MemoryPointer.new(:char, 1024)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
@@ -118,6 +136,8 @@ module Sys
       get_group_from_struct(grp)
     end
 
+    # Returns an array of User objects for each user on the system.
+    #
     def self.users
       users = []
 
@@ -143,6 +163,8 @@ module Sys
       users
     end
 
+    # Returns an array of Group objects for each user on the system.
+    #
     def self.groups
       groups = []
 
@@ -170,6 +192,7 @@ module Sys
 
     private
 
+    # Takes a GroupStruct and converts it to a Group object.
     def self.get_group_from_struct(grp)
       Group.new do |g|
         g.name    = grp[:gr_name]
@@ -179,6 +202,7 @@ module Sys
       end
     end
 
+    # Takes a UserStruct and converts it to a User object.
     def self.get_user_from_struct(pwd)
       user = User.new do |u|
         u.name         = pwd[:pw_name]
