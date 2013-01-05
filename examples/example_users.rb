@@ -10,12 +10,12 @@ include Sys
 
 =begin
 user = User.new do |u|
-   u.name              = "Foo"
-   u.description       = "Test account"
-   u.password          = "changeme"
-   #u.lockout           = false
-   u.disabled          = true
-   #u.password_required = true
+  u.name              = "Foo"
+  u.description       = "Test account"
+  u.password          = "changeme"
+  #u.lockout           = false
+  u.disabled          = true
+  #u.password_required = true
 end
 
 Admin.delete_user(u.name) rescue nil
@@ -30,9 +30,11 @@ user = Admin.get_login
 
 puts "User: #{user}"
 
-Admin.users{ |u|
-   pp u
-   puts
+sleep 3
+
+Admin.users.each{ |u|
+  pp u
+  puts
 }
 
 pp Admin.get_user(user)
