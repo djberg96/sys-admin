@@ -2,6 +2,9 @@
 * Converted code to use FFI. This mostly only affects the unix flavors.
 * The Admin.users and Admin.groups methods no longer accept a block.
 * Some test suite updates.
+* Because all code is now pure Ruby, there is longer any need for two
+  separate gems. There is now a single, unified gem that works on all
+  supported platforms.
 
 == 1.5.6 - 30-Jul-2011
 * Fixed issue for non-gnu platforms where it would use the wrong function
