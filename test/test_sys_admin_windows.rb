@@ -9,12 +9,21 @@
 ###############################################################################
 require 'test-unit'
 require 'sys/admin'
+require 'win32/security'
 require 'socket'
 include Sys
 
 class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   def self.startup
     @@host = Socket.gethostname
+    @@version = `ver`.scan(/\d/).first.to_i
+
+    # No elevated_security? method for XP yet.
+    if @@version < 6
+      @@elevated = true
+    else
+      @@elevated = Win32::Security.elevated_security?
+    end
   end
 
   def setup
@@ -29,6 +38,7 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   # Admin singleton methods
 
   def test_01_add_user
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :add_user)
     assert_nothing_raised{
       Admin.add_user(:name => 'foo', :password => 'a1b2c3D4')
@@ -36,6 +46,7 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   end
 
   def test_02_config_user
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :configure_user)
     assert_nothing_raised{
       Admin.configure_user(
@@ -48,16 +59,19 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   end
 
   def test_03_delete_user
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :delete_user)
     assert_nothing_raised{ Admin.delete_user('foo') }
   end
 
   def test_01_add_group
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :add_group)
     assert_nothing_raised{ Admin.add_group(:name => 'bar') }
   end
 
   def test_02_configure_group
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :configure_group)
     assert_nothing_raised{
        Admin.configure_group(:name => 'bar', :description => 'delete me')
@@ -65,6 +79,7 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   end
 
   def test_03_delete_group
+    omit_unless(@@elevated)
     assert_respond_to(Admin, :delete_group)
     assert_nothing_raised{ Admin.delete_group('bar') }
   end
@@ -310,5 +325,6 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
 
   def self.shutdown
     @@host = nil
+    @@elevated = nil
   end
 end
