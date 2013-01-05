@@ -5,6 +5,20 @@ require 'rbconfig'
 
 CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc")
 
+namespace :gem do
+  desc "Create the sys-uname gem"
+  task :create => [:clean] do
+    spec = eval(IO.read('sys-admin.gemspec'))
+    Gem::Builder.new(spec).build
+  end
+
+  desc "Install the sys-uname gem"
+  task :install => [:build] do
+    file = Dir["*.gem"].first
+    sh "gem install #{file}"
+  end
+end
+
 Rake::TestTask.new('test') do |t|
   case RbConfig::CONFIG['host_os']
   when /darwin|osx/i
