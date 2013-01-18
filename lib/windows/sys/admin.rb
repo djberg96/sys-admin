@@ -379,7 +379,7 @@ module Sys
 
     # Used by the get_login method
     ffi_lib :advapi32
-    attach_function :GetUserNameW, [:buffer_out, :pointer], :bool
+    attach_function :GetUserNameW, [:pointer, :pointer], :bool
     private_class_method :GetUserNameW
 
     public
@@ -614,7 +614,7 @@ module Sys
     # Returns the user name (only) of the current login.
     #
     def self.get_login
-      buffer = 0.chr * 256
+      buffer = FFI::MemoryPointer.new(:char, 256)
       nsize  = FFI::MemoryPointer.new(:ulong)
       nsize.write_ulong(buffer.size)
 
@@ -622,7 +622,7 @@ module Sys
         raise Error, 'GetUserName() call failed in get_login'
       end
 
-      buffer.strip.tr(0.chr, '')
+      buffer.read_string(nsize.read_ulong * 2).tr(0.chr, '')
     end
 
     # Returns a User object based on either +name+ or +uid+.
