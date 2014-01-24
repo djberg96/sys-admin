@@ -17,7 +17,9 @@ Gem::Specification.new do |spec|
   spec.rubyforge_project = 'sysutils'
 	
   spec.add_dependency('ffi', '>= 1.1.0')
+
   spec.add_development_dependency('test-unit', '>= 2.5.0')
+  spec.add_development_dependency('rake')
 
   spec.description = <<-EOF
     The sys-admin library is a unified, cross platform replacement for the
