@@ -5,6 +5,8 @@
 * Modified the Admin.configure_user method so that you don't need to know the
   old password. Just pass a single string argument for the new password.
 * Fixed a potential encoding issue for the Admin.get_login method on JRuby.
+* Updated the gem:create task in the Rakefile.
+* Added rake as a development dependency.
 
 == 1.6.0 - 5-Jan-2013
 * Converted code to use FFI. This mostly only affects the unix flavors.
