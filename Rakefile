@@ -9,7 +9,12 @@ namespace :gem do
   desc "Create the sys-uname gem"
   task :create => [:clean] do
     spec = eval(IO.read('sys-admin.gemspec'))
-    Gem::Builder.new(spec).build
+    if Gem::VERSION < "2.0"
+      Gem::Builder.new(spec).build
+    else
+      require 'rubygems/package'
+      Gem::Package.build(spec)
+    end
   end
 
   desc "Install the sys-uname gem"
