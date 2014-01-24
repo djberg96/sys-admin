@@ -297,7 +297,7 @@ module Sys
     extend FFI::Library
 
     # The version of the sys-admin library.
-    VERSION = '1.6.0'
+    VERSION = '1.6.1'
 
     # This is the error raised in the majority of cases if anything goes wrong
     # with any of the Sys::Admin methods.
@@ -465,7 +465,7 @@ module Sys
     #  # Change the password
     #  Sys::Admin.configure_user(
     #     :name     => 'asmith',
-    #     :password => [old_pass, new_pass]
+    #     :password => 'new_password'
     #  )
     #
     #  # Configure a user on a specific domain
@@ -486,7 +486,7 @@ module Sys
 
         options.each{ |option, value|
           if option.to_s == 'password'
-            adsi.changepassword(value[0], value[1])
+            adsi.setpassword(value)
           else
             adsi.put(option.to_s, value)
           end
@@ -557,6 +557,28 @@ module Sys
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
+    end
+
+    # Adds +user+ to +group+ on the specified +domain+, or the localhost
+    # if no domain is specified.
+    #
+    def self.add_group_member(user, group, domain=nil)
+      domain ||= Socket.gethostname
+      adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
+      adsi.Add("WinNT://#{domain}/#{user}")
+    rescue WIN32OLERuntimeError => err
+      raise Error, err
+    end
+
+    # Removes +user+ from +group+ on the specified +domain+, or the localhost
+    # if no domain is specified.
+    #
+    def self.remove_group_member(user, group, domain=nil)
+      domain ||= Socket.gethostname
+      adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
+      adsi.Remove("WinNT://#{domain}/#{user}")
+    rescue WIN32OLERuntimeError => err
+      raise Error, err
     end
 
     # Configures the +group+ using +options+. If no domain option is
