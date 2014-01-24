@@ -1,3 +1,11 @@
+== 1.6.1 - ???
+* Added the Admin.add_group_member and Admin.remove_group member methos. These
+  let you add a user to a specific group. Thanks go to Alexey Kolyanov for the
+  idea and the code.
+* Modified the Admin.configure_user method so that you don't need to know the
+  old password. Just pass a single string argument for the new password.
+* Fixed a potential encoding issue for the Admin.get_login method on JRuby.
+
 == 1.6.0 - 5-Jan-2013
 * Converted code to use FFI. This mostly only affects the unix flavors.
 * The Admin.users and Admin.groups methods no longer accept a block.
