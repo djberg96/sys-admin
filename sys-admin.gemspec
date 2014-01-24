@@ -4,7 +4,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name      = 'sys-admin'
-  spec.version   = '1.6.0'
+  spec.version   = '1.6.1'
   spec.author    = 'Daniel J. Berger'
   spec.license   = 'Artistic 2.0'
   spec.email     = 'djberg96@gmail.com'
