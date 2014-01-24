@@ -16,14 +16,7 @@ include Sys
 class TC_Sys_Admin_Win32 < Test::Unit::TestCase
   def self.startup
     @@host = Socket.gethostname
-    @@version = `ver`.scan(/\d/).first.to_i
-
-    # No elevated_security? method for XP yet.
-    if @@version < 6
-      @@elevated = true
-    else
-      @@elevated = Win32::Security.elevated_security?
-    end
+    @@elevated = Win32::Security.elevated_security?
   end
 
   def setup
@@ -53,12 +46,12 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
         :name        => 'foo',
         :description => 'delete me',
         :fullname    => 'fubar',
-        :password    => ['a1b2c3D4', 'd1c2b3A4']
+        :password    => 'd1c2b3A4'
       )
     }
   end
 
-  def test_03_delete_user
+  def test_06_delete_user
     omit_unless(@@elevated)
     assert_respond_to(Admin, :delete_user)
     assert_nothing_raised{ Admin.delete_user('foo') }
@@ -74,11 +67,23 @@ class TC_Sys_Admin_Win32 < Test::Unit::TestCase
     omit_unless(@@elevated)
     assert_respond_to(Admin, :configure_group)
     assert_nothing_raised{
-       Admin.configure_group(:name => 'bar', :description => 'delete me')
+      Admin.configure_group(:name => 'bar', :description => 'delete me')
     }
   end
 
-  def test_03_delete_group
+  def test_03_add_group_member
+    omit_unless(@@elevated)
+    assert_respond_to(Admin, :add_group_member)
+    assert_nothing_raised{ Admin.add_group_member('foo', 'bar') }
+  end
+
+  def test_04_remove_group_member
+    omit_unless(@@elevated)
+    assert_respond_to(Admin, :remove_group_member)
+    assert_nothing_raised{ Admin.remove_group_member('foo', 'bar') }
+  end
+
+  def test_05_delete_group
     omit_unless(@@elevated)
     assert_respond_to(Admin, :delete_group)
     assert_nothing_raised{ Admin.delete_group('bar') }
