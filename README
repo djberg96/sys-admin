@@ -58,6 +58,7 @@ Admin.users(options = {})
   * domain
   * password
   * full_name
+  * gid
   * install_date
   * name
   * sid
@@ -68,6 +69,7 @@ Admin.users(options = {})
   * password_changeable?
   * password_expires?
   * password_required?
+  * uid
      
 === User (Unix)
   The User class has the following attributes on Unix systems:
