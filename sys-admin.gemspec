@@ -1,10 +1,9 @@
-require 'rubygems'
-
 # Do not use this file directly. Build the gem via the Rake tasks.
+require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name      = 'sys-admin'
-  spec.version   = '1.6.1'
+  spec.version   = '1.6.2'
   spec.author    = 'Daniel J. Berger'
   spec.license   = 'Artistic 2.0'
   spec.email     = 'djberg96@gmail.com'
