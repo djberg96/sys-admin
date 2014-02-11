@@ -1,3 +1,7 @@
+== 1.6.2 - 11-Feb-2014
+* The User#gid method is now supported on MS Windows. It returns the user's
+  primary group ID.
+
 == 1.6.1 - 24-Jan-2014
 * Added the Admin.add_group_member and Admin.remove_group member methods. These
   let you add a user to a specific group. Thanks go to Alexey Kolyanov for the
