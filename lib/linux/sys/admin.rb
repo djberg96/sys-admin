@@ -7,6 +7,9 @@ module Sys
   class Admin
     private
 
+    # :no-doc:
+    BUF_MAX = 65536 # Absolute max buffer size for retry attempts.
+
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, [:string, :int], :int
     attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
@@ -110,19 +113,38 @@ module Sys
     #
     #    Sys::Admin.get_group('admin')
     #    Sys::Admin.get_group(101)
+    #--
+    # For groups with a large number of members we retry, allocating another
+    # 1k on each retry attempt, up to a maximum of 64k, which ought to be way
+    # more than you'll ever need.
     #
     def self.get_group(gid)
-      buf  = FFI::MemoryPointer.new(:char, 1024)
+      bufsize = 1024
+      buf  = FFI::MemoryPointer.new(:char, bufsize)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = GroupStruct.new
 
       if gid.is_a?(String)
-        if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+        begin
+          if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+          end
+        rescue Errno::ERANGE # Large groups
+          raise if bufsize >= BUF_MAX
+          bufsize += 1024
+          buf = FFI::MemoryPointer.new(:char, bufsize)
+          retry
         end
       else
-        if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
+        begin
+          if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
+          end
+        rescue Errno::ERANGE # Large groups
+          raise if bufsize >= BUF_MAX
+          bufsize += 1024
+          buf = FFI::MemoryPointer.new(:char, bufsize)
+          retry
         end
       end
 
@@ -256,4 +278,9 @@ module Sys
       lastlog
     end
   end
+end
+
+if $0 == __FILE__
+  include Sys
+  p Admin.get_group(122)
 end
