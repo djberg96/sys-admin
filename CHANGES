@@ -1,3 +1,7 @@
+== 1.6.3 - ???
+* The Admin#get_group method now handles groups with very large numbers
+  of members more robustly.
+
 == 1.6.2 - 11-Feb-2014
 * The User#gid method is now supported on MS Windows. It returns the user's
   primary group ID.
