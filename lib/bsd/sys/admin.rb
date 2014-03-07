@@ -1,5 +1,6 @@
 require 'sys/admin/custom'
 require 'sys/admin/common'
+require 'rbconfig'
 
 # The BSD specific code.
 
@@ -27,7 +28,7 @@ module Sys
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
-      layout(
+      fields = [
         :pw_name, :string,
         :pw_passwd, :string,
         :pw_uid, :uid_t,
@@ -37,9 +38,14 @@ module Sys
         :pw_gecos, :string,
         :pw_dir, :string,
         :pw_shell, :string,
-        :pw_expire, :time_t,
-        :pw_fields, :int
-      )
+        :pw_expire, :time_t
+      ]
+
+      if RbConfig::CONFIG['host_os'] =~ /freebsd/i
+        fields.push(:pw_fields, :int)
+      end
+
+      layout(*fields)
     end
 
     # struct group from /usr/include/grp.h
