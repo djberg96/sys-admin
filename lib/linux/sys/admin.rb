@@ -119,39 +119,33 @@ module Sys
     # more than you'll ever need.
     #
     def self.get_group(gid)
-      bufsize = 1024
-      buf  = FFI::MemoryPointer.new(:char, bufsize)
+      size = 1024
+      buf  = FFI::MemoryPointer.new(:char, size)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = GroupStruct.new
 
-      if gid.is_a?(String)
-        begin
+      begin
+        if gid.is_a?(String)
           if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
-            raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+            raise SystemCallError.new('getgrnam_r', FFI.errno)
           end
-        rescue Errno::ERANGE # Large groups
-          raise if bufsize >= BUF_MAX
-          bufsize += 1024
-          buf = FFI::MemoryPointer.new(:char, bufsize)
-          retry
-        end
-      else
-        begin
+        else
           if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
-            raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
+            raise SystemCallError.new('getgrgid_r', FFI.errno)
           end
-        rescue Errno::ERANGE # Large groups
-          raise if bufsize >= BUF_MAX
-          bufsize += 1024
-          buf = FFI::MemoryPointer.new(:char, bufsize)
-          retry
         end
+      rescue Errno::ERANGE # Large groups
+        puts "Retry"
+        raise if size >= BUF_MAX
+        size += 1024
+        buf = FFI::MemoryPointer.new(:char, size)
+        retry
       end
 
       ptr = pbuf.read_pointer
 
       if ptr.null?
-        raise Error, "no group found for #{gid}"
+        raise Error, "no group found for '#{gid}'"
       end
 
       grp = GroupStruct.new(ptr)
@@ -278,9 +272,4 @@ module Sys
       lastlog
     end
   end
-end
-
-if $0 == __FILE__
-  include Sys
-  p Admin.get_group(122)
 end
