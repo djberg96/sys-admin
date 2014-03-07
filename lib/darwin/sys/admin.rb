@@ -7,6 +7,9 @@ module Sys
   class Admin
     private
 
+    # :no-doc:
+    BUF_MAX = 65536 # Max buf size for retry.
+
     attach_function :getlogin_r, [:pointer, :int], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
@@ -109,24 +112,32 @@ module Sys
     #    Sys::Admin.get_group(101)
     #
     def self.get_group(gid)
-      buf  = FFI::MemoryPointer.new(:char, 1024)
+      size = 1024
+      buf  = FFI::MemoryPointer.new(:char, size)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = GroupStruct.new
 
-      if gid.is_a?(String)
-        if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+      begin
+        if gid.is_a?(String)
+          if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise SystemCallError.new('getgrnam_r', FFI.errno)
+          end
+        else
+          if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise SystemCallError.new('getgrgid_r', FFI.errno)
+          end
         end
-      else
-        if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
-        end
+      rescue Errno::ERANGE, Errno::ENOENT # Dumb Darwin
+        size += 1024
+        raise if size > BUF_MAX
+        buf = FFI::MemoryPointer.new(:char, size)
+        retry
       end
 
       ptr = pbuf.read_pointer
 
       if ptr.null?
-        raise Error, "no group found for #{gid}"
+        raise Error, "no group found for '#{gid}'"
       end
 
       grp = GroupStruct.new(ptr)
