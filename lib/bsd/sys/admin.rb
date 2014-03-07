@@ -30,14 +30,15 @@ module Sys
       layout(
         :pw_name, :string,
         :pw_passwd, :string,
-        :pw_uid, :uint,
-        :pw_gid, :uint,
-        :pw_change, :ulong,
+        :pw_uid, :uid_t,
+        :pw_gid, :gid_t,
+        :pw_change, :time_t,
         :pw_class, :string,
         :pw_gecos, :string,
         :pw_dir, :string,
         :pw_shell, :string,
-        :pw_expire, :ulong
+        :pw_expire, :time_t,
+        :pw_fields, :int
       )
     end
 
