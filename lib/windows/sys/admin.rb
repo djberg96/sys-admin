@@ -154,6 +154,9 @@ module Sys
     # The user's id (RID).
     attr_accessor :uid
 
+    # The user's primary group ID.
+    attr_accessor :gid
+
     # The user's home directory
     attr_accessor :dir
 
@@ -196,26 +199,26 @@ module Sys
     # * User::SERVER_TRUST
     #
     def account_type=(type)
-       case type
-          when TEMP_DUPLICATE
-             @account_type = 'duplicate'
-          when NORMAL
-             @account_type = 'normal'
-          when INTERDOMAIN_TRUST
-             @account_type = 'interdomain_trust'
-          when WORKSTATION_TRUST
-             @account_type = 'workstation_trust'
-          when SERVER_TRUST
-             @account_type = 'server_trust'
-          else
-             @account_type = 'unknown'
-       end
+      case type
+        when TEMP_DUPLICATE
+          @account_type = 'duplicate'
+        when NORMAL
+          @account_type = 'normal'
+        when INTERDOMAIN_TRUST
+          @account_type = 'interdomain_trust'
+        when WORKSTATION_TRUST
+          @account_type = 'workstation_trust'
+        when SERVER_TRUST
+          @account_type = 'server_trust'
+        else
+          @account_type = 'unknown'
+      end
     end
 
     # Returns the SID type as a human readable string.
     #
     def sid_type
-       @sid_type
+      @sid_type
     end
 
     # Sets the SID (Security Identifier) type to +stype+, which can be
@@ -232,64 +235,64 @@ module Sys
     # * Admin::SidTypeComputer
     #
     def sid_type=(stype)
-       case stype
-          when Admin::SidTypeUser
-             @sid_type = 'user'
-          when Admin::SidTypeGroup
-             @sid_type = 'group'
-          when Admin::SidTypeDomain
-             @sid_type = 'domain'
-          when Admin::SidTypeAlias
-             @sid_type = 'alias'
-          when Admin::SidTypeWellKnownGroup
-             @sid_type = 'well_known_group'
-          when Admin::SidTypeDeletedAccount
-             @sid_type = 'deleted_account'
-          when Admin::SidTypeInvalid
-             @sid_type = 'invalid'
-          when Admin::SidTypeUnknown
-             @sid_type = 'unknown'
-          when Admin::SidTypeComputer
-             @sid_type = 'computer'
-          else
-             @sid_type = 'unknown'
-       end
+      case stype
+        when Admin::SidTypeUser
+          @sid_type = 'user'
+        when Admin::SidTypeGroup
+          @sid_type = 'group'
+        when Admin::SidTypeDomain
+          @sid_type = 'domain'
+        when Admin::SidTypeAlias
+          @sid_type = 'alias'
+        when Admin::SidTypeWellKnownGroup
+          @sid_type = 'well_known_group'
+        when Admin::SidTypeDeletedAccount
+          @sid_type = 'deleted_account'
+        when Admin::SidTypeInvalid
+          @sid_type = 'invalid'
+        when Admin::SidTypeUnknown
+          @sid_type = 'unknown'
+        when Admin::SidTypeComputer
+          @sid_type = 'computer'
+        else
+          @sid_type = 'unknown'
+      end
     end
 
     # Returns whether or not the account is disabled.
     #
     def disabled?
-       @disabled
+      @disabled
     end
 
     # Returns whether or not the account is local.
     #
     def local?
-       @local
+      @local
     end
 
     # Returns whether or not the account is locked out.
     #
     def lockout?
-       @lockout
+      @lockout
     end
 
     # Returns whether or not the password for the account is changeable.
     #
     def password_changeable?
-       @password_changeable
+      @password_changeable
     end
 
     # Returns whether or not the password for the account is changeable.
     #
     def password_expires?
-       @password_expires
+      @password_expires
     end
 
     # Returns whether or not the a password is required for the account.
     #
     def password_required?
-       @password_required
+      @password_required
     end
   end
 
@@ -297,7 +300,7 @@ module Sys
     extend FFI::Library
 
     # The version of the sys-admin library.
-    VERSION = '1.6.0'
+    VERSION = '1.6.2'
 
     # This is the error raised in the majority of cases if anything goes wrong
     # with any of the Sys::Admin methods.
@@ -358,13 +361,14 @@ module Sys
     end
 
     # An internal, private method for getting a list of groups for
-    # a particular user.
+    # a particular user. The first member is a list of group names,
+    # the second member is the primary group ID.
     #
     def self.get_groups(domain, user)
       array = []
-      adsi = WIN32OLE.connect("WinNT://#{domain}/#{user}")
+      adsi = WIN32OLE.connect("WinNT://#{domain}/#{user},user")
       adsi.groups.each{ |g| array << g.name }
-      array
+      [array, adsi.PrimaryGroupId]
     end
 
     # An internal, private method for getting a list of members for
@@ -465,7 +469,7 @@ module Sys
     #  # Change the password
     #  Sys::Admin.configure_user(
     #     :name     => 'asmith',
-    #     :password => [old_pass, new_pass]
+    #     :password => 'new_password'
     #  )
     #
     #  # Configure a user on a specific domain
@@ -486,7 +490,7 @@ module Sys
 
         options.each{ |option, value|
           if option.to_s == 'password'
-            adsi.changepassword(value[0], value[1])
+            adsi.setpassword(value)
           else
             adsi.put(option.to_s, value)
           end
@@ -557,6 +561,28 @@ module Sys
       rescue WIN32OLERuntimeError => err
         raise Error, err
       end
+    end
+
+    # Adds +user+ to +group+ on the specified +domain+, or the localhost
+    # if no domain is specified.
+    #
+    def self.add_group_member(user, group, domain=nil)
+      domain ||= Socket.gethostname
+      adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
+      adsi.Add("WinNT://#{domain}/#{user}")
+    rescue WIN32OLERuntimeError => err
+      raise Error, err
+    end
+
+    # Removes +user+ from +group+ on the specified +domain+, or the localhost
+    # if no domain is specified.
+    #
+    def self.remove_group_member(user, group, domain=nil)
+      domain ||= Socket.gethostname
+      adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
+      adsi.Remove("WinNT://#{domain}/#{user}")
+    rescue WIN32OLERuntimeError => err
+      raise Error, err
     end
 
     # Configures the +group+ using +options+. If no domain option is
@@ -699,6 +725,8 @@ module Sys
           next if usr != uid
         end
 
+        groups, primary_group = *get_groups(domain, user.name)
+
         user_object = User.new do |u|
           u.account_type        = user.accounttype
           u.caption             = user.caption
@@ -717,7 +745,8 @@ module Sys
           u.sid_type            = user.sidtype
           u.status              = user.status
           u.uid                 = uid
-          u.groups              = get_groups(domain, user.name)
+          u.gid                 = primary_group
+          u.groups              = groups
           u.dir                 = get_home_dir(user.name, options[:localaccount], domain)
         end
 

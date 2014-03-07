@@ -34,7 +34,7 @@ module Sys
     public
 
     # The version of the sys-admin library.
-    VERSION = '1.6.0'
+    VERSION = '1.6.2'
 
     # Error typically raised if any of the Sys::Admin methods fail.
     class Error < StandardError; end

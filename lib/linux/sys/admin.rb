@@ -7,6 +7,9 @@ module Sys
   class Admin
     private
 
+    # :no-doc:
+    BUF_MAX = 65536 # Absolute max buffer size for retry attempts.
+
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, [:string, :int], :int
     attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
@@ -110,26 +113,39 @@ module Sys
     #
     #    Sys::Admin.get_group('admin')
     #    Sys::Admin.get_group(101)
+    #--
+    # For groups with a large number of members we retry, allocating another
+    # 1k on each retry attempt, up to a maximum of 64k, which ought to be way
+    # more than you'll ever need.
     #
     def self.get_group(gid)
-      buf  = FFI::MemoryPointer.new(:char, 1024)
+      size = 1024
+      buf  = FFI::MemoryPointer.new(:char, size)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = GroupStruct.new
 
-      if gid.is_a?(String)
-        if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrnam_r function failed: " + strerror(FFI.errno)
+      begin
+        if gid.is_a?(String)
+          if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise SystemCallError.new('getgrnam_r', FFI.errno)
+          end
+        else
+          if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
+            raise SystemCallError.new('getgrgid_r', FFI.errno)
+          end
         end
-      else
-        if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getgrgid_r function failed: " + strerror(FFI.errno)
-        end
+      rescue Errno::ERANGE # Large groups
+        puts "Retry"
+        raise if size >= BUF_MAX
+        size += 1024
+        buf = FFI::MemoryPointer.new(:char, size)
+        retry
       end
 
       ptr = pbuf.read_pointer
 
       if ptr.null?
-        raise Error, "no group found for #{gid}"
+        raise Error, "no group found for '#{gid}'"
       end
 
       grp = GroupStruct.new(ptr)

@@ -7,6 +7,9 @@ module Sys
   class Admin
     private
 
+    # :no-doc:
+    BUF_MAX = 65536 # Max buffer size for retry.
+
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, [:string, :int], :int
     attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
@@ -109,17 +112,34 @@ module Sys
     #    Sys::Admin.get_group(101)
     #
     def self.get_group(gid)
-      buf  = FFI::MemoryPointer.new(:char, 1024)
+      size = 1024
+      buf  = FFI::MemoryPointer.new(:char, size)
       temp = GroupStruct.new
 
-      if gid.is_a?(String)
-        ptr = getgrnam_r(gid, temp, buf, buf.size)
-      else
-        ptr = getgrgid_r(gid, temp, buf, buf.size)
-      end
+      begin
+        if gid.is_a?(String)
+          ptr = getgrnam_r(gid, temp, buf, buf.size)
+          fun = 'getgrnam_r'
+        else
+          ptr = getgrgid_r(gid, temp, buf, buf.size)
+          fun = 'getgrgid_r'
+        end
 
-      if ptr.null?
-        raise Error, "getgrnam_r or getgrgid_r function failed: " + strerror(FFI.errno)
+        # SunOS distinguishes between a failed function call and a
+        # group that isn't found.
+
+        if ptr.null?
+          if FFI.errno > 0
+            raise SystemCallError.new(fun, FFI.errno)
+          else
+            raise Error, "group '#{gid}' not found"
+          end
+        end
+      rescue Errno::ERANGE
+        size += 1024
+        raise if size >= BUF_MAX
+        buf = FFI::MemoryPointer.new(:char, size)
+        retry
       end
 
       grp = GroupStruct.new(ptr)

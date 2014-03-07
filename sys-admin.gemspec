@@ -1,10 +1,9 @@
-require 'rubygems'
-
 # Do not use this file directly. Build the gem via the Rake tasks.
+require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name      = 'sys-admin'
-  spec.version   = '1.6.0'
+  spec.version   = '1.6.2'
   spec.author    = 'Daniel J. Berger'
   spec.license   = 'Artistic 2.0'
   spec.email     = 'djberg96@gmail.com'
@@ -17,7 +16,9 @@ Gem::Specification.new do |spec|
   spec.rubyforge_project = 'sysutils'
 	
   spec.add_dependency('ffi', '>= 1.1.0')
+
   spec.add_development_dependency('test-unit', '>= 2.5.0')
+  spec.add_development_dependency('rake')
 
   spec.description = <<-EOF
     The sys-admin library is a unified, cross platform replacement for the
