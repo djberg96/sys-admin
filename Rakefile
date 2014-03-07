@@ -3,7 +3,7 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'rbconfig'
 
-CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc")
+CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core")
 
 namespace :gem do
   desc "Create the sys-uname gem"
