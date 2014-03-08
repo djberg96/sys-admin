@@ -119,7 +119,7 @@ module Sys
     # more than you'll ever need.
     #
     def self.get_group(gid)
-      size = 4
+      size = 1024
       buf  = FFI::MemoryPointer.new(:char, size)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = GroupStruct.new
