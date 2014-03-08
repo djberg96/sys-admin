@@ -137,7 +137,7 @@ module Sys
         end
       rescue Errno::ERANGE
         size += 1024
-        raise if size >= BUF_MAX
+        raise if size > BUF_MAX
         buf = FFI::MemoryPointer.new(:char, size)
         retry
       end
