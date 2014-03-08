@@ -134,8 +134,8 @@ module Sys
         end
         raise SystemCallError.new(fun, val) if val != 0
       rescue Errno::ERANGE # Large groups
-        raise if size >= BUF_MAX
         size += 1024
+        raise if size > BUF_MAX
         buf = FFI::MemoryPointer.new(:char, size)
         retry
       end
