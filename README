@@ -131,7 +131,15 @@ Admin::Error < StandardError
 
 == Known Bugs
   None that I'm aware of. If you find any, please log them on the project
-  page at http://www.rubyforge.org/projects/sysutils.
+  page at:
+
+  https://github.com/djberg96/sys-admin
+
+== Contributions
+  Although this library is free, please consider having your company
+  setup a gittip if used by your company professionally.
+
+  http://www.gittip.com/djberg96/
 
 == License
   Artistic 2.0
