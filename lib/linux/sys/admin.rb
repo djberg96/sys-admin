@@ -126,16 +126,14 @@ module Sys
 
       begin
         if gid.is_a?(String)
-          if getgrnam_r(gid, temp, buf, buf.size, pbuf) != 0
-            raise SystemCallError.new('getgrnam_r', FFI.errno)
-          end
+          val = getgrnam_r(gid, temp, buf, buf.size, pbuf)
+          fun = 'getgrnam_r'
         else
-          if getgrgid_r(gid, temp, buf, buf.size, pbuf) != 0
-            raise SystemCallError.new('getgrgid_r', FFI.errno)
-          end
+          val = getgrgid_r(gid, temp, buf, buf.size, pbuf)
+          fun = 'getgrgid_r'
         end
+        raise SystemCallError.new(fun, val) if val != 0
       rescue Errno::ERANGE # Large groups
-        puts "Retry"
         raise if size >= BUF_MAX
         size += 1024
         buf = FFI::MemoryPointer.new(:char, size)
