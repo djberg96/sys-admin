@@ -1,4 +1,4 @@
-== 1.6.3 - ???
+== 1.6.3 - 8-Mar-2014
 * The Admin#get_group method now handles groups with very large numbers
   of members more robustly.
 
