@@ -5,10 +5,6 @@ require 'sys/admin/common'
 
 module Sys
   class Admin
-
-    # The version of the sys-admin library
-    VERSION = 1.6.3
-
     private
 
     class PasswdStruct < FFI::Struct
