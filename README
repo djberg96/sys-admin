@@ -16,9 +16,11 @@
 
   # Get information about a particular user
   p Admin.get_user("nobody")
+  p Admin.get_user("nobody", :localaccount => true)
 
   # Get information about a particular group
   p Admin.get_group("adm")
+  p Admin.get_group("adm", :localaccount => true)
 
 == Admin
 Admin.get_login
