@@ -1,4 +1,5 @@
 == 1.6.4 - 6-Sep-2015
+* Added a sys-admin.rb file for convenience.
 * Set VERSION in a single place.
 * Assume Rubygems 2.x for Rakefile tasks.
 * This gem is now signed.
