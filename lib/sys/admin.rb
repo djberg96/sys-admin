@@ -1,3 +1,10 @@
+module Sys
+  class Admin
+    # The version of the sys-admin library.
+    VERSION = "1.6.4"
+  end
+end
+
 # Stub to require the correct based on platform
 require 'rbconfig'
 
