@@ -8,13 +8,10 @@ CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core")
 namespace :gem do
   desc "Create the sys-uname gem"
   task :create => [:clean] do
+    require 'rubygems/package'
     spec = eval(IO.read('sys-admin.gemspec'))
-    if Gem::VERSION < "2.0"
-      Gem::Builder.new(spec).build
-    else
-      require 'rubygems/package'
-      Gem::Package.build(spec)
-    end
+    spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
+    Gem::Package.build(spec)
   end
 
   desc "Install the sys-uname gem"
