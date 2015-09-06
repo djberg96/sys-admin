@@ -3,6 +3,7 @@
 * MANIFEST
 * Rakefile
 * README
+* certs/djberg96_pub.pem
 * examples/groups.rb
 * examples/users.rb
 * lib/sys/admin.rb
