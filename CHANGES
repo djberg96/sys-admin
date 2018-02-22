@@ -3,6 +3,7 @@
 * VERSION constant is now frozen.
 * Ignore dependency warnings in gem:create task.
 * Minor README updates.
+* Updated cert.
 
 == 1.6.4 - 6-Sep-2015
 * Added a sys-admin.rb file for convenience.
