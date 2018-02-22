@@ -1,3 +1,9 @@
+== 1.7.0 - 21-Feb-2018
+* Changed the license to Apache 2.0.
+* VERSION constant is now frozen.
+* Ignore dependency warnings in gem:create task.
+* Minor README updates.
+
 == 1.6.4 - 6-Sep-2015
 * Added a sys-admin.rb file for convenience.
 * Set VERSION in a single place.
