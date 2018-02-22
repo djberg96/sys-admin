@@ -5,7 +5,7 @@
   gem install sys-admin
 
 == Synopsis
-  require 'sys/admin'
+  require 'sys/admin' # or sys-admin
   include Sys
 
   # Returns an Array of User objects
@@ -137,17 +137,11 @@ Admin::Error < StandardError
 
   https://github.com/djberg96/sys-admin
 
-== Contributions
-  Although this library is free, please consider having your company
-  setup a gittip if used by your company professionally.
-
-  http://www.gittip.com/djberg96/
-
 == License
-  Artistic 2.0
+  Apache 2.0
 
 == Copyright
-  (C) 2005-2015, Daniel J. Berger
+  (C) 2005-2018, Daniel J. Berger
   All Rights Reserved
 
 == Author
