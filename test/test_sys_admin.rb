@@ -14,6 +14,10 @@ end
 
 class TC_Sys_Admin_All < Test::Unit::TestCase
   test "version is set to expected value" do
-    assert_equal('1.7.0', Sys::Admin::VERSION)
+    assert_equal('1.7.1', Sys::Admin::VERSION)
+  end
+
+  test "version constant is frozen" do
+    assert_true(Sys::Admin::VERSION.frozen?)
   end
 end
