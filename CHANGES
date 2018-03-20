@@ -1,3 +1,8 @@
+== 1.7.1 - 19-Mar-2018
+* Fixed deprecation warnings in tests.
+* Added gemspec metadata.
+* Updated cert again, this one should last 10 years.
+
 == 1.7.0 - 21-Feb-2018
 * Changed the license to Apache 2.0.
 * VERSION constant is now frozen.
