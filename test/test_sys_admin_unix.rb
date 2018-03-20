@@ -129,13 +129,13 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   test "user.uid behaves as expected" do
     @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :uid)
-    assert_kind_of(Fixnum, @user.uid)
+    assert_kind_of(Integer, @user.uid)
   end
 
   test "user.gid behaves as expected" do
     @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :gid)
-    assert_kind_of(Fixnum, @user.gid)
+    assert_kind_of(Integer, @user.gid)
   end
 
   test "user.dir behaves as expected" do
@@ -159,13 +159,13 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   test "user.quota behaves as expected" do
     @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :quota)
-    assert_true([Fixnum, NilClass].include?(@user.quota.class))
+    assert_true([Integer, NilClass].include?(@user.quota.class))
   end
 
   test "user.age behaves as expected" do
     @user = Admin.get_user(@user_id)
     assert_respond_to(@user, :age)
-    assert_true([Fixnum, NilClass].include?(@user.age.class))
+    assert_true([Integer, NilClass].include?(@user.age.class))
   end
 
   test "user.access behaves as expected" do
@@ -227,7 +227,7 @@ class TC_Sys_Admin_Unix < Test::Unit::TestCase
   test "group.gid behaves as expected" do
     @group = Admin.get_group(@group_id)
     assert_respond_to(@group, :gid)
-    assert_kind_of(Fixnum, @group.gid)
+    assert_kind_of(Integer, @group.gid)
   end
 
   test "group.members behaves as expected" do
