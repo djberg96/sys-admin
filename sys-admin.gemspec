@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.name       = 'sys-admin'
   spec.version    = '1.7.1'
   spec.author     = 'Daniel J. Berger'
-  spec.license    = 'Apache 2.0'
+  spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://www.github.com/djberg96/sysutils'
   spec.summary    = 'A unified, cross platform replacement for the "etc" library.'
