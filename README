@@ -138,10 +138,10 @@ Admin::Error < StandardError
   https://github.com/djberg96/sys-admin
 
 == License
-  Apache 2.0
+  Apache-2.0
 
 == Copyright
-  (C) 2005-2018, Daniel J. Berger
+  (C) 2005-2019, Daniel J. Berger
   All Rights Reserved
 
 == Author
