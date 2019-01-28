@@ -1,3 +1,8 @@
+== 1.7.1 - 28-Jan-2019
+* Fixed some deprecation warnings in the test suite.
+* Fixed the license name, was missing a hyphen.
+* Fixed the homepage in the gemspec.
+ 
 == 1.7.0 - 21-Feb-2018
 * Changed the license to Apache 2.0.
 * VERSION constant is now frozen.
