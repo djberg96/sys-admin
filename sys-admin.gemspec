@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.author     = 'Daniel J. Berger'
   spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
-  spec.homepage   = 'http://www.github.com/djberg96/sysutils'
+  spec.homepage   = 'http://www.github.com/djberg96/sys-admin'
   spec.summary    = 'A unified, cross platform replacement for the "etc" library.'
   spec.test_file  = 'test/test_sys_admin.rb'
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
