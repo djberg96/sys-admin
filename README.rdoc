@@ -23,7 +23,7 @@ The sys-admin library is a unified, cross platform replacement for the Etc modul
   p Admin.get_group("adm", :localaccount => true)
 
 == Admin
-Admin.get_login
+  Admin.get_login
 
 Returns the user name (only) of the current login.
 
