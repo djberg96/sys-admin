@@ -1,3 +1,8 @@
+== 1.7.3 - 16-Jan-2020
+* Add explicit .rdoc extension to various rdoc files so that they show up
+  better in github.
+* Some formatting adjustments to the rdoc files.
+
 == 1.7.2 - 28-Jan-2019
 * Fixed the license name, was missing a hyphen.
 * Fixed the homepage in the gemspec.

@@ -1,8 +1,8 @@
 * sys-admin.gemspec
-* CHANGES
-* MANIFEST
+* CHANGES.rdoc
+* MANIFEST.rdoc
 * Rakefile
-* README
+* README.rdoc
 * certs/djberg96_pub.pem
 * examples/groups.rb
 * examples/users.rb
