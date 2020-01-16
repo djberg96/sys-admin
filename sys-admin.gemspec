@@ -3,7 +3,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name       = 'sys-admin'
-  spec.version    = '1.7.2'
+  spec.version    = '1.7.3'
   spec.author     = 'Daniel J. Berger'
   spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
-  spec.extra_rdoc_files  = ['CHANGES', 'README', 'MANIFEST']
+  spec.extra_rdoc_files = Dir['*.rdoc']
 	
   spec.add_dependency('ffi', '>= 1.1.0')
 
