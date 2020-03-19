@@ -1,3 +1,6 @@
+== 1.7.4 - 19-Mar-2020
+* Properly include a LICENSE file as per the Apache-2.0 license.
+
 == 1.7.3 - 16-Jan-2020
 * Add explicit .rdoc extension to various rdoc files so that they show up
   better in github.
