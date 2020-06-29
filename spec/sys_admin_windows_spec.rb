@@ -12,7 +12,7 @@ require 'sys/admin'
 require 'win32/security'
 require 'socket'
 
-RSpec.describe Sys_Admin, :windows do
+RSpec.describe Sys_described_class, :windows do
   let(host) { Socket.gethostname }
   let(elevated) { Win32::Security.elevated_security? }
 
@@ -25,22 +25,22 @@ RSpec.describe Sys_Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-=begin
-  # Admin singleton methods
+  # described_class singleton methods
 
   def test_01_add_user
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:add_user)
+    expect(described_class).to respond_to(:add_user)
     assert_nothing_raised{
-      Admin.add_user(:name => 'foo', :password => 'a1b2c3D4')
+      described_class.add_user(:name => 'foo', :password => 'a1b2c3D4')
     }
   end
 
+=begin
   def test_02_config_user
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:configure_user)
+    expect(described_class).to respond_to(:configure_user)
     assert_nothing_raised{
-      Admin.configure_user(
+      described_class.configure_user(
         :name        => 'foo',
         :description => 'delete me',
         :fullname    => 'fubar',
@@ -51,131 +51,144 @@ RSpec.describe Sys_Admin, :windows do
 
   def test_06_delete_user
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:delete_user)
-    expect{ Admin.delete_user('foo') }.not_to raise_error
+    expect(described_class).to respond_to(:delete_user)
+    expect{ described_class.delete_user('foo') }.not_to raise_error
   end
 
   def test_01_add_group
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:add_group)
-    expect{ Admin.add_group(:name => 'bar') }.not_to raise_error
+    expect(described_class).to respond_to(:add_group)
+    expect{ described_class.add_group(:name => 'bar') }.not_to raise_error
   end
 
   def test_02_configure_group
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:configure_group)
+    expect(described_class).to respond_to(:configure_group)
     assert_nothing_raised{
-      Admin.configure_group(:name => 'bar', :description => 'delete me')
+      described_class.configure_group(:name => 'bar', :description => 'delete me')
     }
   end
 
   def test_03_add_group_member
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:add_group_member)
-    expect{ Admin.add_group_member('foo', 'bar') }.not_to raise_error
+    expect(described_class).to respond_to(:add_group_member)
+    expect{ described_class.add_group_member('foo', 'bar') }.not_to raise_error
   end
 
   def test_04_remove_group_member
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:remove_group_member)
-    expect{ Admin.remove_group_member('foo', 'bar') }.not_to raise_error
+    expect(described_class).to respond_to(:remove_group_member)
+    expect{ described_class.remove_group_member('foo', 'bar') }.not_to raise_error
   end
 
   def test_05_delete_group
     omit_unless(@@elevated)
-    expect(Admin).to respond_to(:delete_group)
-    expect{ Admin.delete_group('bar') }.not_to raise_error
+    expect(described_class).to respond_to(:delete_group)
+    expect{ described_class.delete_group('bar') }.not_to raise_error
   end
 =end
 
-  example "get_login basic functionality" do
-    expect(Admin).to respond_to(:get_login)
-    expect{ Admin.get_login }.not_to raise_error
+  context "singleton methods" do
+    describe "get_login" do
+      example "get_login basic functionality" do
+        expect(described_class).to respond_to(:get_login)
+        expect{ described_class.get_login }.not_to raise_error
+      end
+
+      example "get_login returns a string" do
+        expect( described_class.get_login).to be_kind_of(String)
+        expect(described_class.get_login.size).to be > 0
+      end
+
+      example "get_login does not accept any arguments" do
+        expect{ described_class.get_login('foo') }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "get_user" do
+      example "get_user basic functionality" do
+        expect(described_class).to respond_to(:get_user)
+      end
+
+      example "get_user with string argument works as expected" do
+        expect{ described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
+        expect( described_class.get_user(@user_name, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+      end
+
+      example "get user with integer argument works as expected" do
+        expect{ described_class.get_user(@user_id, :localaccount => true) }.not_to raise_error
+        expect( described_class.get_user(@user_id, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+      end
+
+      example "get_user method by string accepts a hash of options" do
+        options = {:host => host, :localaccount => true}
+        expect{ described_class.get_user(@user_name, options) }.not_to raise_error
+        expect( described_class.get_user(@user_name, options)).to be_kind_of(Sys::Admin::User)
+      end
+
+      example "get_user method by uid accepts a hash of options" do
+        options = {:host => host, :localaccount => true}
+        expect{ described_class.get_user(@user_id, options) }.not_to raise_error
+        expect( described_class.get_user(@user_id, options)).to be_kind_of(Sys::Admin::User)
+      end
+
+      example "get_user method requires an argument" do
+        assert_raises(ArgumentError){ described_class.get_user }
+      end
+    end
+
+    describe "users" do
+      example "users method basic functionality" do
+        expect(described_class).to respond_to(:users)
+        expect{ described_class.users(:localaccount => true) }.not_to raise_error
+      end
+
+      example "users method returns an array of User objects" do
+        expect( described_class.users(:localaccount => true)).to be_kind_of(Array)
+        expect( described_class.users(:localaccount => true).first).to be_kind_of(Sys::Admin::User)
+      end
+    end
+
+    describe "get_group" do
+      example "get_group basic functionality" do
+        expect(described_class).to respond_to(:get_group)
+      end
+
+      example "get_group method returns expected results with a string argument" do
+        expect{ described_class.get_group(@group_name, :localaccount => true) }.not_to raise_error
+        expect( described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+      end
+
+      example "get_group method returns expected results with an integer argument" do
+        expect{ described_class.get_group(@group_id, :localaccount => true) }.not_to raise_error
+        expect( described_class.get_group(@group_id, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+      end
+
+      # TODO: Update
+      example "get_group method accepts a hash of options" do
+        expect{ described_class.get_group(@group_name, :localaccount => true) }.not_to raise_error
+        expect( described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+      end
+
+      example "get_group method requires an argument" do
+        expect{ described_class.get_group }.to raise_error(ArgumentError)
+      end
+    end
+
+    describe "groups" do
+      example "groups method basic functionality" do
+        expect(described_class).to respond_to(:groups)
+        expect{ described_class.groups(:localaccount => true) }.not_to raise_error
+      end
+
+      example "groups method returns an array of Group objects" do
+        expect( described_class.groups(:localaccount => true)).to be_kind_of(Array)
+        expect( described_class.groups(:localaccount => true).first).to be_kind_of(Sys::Admin::Group)
+      end
+    end
   end
 
-  example "get_login returns a string" do
-    expect( Admin.get_login).to be_kind_of(String)
-    expect(Admin.get_login.size > 0).to be_true
-  end
-
-  example "get_login does not accept any arguments" do
-    expect{ Admin.get_login('foo') }.to raise_error(ArgumentError)
-  end
-
-  example "get_user basic functionality" do
-    expect(Admin).to respond_to(:get_user)
-  end
-
-  example "get_user with string argument works as expected" do
-    expect{ Admin.get_user(@user_name, :localaccount => true) }.not_to raise_error
-    expect( :localaccount => true)).to be_kind_of(User, Admin.get_user(@user_name)
-  end
-
-  example "get user with integer argument works as expected" do
-    expect{ Admin.get_user(@user_id, :localaccount => true) }.not_to raise_error
-    expect( :localaccount => true)).to be_kind_of(User, Admin.get_user(@user_id)
-  end
-
-  example "get_user method by string accepts a hash of options" do
-    options = {:host => @@host, :localaccount => true}
-    expect{ Admin.get_user(@user_name, options) }.not_to raise_error
-    expect( options)).to be_kind_of(User, Admin.get_user(@user_name)
-  end
-
-  example "get_user method by uid accepts a hash of options" do
-    options = {:host => @@host, :localaccount => true}
-    expect{ Admin.get_user(@user_id, options) }.not_to raise_error
-    expect( options)).to be_kind_of(User, Admin.get_user(@user_id)
-  end
-
-  example "get_user method requires an argument" do
-    assert_raises(ArgumentError){ Admin.get_user }
-  end
-
-  example "users method basic functionality" do
-    expect(Admin).to respond_to(:users)
-    expect{ Admin.users(:localaccount => true) }.not_to raise_error
-  end
-
-  example "users method returns an array of User objects" do
-    expect( Admin.users(:localaccount => true)).to be_kind_of(Array)
-    expect( Admin.users(:localaccount => true).first).to be_kind_of(User)
-  end
-
-  example "get_group basic functionality" do
-    expect(Admin).to respond_to(:get_group)
-  end
-
-  example "get_group method returns expected results with a string argument" do
-    expect{ Admin.get_group(@group_name, :localaccount => true) }.not_to raise_error
-    expect( :localaccount => true)).to be_kind_of(Group, Admin.get_group(@group_name)
-  end
-
-  example "get_group method returns expected results with an integer argument" do
-    expect{ Admin.get_group(@group_id, :localaccount => true) }.not_to raise_error
-    expect( :localaccount => true)).to be_kind_of(Group, Admin.get_group(@group_id)
-  end
-
-  # TODO: Update
-  example "get_group method accepts a hash of options" do
-    expect{ Admin.get_group(@group_name, :localaccount => true) }.not_to raise_error
-    expect( :localaccount => true)).to be_kind_of(Group, Admin.get_group(@group_name)
-  end
-
-  example "get_group method requires an argument" do
-    expect{ Admin.get_group }.to raise_error(ArgumentError)
-  end
-
-  example "get_groups method basic functionality" do
-    expect(Admin).to respond_to(:groups)
-    expect{ Admin.groups(:localaccount => true) }.not_to raise_error
-  end
-
-  example "get_groups method returns an array of Group objects" do
-    expect( Admin.groups(:localaccount => true)).to be_kind_of(Array)
-    expect( Admin.groups(:localaccount => true).first).to be_kind_of(Group)
-  end
-
+=begin
   # User class
 
   example "caption accessor for User class" do
@@ -264,7 +277,7 @@ RSpec.describe Sys_Admin, :windows do
   end
 
   example "dir method returns either a string or nil" do
-    expect{ @user = Admin.get_user(@user_name, :localaccount => true) }.not_to raise_error
+    expect{ @user = described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
     expect( @user.dir).to be_kind_of([String, NilClass])
   end
 
@@ -319,4 +332,5 @@ RSpec.describe Sys_Admin, :windows do
     expect(@group).to respond_to(:local?)
     expect(@group).to respond_to(:local=)
   end
+=end
 end
