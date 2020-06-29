@@ -119,144 +119,144 @@ RSpec.describe Sys::Admin, :unix do
     end
   end
 
-  context "User instance methods" do
-    example "user.name behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:name)
-      expect(user.name).to be_kind_of(String)
+  context "instance methods" do
+    describe "User instance methods" do
+      example "user.name behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:name)
+        expect(user.name).to be_kind_of(String)
+      end
+
+      example "user.passwd behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:passwd)
+        expect(user.passwd).to be_kind_of(String)
+      end
+
+      example "user.uid behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:uid)
+        expect(user.uid).to be_kind_of(Integer)
+      end
+
+      example "user.gid behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:gid)
+        expect(user.gid).to be_kind_of(Integer)
+      end
+
+      example "user.dir behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:dir)
+        expect(user.dir).to be_kind_of(String)
+      end
+
+      example "user.shell behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:shell)
+        expect(user.shell).to be_kind_of(String)
+      end
+
+      example "user.gecos behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:gecos)
+        expect(user.gecos).to be_kind_of(String).or be_nil
+      end
+
+      example "user.quota behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:quota)
+        expect(user.quota).to be_kind_of(Integer).or be_nil
+      end
+
+      example "user.age behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:age)
+        expect(user.age).to be_kind_of(Integer).or be_nil
+      end
+
+      example "user.access behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:access_class)
+        expect(user.access_class).to be_kind_of(String).or be_nil
+      end
+
+      example "user.comment behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:comment)
+        expect(user.comment).to be_kind_of(String).or be_nil
+      end
+
+      example "user.expire behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:expire)
+        expect(user.expire).to be_kind_of(Time).or be_nil
+      end
+
+      example "user.change behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:change)
+        expect(user.change).to be_kind_of(Time).or be_nil
+      end
+
+      example "user.login_time behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:login_time)
+        expect(user.login_time).to be_kind_of(Time).or be_nil
+      end
+
+      example "user.login_device behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:login_device)
+        expect(user.login_device).to be_kind_of(String).or be_nil
+      end
+
+      example "user.login_host behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:login_host)
+        expect(user.login_host).to be_kind_of(String).or be_nil
+      end
+
+      example "user.groups behaves as expected" do
+        user = described_class.get_user(user_id)
+        expect(user).to respond_to(:groups)
+        expect(user.groups).to be_kind_of(Array)
+      end
     end
 
-    example "user.passwd behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:passwd)
-      expect(user.passwd).to be_kind_of(String)
-    end
+    describe "Group instance methods" do
+      example "group.name behaves as expected" do
+        group = described_class.get_group(group_id)
+        expect(group).to respond_to(:name)
+        expect(group.name).to be_kind_of(String)
+      end
 
-    example "user.uid behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:uid)
-      expect(user.uid).to be_kind_of(Integer)
-    end
+      example "group.gid behaves as expected" do
+        group = described_class.get_group(group_id)
+        expect(group).to respond_to(:gid)
+        expect(group.gid).to be_kind_of(Integer)
+      end
 
-    example "user.gid behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:gid)
-      expect(user.gid).to be_kind_of(Integer)
-    end
+      example "group.members behaves as expected" do
+        group = described_class.get_group(group_id)
+        expect(group).to respond_to(:members)
+        expect(group.members).to be_kind_of(Array)
+      end
 
-    example "user.dir behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:dir)
-      expect(user.dir).to be_kind_of(String)
-    end
-
-    example "user.shell behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:shell)
-      expect(user.shell).to be_kind_of(String)
-    end
-
-    example "user.gecos behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:gecos)
-      expect(user.gecos).to be_kind_of(String).or be_nil
-    end
-
-    example "user.quota behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:quota)
-      expect(user.quota).to be_kind_of(Integer).or be_nil
-    end
-
-    example "user.age behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:age)
-      expect(user.age).to be_kind_of(Integer).or be_nil
-    end
-
-    example "user.access behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:access_class)
-      expect(user.access_class).to be_kind_of(String).or be_nil
-    end
-
-    example "user.comment behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:comment)
-      expect(user.comment).to be_kind_of(String).or be_nil
-    end
-
-    example "user.expire behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:expire)
-      expect(user.expire).to be_kind_of(Time).or be_nil
-    end
-
-    example "user.change behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:change)
-      expect(user.change).to be_kind_of(Time).or be_nil
-    end
-
-    example "user.login_time behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:login_time)
-      expect(user.login_time).to be_kind_of(Time).or be_nil
-    end
-
-    example "user.login_device behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:login_device)
-      expect(user.login_device).to be_kind_of(String).or be_nil
-    end
-
-    example "user.login_host behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:login_host)
-      expect(user.login_host).to be_kind_of(String).or be_nil
-    end
-
-    example "user.groups behaves as expected" do
-      user = described_class.get_user(user_id)
-      expect(user).to respond_to(:groups)
-      expect(user.groups).to be_kind_of(Array)
+      example "group.passwd behaves as expected" do
+        group = described_class.get_group(group_id)
+        expect(group).to respond_to(:passwd)
+        expect(group.passwd).to be_kind_of(String)
+      end
     end
   end
 
-=begin
-  ## Group Tests
-
-  example "group.name behaves as expected" do
-    group = described_class.get_group(group_id)
-    expect(group).to respond_to(:name)
-    expect( group.name).to be_kind_of(String)
+  context "ffi functions" do
+    example "ffi functions are private" do
+      methods = described_class.methods(false).map(&:to_s)
+      expect(methods).not_to include('getlogin')
+      expect(methods).not_to include('getlogin_r')
+      expect(methods).not_to include('strerror')
+    end
   end
-
-  example "group.gid behaves as expected" do
-    group = described_class.get_group(group_id)
-    expect(group).to respond_to(:gid)
-    expect( group.gid).to be_kind_of(Integer)
-  end
-
-  example "group.members behaves as expected" do
-    group = described_class.get_group(group_id)
-    expect(group).to respond_to(:members)
-    expect( group.members).to be_kind_of(Array)
-  end
-
-  example "group.passwd behaves as expected" do
-    group = described_class.get_group(group_id)
-    expect(group).to respond_to(:passwd)
-    expect( group.passwd).to be_kind_of(String)
-  end
-
-  ## FFI
-
-  example "ffi functions are private" do
-    methods = described_class.methods(false).map{ |e| e.to_s }
-    expect(methods.include?('getlogin')).to be_false
-    expect(methods.include?('getlogin_r')).to be_false
-    expect(methods.include?('strerror')).to be_false
-  end
-=end
 end
