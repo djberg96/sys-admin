@@ -25,35 +25,33 @@ RSpec.describe Sys_described_class, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  # described_class singleton methods
+  context "add, configure, delete user", :order => :defined, :skip_unless => elevated do
+    describe "add_user" do
+      expect(described_class).to respond_to(:add_user)
+      expect{ described_class.add_user(:name => 'foo', :password => 'a1b2c3D4') }.not_to raise_error
+      expect(described_class.users.map(&:name)).to include('foo')
+    end
 
-  def test_01_add_user
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:add_user)
-    assert_nothing_raised{
-      described_class.add_user(:name => 'foo', :password => 'a1b2c3D4')
-    }
+    describe "configure_user" do
+      expect(described_class).to respond_to(:configure_user)
+      expect{
+        described_class.configure_user(
+          :name        => 'foo',
+          :description => 'delete me',
+          :fullname    => 'fubar',
+          :password    => 'd1c2b3A4'
+      }.not_to raise_error
+      expect(described_class.get_user('foo').description).to eq('delete me')
+    end
+
+    describe "delete_user" do
+      expect(described_class).to respond_to(:delete_user)
+      expect{ described_class.delete_user('foo') }.not_to raise_error
+      expect(described_class.users.map(&:name)).not_to include('foo')
+    end
   end
 
 =begin
-  def test_02_config_user
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:configure_user)
-    assert_nothing_raised{
-      described_class.configure_user(
-        :name        => 'foo',
-        :description => 'delete me',
-        :fullname    => 'fubar',
-        :password    => 'd1c2b3A4'
-      )
-    }
-  end
-
-  def test_06_delete_user
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:delete_user)
-    expect{ described_class.delete_user('foo') }.not_to raise_error
-  end
 
   def test_01_add_group
     omit_unless(@@elevated)
