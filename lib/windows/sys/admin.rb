@@ -419,7 +419,7 @@ module Sys
         end
       }
 
-      if usr.kind_of?(Integer)
+      if usr.kind_of?(Numeric)
         query << " and sid like '%-#{usr}'"
       else
         query << " and name = '#{usr}'"
@@ -432,7 +432,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if usr.kind_of?(Integer)
+        if usr.kind_of?(Numeric)
           next if usr != uid
         end
 
