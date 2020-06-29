@@ -12,19 +12,20 @@ require 'sys/admin'
 require 'win32/security'
 require 'socket'
 
-RSpec.describe Sys_described_class, :windows do
-  let(host) { Socket.gethostname }
-  let(elevated) { Win32::Security.elevated_security? }
+RSpec.describe Sys::Admin, :windows do
+  let(:host) { Socket.gethostname }
+  let(:elevated) { Win32::Security.elevated_security? }
 
   before do
-    @user       = User.new
+    @user       = Sys::Admin::User.new
     @user_name  = 'Guest'
     @user_id    = 501        # best guess, may fail
-    @group      = Group.new
+    @group      = Sys::Admin::Group.new
     @group_name = 'Guests'
     @group_id   = 546        # best guess, may fail
   end
 
+=begin
   context "add, configure, delete user", :order => :defined, :skip_unless => elevated do
     describe "add_user" do
       expect(described_class).to respond_to(:add_user)
@@ -50,6 +51,7 @@ RSpec.describe Sys_described_class, :windows do
       expect(described_class.users.map(&:name)).not_to include('foo')
     end
   end
+=end
 
 =begin
 
@@ -131,10 +133,11 @@ RSpec.describe Sys_described_class, :windows do
       end
 
       example "get_user method requires an argument" do
-        assert_raises(ArgumentError){ described_class.get_user }
+        expect{ described_class.get_user }.to raise_error(ArgumentError)
       end
     end
 
+=begin
     describe "users" do
       example "users method basic functionality" do
         expect(described_class).to respond_to(:users)
@@ -184,6 +187,7 @@ RSpec.describe Sys_described_class, :windows do
         expect( described_class.groups(:localaccount => true).first).to be_kind_of(Sys::Admin::Group)
       end
     end
+=end
   end
 
 =begin
