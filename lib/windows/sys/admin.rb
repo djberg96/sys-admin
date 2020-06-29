@@ -5,297 +5,6 @@ require 'win32/registry'
 require 'socket'
 
 module Sys
-  class Group
-    # Short description of the object.
-    attr_accessor :caption
-
-    # Description of the group.
-    attr_accessor :description
-
-    # Name of the Windows domain to which the group account belongs.
-    attr_accessor :domain
-
-    # Date the group was added.
-    attr_accessor :install_date
-
-    # Name of the Windows group account on the Group#domain specified.
-    attr_accessor :name
-
-    # Security identifier for this group.
-    attr_accessor :sid
-
-    # Current status for the group, such as "ok", "error", etc.
-    attr_accessor :status
-
-    # The group ID.
-    attr_accessor :gid
-
-    # Sets whether or not the group is local (as opposed to global).
-    attr_writer :local
-
-    # An array of members for that group. May contain SID's.
-    attr_accessor :members
-
-    # Creates and returns a new Group object.  This class encapsulates
-    # the information for a group account, whether it be global or local.
-    #
-    # Yields +self+ if a block is given.
-    #
-    def initialize
-      yield self if block_given?
-    end
-
-    # Returns whether or not the group is a local group.
-    #
-    def local?
-       @local
-    end
-
-    # Returns the type of SID (Security Identifier) as a stringified value.
-    #
-    def sid_type
-       @sid_type
-    end
-
-    # Sets the SID (Security Identifier) type to +stype+, which can be
-    # one of the following constant values:
-    #
-    # * Admin::SidTypeUser
-    # * Admin::SidTypeGroup
-    # * Admin::SidTypeDomain
-    # * Admin::SidTypeAlias
-    # * Admin::SidTypeWellKnownGroup
-    # * Admin::SidTypeDeletedAccount
-    # * Admin::SidTypeInvalid
-    # * Admin::SidTypeUnknown
-    # * Admin::SidTypeComputer
-    #
-    def sid_type=(stype)
-      if stype.kind_of?(String)
-        @sid_type = stype.downcase
-      else
-        case stype
-           when Admin::SidTypeUser
-              @sid_type = "user"
-           when Admin::SidTypeGroup
-              @sid_type = "group"
-           when Admin::SidTypeDomain
-              @sid_type = "domain"
-           when Admin::SidTypeAlias
-              @sid_type = "alias"
-           when Admin::SidTypeWellKnownGroup
-              @sid_type = "well_known_group"
-           when Admin::SidTypeDeletedAccount
-              @sid_type = "deleted_account"
-           when Admin::SidTypeInvalid
-              @sid_type = "invalid"
-           when Admin::SidTypeUnknown
-              @sid_type = "unknown"
-           when Admin::SidTypeComputer
-              @sid_type = "computer"
-           else
-              @sid_type = "unknown"
-        end
-      end
-
-      @sid_type
-    end
-  end
-
-  class User
-    # An account for users whose primary account is in another domain.
-    TEMP_DUPLICATE = 0x0100
-
-    # Default account type that represents a typical user.
-    NORMAL = 0x0200
-
-    # A permit to trust account for a domain that trusts other domains.
-    INTERDOMAIN_TRUST = 0x0800
-
-    # An account for a Windows NT/2000 workstation or server that is a
-    # member of this domain.
-    WORKSTATION_TRUST = 0x1000
-
-    # A computer account for a backup domain controller that is a member
-    # of this domain.
-    SERVER_TRUST = 0x2000
-
-    # Domain and username of the account.
-    attr_accessor :caption
-
-    # Description of the account.
-    attr_accessor :description
-
-    # Name of the Windows domain to which a user account belongs.
-    attr_accessor :domain
-
-    # The user's password.
-    attr_accessor :password
-
-    # Full name of a local user.
-    attr_accessor :full_name
-
-    # An array of groups to which the user belongs.
-    attr_accessor :groups
-
-    # Date the user account was created.
-    attr_accessor :install_date
-
-    # Name of the Windows user account on the domain that the User#domain
-    # property specifies.
-    attr_accessor :name
-
-    # The user's security identifier.
-    attr_accessor :sid
-
-    # Current status for the user, such as "ok", "error", etc.
-    attr_accessor :status
-
-    # The user's id (RID).
-    attr_accessor :uid
-
-    # The user's primary group ID.
-    attr_accessor :gid
-
-    # The user's home directory
-    attr_accessor :dir
-
-    # Used to set whether or not the account is disabled.
-    attr_writer :disabled
-
-    # Sets whether or not the account is defined on the local computer.
-    attr_writer :local
-
-    # Sets whether or not the account is locked out of the OS.
-    attr_writer :lockout
-
-    # Sets whether or not the password for the account can be changed.
-    attr_writer :password_changeable
-
-    # Sets whether or not the password for the account expires.
-    attr_writer :password_expires
-
-    # Sets whether or not a password is required for the account.
-    attr_writer :password_required
-
-    # Returns the account type as a human readable string.
-    attr_reader :account_type
-
-    # Creates an returns a new User object.  A User object encapsulates a
-    # user account on the operating system.
-    #
-    # Yields +self+ if a block is provided.
-    #
-    def initialize
-      yield self if block_given?
-    end
-
-    # Sets the account type for the account.  Possible values are:
-    #
-    # * User::TEMP_DUPLICATE
-    # * User::NORMAL
-    # * User::INTERDOMAIN_TRUST
-    # * User::WORKSTATION_TRUST
-    # * User::SERVER_TRUST
-    #
-    def account_type=(type)
-      case type
-        when TEMP_DUPLICATE
-          @account_type = 'duplicate'
-        when NORMAL
-          @account_type = 'normal'
-        when INTERDOMAIN_TRUST
-          @account_type = 'interdomain_trust'
-        when WORKSTATION_TRUST
-          @account_type = 'workstation_trust'
-        when SERVER_TRUST
-          @account_type = 'server_trust'
-        else
-          @account_type = 'unknown'
-      end
-    end
-
-    # Returns the SID type as a human readable string.
-    #
-    def sid_type
-      @sid_type
-    end
-
-    # Sets the SID (Security Identifier) type to +stype+, which can be
-    # one of the following constant values:
-    #
-    # * Admin::SidTypeUser
-    # * Admin::SidTypeGroup
-    # * Admin::SidTypeDomain
-    # * Admin::SidTypeAlias
-    # * Admin::SidTypeWellKnownGroup
-    # * Admin::SidTypeDeletedAccount
-    # * Admin::SidTypeInvalid
-    # * Admin::SidTypeUnknown
-    # * Admin::SidTypeComputer
-    #
-    def sid_type=(stype)
-      case stype
-        when Admin::SidTypeUser
-          @sid_type = 'user'
-        when Admin::SidTypeGroup
-          @sid_type = 'group'
-        when Admin::SidTypeDomain
-          @sid_type = 'domain'
-        when Admin::SidTypeAlias
-          @sid_type = 'alias'
-        when Admin::SidTypeWellKnownGroup
-          @sid_type = 'well_known_group'
-        when Admin::SidTypeDeletedAccount
-          @sid_type = 'deleted_account'
-        when Admin::SidTypeInvalid
-          @sid_type = 'invalid'
-        when Admin::SidTypeUnknown
-          @sid_type = 'unknown'
-        when Admin::SidTypeComputer
-          @sid_type = 'computer'
-        else
-          @sid_type = 'unknown'
-      end
-    end
-
-    # Returns whether or not the account is disabled.
-    #
-    def disabled?
-      @disabled
-    end
-
-    # Returns whether or not the account is local.
-    #
-    def local?
-      @local
-    end
-
-    # Returns whether or not the account is locked out.
-    #
-    def lockout?
-      @lockout
-    end
-
-    # Returns whether or not the password for the account is changeable.
-    #
-    def password_changeable?
-      @password_changeable
-    end
-
-    # Returns whether or not the password for the account is changeable.
-    #
-    def password_expires?
-      @password_expires
-    end
-
-    # Returns whether or not the a password is required for the account.
-    #
-    def password_required?
-      @password_required
-    end
-  end
-
   class Admin
     extend FFI::Library
 
@@ -992,6 +701,297 @@ module Sys
       }
 
       array
+    end
+
+    class User
+      # An account for users whose primary account is in another domain.
+      TEMP_DUPLICATE = 0x0100
+
+      # Default account type that represents a typical user.
+      NORMAL = 0x0200
+
+      # A permit to trust account for a domain that trusts other domains.
+      INTERDOMAIN_TRUST = 0x0800
+
+      # An account for a Windows NT/2000 workstation or server that is a
+      # member of this domain.
+      WORKSTATION_TRUST = 0x1000
+
+      # A computer account for a backup domain controller that is a member
+      # of this domain.
+      SERVER_TRUST = 0x2000
+
+      # Domain and username of the account.
+      attr_accessor :caption
+
+      # Description of the account.
+      attr_accessor :description
+
+      # Name of the Windows domain to which a user account belongs.
+      attr_accessor :domain
+
+      # The user's password.
+      attr_accessor :password
+
+      # Full name of a local user.
+      attr_accessor :full_name
+
+      # An array of groups to which the user belongs.
+      attr_accessor :groups
+
+      # Date the user account was created.
+      attr_accessor :install_date
+
+      # Name of the Windows user account on the domain that the User#domain
+      # property specifies.
+      attr_accessor :name
+
+      # The user's security identifier.
+      attr_accessor :sid
+
+      # Current status for the user, such as "ok", "error", etc.
+      attr_accessor :status
+
+      # The user's id (RID).
+      attr_accessor :uid
+
+      # The user's primary group ID.
+      attr_accessor :gid
+
+      # The user's home directory
+      attr_accessor :dir
+
+      # Used to set whether or not the account is disabled.
+      attr_writer :disabled
+
+      # Sets whether or not the account is defined on the local computer.
+      attr_writer :local
+
+      # Sets whether or not the account is locked out of the OS.
+      attr_writer :lockout
+
+      # Sets whether or not the password for the account can be changed.
+      attr_writer :password_changeable
+
+      # Sets whether or not the password for the account expires.
+      attr_writer :password_expires
+
+      # Sets whether or not a password is required for the account.
+      attr_writer :password_required
+
+      # Returns the account type as a human readable string.
+      attr_reader :account_type
+
+      # Creates an returns a new User object.  A User object encapsulates a
+      # user account on the operating system.
+      #
+      # Yields +self+ if a block is provided.
+      #
+      def initialize
+        yield self if block_given?
+      end
+
+      # Sets the account type for the account.  Possible values are:
+      #
+      # * User::TEMP_DUPLICATE
+      # * User::NORMAL
+      # * User::INTERDOMAIN_TRUST
+      # * User::WORKSTATION_TRUST
+      # * User::SERVER_TRUST
+      #
+      def account_type=(type)
+        case type
+          when TEMP_DUPLICATE
+            @account_type = 'duplicate'
+          when NORMAL
+            @account_type = 'normal'
+          when INTERDOMAIN_TRUST
+            @account_type = 'interdomain_trust'
+          when WORKSTATION_TRUST
+            @account_type = 'workstation_trust'
+          when SERVER_TRUST
+            @account_type = 'server_trust'
+          else
+            @account_type = 'unknown'
+        end
+      end
+
+      # Returns the SID type as a human readable string.
+      #
+      def sid_type
+        @sid_type
+      end
+
+      # Sets the SID (Security Identifier) type to +stype+, which can be
+      # one of the following constant values:
+      #
+      # * Admin::SidTypeUser
+      # * Admin::SidTypeGroup
+      # * Admin::SidTypeDomain
+      # * Admin::SidTypeAlias
+      # * Admin::SidTypeWellKnownGroup
+      # * Admin::SidTypeDeletedAccount
+      # * Admin::SidTypeInvalid
+      # * Admin::SidTypeUnknown
+      # * Admin::SidTypeComputer
+      #
+      def sid_type=(stype)
+        case stype
+          when Admin::SidTypeUser
+            @sid_type = 'user'
+          when Admin::SidTypeGroup
+            @sid_type = 'group'
+          when Admin::SidTypeDomain
+            @sid_type = 'domain'
+          when Admin::SidTypeAlias
+            @sid_type = 'alias'
+          when Admin::SidTypeWellKnownGroup
+            @sid_type = 'well_known_group'
+          when Admin::SidTypeDeletedAccount
+            @sid_type = 'deleted_account'
+          when Admin::SidTypeInvalid
+            @sid_type = 'invalid'
+          when Admin::SidTypeUnknown
+            @sid_type = 'unknown'
+          when Admin::SidTypeComputer
+            @sid_type = 'computer'
+          else
+            @sid_type = 'unknown'
+        end
+      end
+
+      # Returns whether or not the account is disabled.
+      #
+      def disabled?
+        @disabled
+      end
+
+      # Returns whether or not the account is local.
+      #
+      def local?
+        @local
+      end
+
+      # Returns whether or not the account is locked out.
+      #
+      def lockout?
+        @lockout
+      end
+
+      # Returns whether or not the password for the account is changeable.
+      #
+      def password_changeable?
+        @password_changeable
+      end
+
+      # Returns whether or not the password for the account is changeable.
+      #
+      def password_expires?
+        @password_expires
+      end
+
+      # Returns whether or not the a password is required for the account.
+      #
+      def password_required?
+        @password_required
+      end
+    end
+
+    class Group
+      # Short description of the object.
+      attr_accessor :caption
+
+      # Description of the group.
+      attr_accessor :description
+
+      # Name of the Windows domain to which the group account belongs.
+      attr_accessor :domain
+
+      # Date the group was added.
+      attr_accessor :install_date
+
+      # Name of the Windows group account on the Group#domain specified.
+      attr_accessor :name
+
+      # Security identifier for this group.
+      attr_accessor :sid
+
+      # Current status for the group, such as "ok", "error", etc.
+      attr_accessor :status
+
+      # The group ID.
+      attr_accessor :gid
+
+      # Sets whether or not the group is local (as opposed to global).
+      attr_writer :local
+
+      # An array of members for that group. May contain SID's.
+      attr_accessor :members
+
+      # Creates and returns a new Group object.  This class encapsulates
+      # the information for a group account, whether it be global or local.
+      #
+      # Yields +self+ if a block is given.
+      #
+      def initialize
+        yield self if block_given?
+      end
+
+      # Returns whether or not the group is a local group.
+      #
+      def local?
+         @local
+      end
+
+      # Returns the type of SID (Security Identifier) as a stringified value.
+      #
+      def sid_type
+         @sid_type
+      end
+
+      # Sets the SID (Security Identifier) type to +stype+, which can be
+      # one of the following constant values:
+      #
+      # * Admin::SidTypeUser
+      # * Admin::SidTypeGroup
+      # * Admin::SidTypeDomain
+      # * Admin::SidTypeAlias
+      # * Admin::SidTypeWellKnownGroup
+      # * Admin::SidTypeDeletedAccount
+      # * Admin::SidTypeInvalid
+      # * Admin::SidTypeUnknown
+      # * Admin::SidTypeComputer
+      #
+      def sid_type=(stype)
+        if stype.kind_of?(String)
+          @sid_type = stype.downcase
+        else
+          case stype
+             when Admin::SidTypeUser
+                @sid_type = "user"
+             when Admin::SidTypeGroup
+                @sid_type = "group"
+             when Admin::SidTypeDomain
+                @sid_type = "domain"
+             when Admin::SidTypeAlias
+                @sid_type = "alias"
+             when Admin::SidTypeWellKnownGroup
+                @sid_type = "well_known_group"
+             when Admin::SidTypeDeletedAccount
+                @sid_type = "deleted_account"
+             when Admin::SidTypeInvalid
+                @sid_type = "invalid"
+             when Admin::SidTypeUnknown
+                @sid_type = "unknown"
+             when Admin::SidTypeComputer
+                @sid_type = "computer"
+             else
+                @sid_type = "unknown"
+          end
+        end
+
+        @sid_type
+      end
     end
   end
 end
