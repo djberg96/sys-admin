@@ -3,20 +3,21 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name       = 'sys-admin'
-  spec.version    = '1.7.6'
+  spec.version    = '1.8.0'
   spec.author     = 'Daniel J. Berger'
   spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://www.github.com/djberg96/sys-admin'
   spec.summary    = 'A unified, cross platform replacement for the "etc" library.'
-  spec.test_file  = 'test/test_sys_admin.rb'
+  spec.test_files = File['spec/*_spec.rb']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
+  spec.extra_rdoc_files = Dir['*.rdoc']
+	
   spec.add_dependency('ffi', '~> 1.1')
-  spec.add_dependency('win32-security', '~> 0.5') if Gem.win_platform?
 
-  spec.add_development_dependency('test-unit', '>= 2.5.0')
+  spec.add_development_dependency('rspec', '~> 3.9')
   spec.add_development_dependency('rake')
 
   spec.metadata = {
