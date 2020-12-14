@@ -705,7 +705,7 @@ module Sys
         end
       }
 
-      if usr.kind_of?(Fixnum)
+      if usr.kind_of?(Integer)
         query << " and sid like '%-#{usr}'"
       else
         query << " and name = '#{usr}'"
@@ -718,7 +718,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if usr.kind_of?(Fixnum)
+        if usr.kind_of?(Integer)
           next if usr != uid
         end
 
@@ -886,7 +886,7 @@ module Sys
         end
       }
 
-      if grp.kind_of?(Fixnum)
+      if grp.kind_of?(Integer)
         query << " and sid like '%-#{grp}'"
       else
         query << " and name = '#{grp}'"
@@ -899,7 +899,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if grp.kind_of?(Fixnum)
+        if grp.kind_of?(Integer)
           next if grp != gid
         end
 
