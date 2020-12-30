@@ -6,22 +6,22 @@ The sys-admin library is a unified, cross platform replacement for the Etc modul
 
 ## Synopsis
 ```ruby
-  require 'sys/admin' # or sys-admin
-  include Sys
+require 'sys/admin' # or sys-admin
+include Sys
 
-  # Returns an Array of User objects
-  a = Admin.users
+# Returns an Array of User objects
+a = Admin.users
 
-  # Returns an Array of Group objects
-  g = Admin.groups
+# Returns an Array of Group objects
+g = Admin.groups
 
-  # Get information about a particular user
-  p Admin.get_user("nobody")
-  p Admin.get_user("nobody", :localaccount => true)
+# Get information about a particular user
+p Admin.get_user("nobody")
+p Admin.get_user("nobody", :localaccount => true)
 
-  # Get information about a particular group
-  p Admin.get_group("adm")
-  p Admin.get_group("adm", :localaccount => true)
+# Get information about a particular group
+p Admin.get_group("adm")
+p Admin.get_group("adm", :localaccount => true)
 ```
 
 ## Admin
