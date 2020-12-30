@@ -29,32 +29,32 @@ p Admin.get_group("adm", :localaccount => true)
 
 Returns the user name (only) of the current login.
 
-  ```
-  Admin.get_user(name, options = {})
-  Admin.get_user(uid, options = {})
-  ```
+```
+Admin.get_user(name, options = {})
+Admin.get_user(uid, options = {})
+```
 
 Returns a User object based on +name+ or +uid+. The +options+ hash is
 for MS Windows only, and allows you to restrict the search based on the
 options you provide, e.g. 'domain' or 'localaccount'.
    
-  ```
-  Admin.get_group(name, options = {})
-  Admin.get_group(gid, options = {})
-  ```
+```
+Admin.get_group(name, options = {})
+Admin.get_group(gid, options = {})
+```
 
 Returns a Group object based on +name+ or +uid+. The +options+ hash is
 for MS Windows only, and allows you to restrict the search based on the
 options you provide, e.g. 'domain' or 'localaccount'.
 
-  `Admin.groups(options = {})`
+`Admin.groups(options = {})`
 
 Returns an Array of Group objects.
 
 The +options+ hash is for MS Windows only, and allows you to restrict the
 search based on the options you provide, e.g. 'domain' or 'localaccount'.
 
-  `Admin.users(options = {})`
+`Admin.users(options = {})`
 
 Returns an Array of User objects.
    
@@ -124,7 +124,7 @@ The Group class has the following attributes on Unix systems:
   * passwd
 
 ## Error Classes
-  `Admin::Error < StandardError`
+`Admin::Error < StandardError`
 
 Raised if anything goes wrong with any of the above methods.
 
