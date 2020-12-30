@@ -29,7 +29,7 @@ p Admin.get_group("adm", :localaccount => true)
 
 Returns the user name (only) of the current login.
 
-  ```ruby
+  ```
   Admin.get_user(name, options = {})
   Admin.get_user(uid, options = {})
   ```
@@ -38,7 +38,7 @@ Returns a User object based on +name+ or +uid+. The +options+ hash is
 for MS Windows only, and allows you to restrict the search based on the
 options you provide, e.g. 'domain' or 'localaccount'.
    
-  ```ruby
+  ```
   Admin.get_group(name, options = {})
   Admin.get_group(gid, options = {})
   ```
