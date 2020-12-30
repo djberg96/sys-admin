@@ -3,7 +3,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name       = 'sys-admin'
-  spec.version    = '1.7.4'
+  spec.version    = '1.7.5'
   spec.author     = 'Daniel J. Berger'
   spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
@@ -13,9 +13,7 @@ Gem::Specification.new do |spec|
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
-  spec.extra_rdoc_files = Dir['*.rdoc']
-	
-  spec.add_dependency('ffi', '>= 1.1.0')
+  spec.add_dependency('ffi', '~> 1.1')
 
   spec.add_development_dependency('test-unit', '>= 2.5.0')
   spec.add_development_dependency('rake')
@@ -23,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata = {
     'homepage_uri'      => 'https://github.com/djberg96/sys-admin',
     'bug_tracker_uri'   => 'https://github.com/djberg96/sys-admin/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/sys-admin/blob/ffi/CHANGES.rdoc',
+    'changelog_uri'     => 'https://github.com/djberg96/sys-admin/blob/ffi/CHANGES.md',
     'documentation_uri' => 'https://github.com/djberg96/sys-admin/wiki',
     'source_code_uri'   => 'https://github.com/djberg96/sys-admin',
     'wiki_uri'          => 'https://github.com/djberg96/sys-admin/wiki'
