@@ -9,8 +9,6 @@ module Sys
     extend FFI::Library
     ffi_lib FFI::Library::LIBC
 
-    private
-
     attach_function :strerror, [:int], :string
 
     attach_function :getlogin, [], :string
@@ -30,8 +28,6 @@ module Sys
     private_class_method :getlogin, :getuid, :getpwnam, :getpwuid, :getpwent
     private_class_method :setpwent, :endpwent, :getgrgid, :getgrnam
     private_class_method :getgrent, :endgrent, :setgrent, :strerror
-
-    public
 
     # Error typically raised if any of the Sys::Admin methods fail.
     class Error < StandardError; end
