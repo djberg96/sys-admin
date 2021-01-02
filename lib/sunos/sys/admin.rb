@@ -5,10 +5,9 @@ require 'sys/admin/common'
 
 module Sys
   class Admin
-    private
-
     # :no-doc:
     BUF_MAX = 65536 # Max buffer size for retry.
+    private_constant :BUF_MAX
 
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, [:string, :int], :int
@@ -42,6 +41,8 @@ module Sys
       )
     end
 
+    private_constant :PasswdStruct
+
     # struct group from /usr/include/grp.h
     class GroupStruct < FFI::Struct
       layout(
@@ -52,6 +53,8 @@ module Sys
       )
     end
 
+    private_constant :GroupStruct
+
     # I'm blending the timeval struct in directly here
     class LastlogStruct < FFI::Struct
       layout(
@@ -61,7 +64,7 @@ module Sys
       )
     end
 
-    public
+    private_constant :LastlogStruct
 
     # Returns the login for the current process.
     #
@@ -194,8 +197,6 @@ module Sys
       groups
     end
 
-    private
-
     # Takes a GroupStruct and converts it to a Group object.
     def self.get_group_from_struct(grp)
       Group.new do |g|
@@ -205,6 +206,8 @@ module Sys
         g.members = grp[:gr_mem].read_array_of_string
       end
     end
+
+    private_class_method :get_group_from_struct
 
     # Takes a UserStruct and converts it to a User object.
     def self.get_user_from_struct(pwd)
@@ -232,6 +235,8 @@ module Sys
       user
     end
 
+    private_class_method :get_use_from_struct
+
     # The use of pread was necessary here because it's a sparse file. Note
     # also that while Solaris supports the getuserattr function, it doesn't
     # appear to store anything regarding login information.
@@ -257,5 +262,7 @@ module Sys
 
       lastlog
     end
+
+    private_class_method :get_lastlog_info
   end
 end
