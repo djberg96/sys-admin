@@ -97,8 +97,6 @@ module Sys
               @sid_type = "unknown"
         end
       end
-
-      @sid_type
     end
   end
 
@@ -314,9 +312,8 @@ module Sys
     SidTypeUnknown        = 8
     SidTypeComputer       = 9
 
-    private
-
     HKEY = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\"
+    private_constant :HKEY
 
     # Retrieves the user's home directory. For local accounts query the
     # registry. For domain accounts use ADSI and use the HomeDirectory.
@@ -343,6 +340,8 @@ module Sys
       dir
     end
 
+    private_class_method :get_home_dir
+
     # A private method that lower cases all keys, and converts them
     # all to symbols.
     #
@@ -357,6 +356,8 @@ module Sys
       rhash
     end
 
+    private_class_method :munge_options
+
     # An internal, private method for getting a list of groups for
     # a particular user. The first member is a list of group names,
     # the second member is the primary group ID.
@@ -368,6 +369,8 @@ module Sys
       [array, adsi.PrimaryGroupId]
     end
 
+    private_class_method :get_groups
+
     # An internal, private method for getting a list of members for
     # any particular group.
     #
@@ -378,12 +381,12 @@ module Sys
       array
     end
 
+    private_class_method :get_members
+
     # Used by the get_login method
     ffi_lib :advapi32
     attach_function :GetUserNameW, [:pointer, :pointer], :bool
     private_class_method :GetUserNameW
-
-    public
 
     # Creates the given +user+. If no domain option is specified,
     # then it defaults to your local host, i.e. a local account is
