@@ -6,10 +6,9 @@ require 'rbconfig'
 
 module Sys
   class Admin
-    private
-
     # :no-doc:
     BUF_MAX = 65536 # Max buffer for retry
+    private_constant :BUF_MAX
 
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, [:string, :int], :int
@@ -22,8 +21,7 @@ module Sys
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
-    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r
-    private_class_method :getgrgid_r
+    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r, :getgrgid_r
     private_class_method :open_c, :pread_c, :close_c
 
     # struct passwd from /usr/include/pwd.h
@@ -48,6 +46,8 @@ module Sys
       layout(*fields)
     end
 
+    private_constant :PasswdStruct
+
     # struct group from /usr/include/grp.h
     class GroupStruct < FFI::Struct
       layout(
@@ -58,6 +58,8 @@ module Sys
       )
     end
 
+    private_constant :GroupStruct
+
     # I'm blending the timeval struct in directly here
     class LastlogStruct < FFI::Struct
       layout(
@@ -67,7 +69,7 @@ module Sys
       )
     end
 
-    public
+    private_constant :LastlogStruct
 
     # Returns the login for the current process.
     #
@@ -192,8 +194,6 @@ module Sys
       groups
     end
 
-    private
-
     # Takes a GroupStruct and converts it to a Group object.
     def self.get_group_from_struct(grp)
       Group.new do |g|
@@ -203,6 +203,8 @@ module Sys
         g.members = grp[:gr_mem].read_array_of_string
       end
     end
+
+    private_class_method :get_group_from_struct
 
     # Takes a UserStruct and converts it to a User object.
     def self.get_user_from_struct(pwd)
@@ -230,6 +232,8 @@ module Sys
       user
     end
 
+    private_class_method :get_user_from_struct
+
     # Get lastlog information for the given user.
     def self.get_lastlog_info(uid)
       logfile = '/var/log/lastlog'
@@ -252,5 +256,7 @@ module Sys
 
       lastlog
     end
+
+    private_class_method :get_lastlog_info
   end
 end
