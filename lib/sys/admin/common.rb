@@ -13,6 +13,7 @@ module Sys
 
     attach_function :getlogin, [], :string
     attach_function :getuid, [], :long
+    attach_function :geteuid, [], :long
     attach_function :getpwnam, [:string], :pointer
     attach_function :getpwuid, [:long], :pointer
     attach_function :getpwent, [], :pointer
@@ -25,8 +26,8 @@ module Sys
     attach_function :endgrent, [], :void
     attach_function :setgrent, [], :void
 
-    private_class_method :getlogin, :getuid, :getpwnam, :getpwuid, :getpwent
-    private_class_method :setpwent, :endpwent, :getgrgid, :getgrnam
+    private_class_method :getlogin, :getuid, :geteuid, :getpwnam, :getpwuid
+    private_class_method :getpwent, :setpwent, :endpwent, :getgrgid, :getgrnam
     private_class_method :getgrent, :endgrent, :setgrent, :strerror
 
     # Error typically raised if any of the Sys::Admin methods fail.

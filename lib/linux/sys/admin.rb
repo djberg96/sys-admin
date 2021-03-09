@@ -67,13 +67,7 @@ module Sys
     # Returns the login for the current process.
     #
     def self.get_login
-      buf = FFI::MemoryPointer.new(:char, 256)
-
-      if getlogin_r(buf, buf.size) != 0
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
-      end
-
-      buf.read_string
+      get_user(geteuid()).name
     end
 
     # Returns a User object for the given name or uid. Raises an error
