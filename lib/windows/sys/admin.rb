@@ -71,7 +71,7 @@ module Sys
     # * Admin::SidTypeComputer
     #
     def sid_type=(stype)
-      if stype.kind_of?(String)
+      if stype.is_a?(String)
         @sid_type = stype.downcase
       else
         case stype
@@ -708,7 +708,7 @@ module Sys
         end
       end
 
-      if usr.kind_of?(Integer)
+      if usr.is_a?(Integer)
         query << " and sid like '%-#{usr}'"
       else
         query << " and name = '#{usr}'"
@@ -721,7 +721,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if usr.kind_of?(Integer)
+        if usr.is_a?(Integer)
           next if usr != uid
         end
 
@@ -889,7 +889,7 @@ module Sys
         end
       end
 
-      if grp.kind_of?(Integer)
+      if grp.is_a?(Integer)
         query << " and sid like '%-#{grp}'"
       else
         query << " and name = '#{grp}'"
@@ -902,7 +902,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if grp.kind_of?(Integer)
+        if grp.is_a?(Integer)
           next if grp != gid
         end
 
