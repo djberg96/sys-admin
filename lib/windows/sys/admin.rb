@@ -312,7 +312,7 @@ module Sys
     SidTypeUnknown        = 8
     SidTypeComputer       = 9
 
-    HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'
+    HKEY = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\"
     private_constant :HKEY
 
     # Retrieves the user's home directory. For local accounts query the
