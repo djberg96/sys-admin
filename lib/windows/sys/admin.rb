@@ -688,8 +688,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs = "winmgmts:{impersonationLevel=impersonate}!//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -703,17 +702,17 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+          query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+          query += " and #{opt} = '#{val}'"
         end
       end
 
       if usr.is_a?(Integer)
-        query << " and sid like '%-#{usr}'"
+         query += " and sid like '%-#{usr}'"
       else
-        query << " and name = '#{usr}'"
+         query += " and name = '#{usr}'"
       end
 
       domain = options[:domain] || host
@@ -782,8 +781,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs = "winmgmts:{impersonationLevel=impersonate}!//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -797,10 +795,10 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+           query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+           query += " and #{opt} = '#{val}'"
         end
       end
 
@@ -869,8 +867,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs = "winmgmts:{impersonationLevel=impersonate}!//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -884,17 +881,17 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+           query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+           query += " and #{opt} = '#{val}'"
         end
       end
 
       if grp.is_a?(Integer)
-        query << " and sid like '%-#{grp}'"
+         query += " and sid like '%-#{grp}'"
       else
-        query << " and name = '#{grp}'"
+         query += " and name = '#{grp}'"
       end
 
       domain = options[:domain] || host
@@ -953,8 +950,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs = "winmgmts:{impersonationLevel=impersonate}!//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -968,10 +964,10 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+           query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+           query += " and #{opt} = '#{val}'"
         end
       end
 
