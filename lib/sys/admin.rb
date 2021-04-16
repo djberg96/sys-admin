@@ -21,6 +21,6 @@ when /darwin|mach/i
   require 'darwin/sys/admin'
 when /bsd/i
   require 'bsd/sys/admin'
-  else
+else
   require 'unix/sys/admin'
 end

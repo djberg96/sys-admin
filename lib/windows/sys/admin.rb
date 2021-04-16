@@ -210,7 +210,7 @@ module Sys
         @account_type = 'workstation_trust'
       when SERVER_TRUST
         @account_type = 'server_trust'
-        else
+      else
         @account_type = 'unknown'
       end
     end
