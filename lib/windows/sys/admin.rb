@@ -348,10 +348,10 @@ module Sys
     def self.munge_options(opts)
       rhash = {}
 
-      opts.each{ |k, v|
+      opts.each do |k, v|
         k = k.to_s.downcase.to_sym
         rhash[k] = v
-      }
+      end
 
       rhash
     end
@@ -435,13 +435,13 @@ module Sys
         adsi = WIN32OLE.connect(moniker)
         user = adsi.create('user', name)
 
-        options.each{ |option, value|
+        options.each do |option, value|
           if option.to_s == 'password'
             user.setpassword(value)
           else
             user.put(option.to_s, value)
           end
-        }
+        end
 
         user.setinfo
       rescue WIN32OLERuntimeError => err
@@ -488,13 +488,13 @@ module Sys
       begin
         adsi = WIN32OLE.connect("WinNT://#{domain}/#{name},user")
 
-        options.each{ |option, value|
+        options.each do |option, value|
           if option.to_s == 'password'
             adsi.setpassword(value)
           else
             adsi.put(option.to_s, value)
           end
-        }
+        end
 
         adsi.setinfo
       rescue WIN32OLERuntimeError => err
@@ -699,14 +699,14 @@ module Sys
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       if usr.kind_of?(Integer)
         query << " and sid like '%-#{usr}'"
@@ -716,7 +716,7 @@ module Sys
 
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |user|
+      wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
         # Because our 'like' query isn't fulproof, let's parse
@@ -751,7 +751,7 @@ module Sys
         end
 
         return user_object
-      }
+      end
 
       # If we're here, it means it wasn't found.
       raise Error, "no user found for '#{usr}'"
@@ -793,19 +793,19 @@ module Sys
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       array = []
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |user|
+      wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
         usr = User.new do |u|
@@ -831,7 +831,7 @@ module Sys
         end
 
         array.push(usr)
-      }
+      end
 
       array
     end
@@ -880,14 +880,14 @@ module Sys
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       if grp.kind_of?(Integer)
         query << " and sid like '%-#{grp}'"
@@ -897,7 +897,7 @@ module Sys
 
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |group|
+      wmi.execquery(query).each do |group|
         gid = group.sid.split('-').last.to_i
 
         # Because our 'like' query isn't fulproof, let's parse
@@ -921,7 +921,7 @@ module Sys
         end
 
         return group_object
-      }
+      end
 
       # If we're here, it means it wasn't found.
       raise Error, "no group found for '#{grp}'"
@@ -964,19 +964,19 @@ module Sys
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       array = []
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |group|
+      wmi.execquery(query).each do |group|
         grp = Group.new do |g|
           g.caption      = group.caption
           g.description  = group.description
@@ -992,7 +992,7 @@ module Sys
         end
 
         array.push(grp)
-      }
+      end
 
       array
     end

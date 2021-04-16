@@ -99,9 +99,9 @@ module Sys
       def groups
         array = []
 
-        Sys::Admin.groups.each{ |grp|
+        Sys::Admin.groups.each do |grp|
           array << grp.name if grp.members.include?(self.name)
-        }
+        end
 
         array
       end
