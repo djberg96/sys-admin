@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sys/admin/custom'
 require 'sys/admin/common'
 

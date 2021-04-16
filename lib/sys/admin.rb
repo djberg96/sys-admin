@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Sys
   class Admin
     # The version of the sys-admin library.
-    VERSION = '1.7.6'.freeze
+    VERSION = '1.7.6'
   end
 end
 
