@@ -385,7 +385,7 @@ module Sys
 
     # Used by the get_login method
     ffi_lib :advapi32
-    attach_function :GetUserNameW, [:pointer, :pointer], :bool
+    attach_function :GetUserNameW, %i[pointer pointer], :bool
     private_class_method :GetUserNameW
 
     # Creates the given +user+. If no domain option is specified,
