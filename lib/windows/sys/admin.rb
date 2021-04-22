@@ -78,25 +78,25 @@ module Sys
       else
         case stype
           when Admin::SidTypeUser
-          @sid_type = 'user'
+            @sid_type = 'user'
           when Admin::SidTypeGroup
-          @sid_type = 'group'
+            @sid_type = 'group'
           when Admin::SidTypeDomain
-          @sid_type = 'domain'
+            @sid_type = 'domain'
           when Admin::SidTypeAlias
-          @sid_type = 'alias'
+            @sid_type = 'alias'
           when Admin::SidTypeWellKnownGroup
-          @sid_type = 'well_known_group'
+            @sid_type = 'well_known_group'
           when Admin::SidTypeDeletedAccount
-          @sid_type = 'deleted_account'
+            @sid_type = 'deleted_account'
           when Admin::SidTypeInvalid
-          @sid_type = 'invalid'
+            @sid_type = 'invalid'
           when Admin::SidTypeUnknown
-          @sid_type = 'unknown'
+            @sid_type = 'unknown'
           when Admin::SidTypeComputer
-          @sid_type = 'computer'
+            @sid_type = 'computer'
         else
-          @sid_type = 'unknown'
+            @sid_type = 'unknown'
         end
       end
     end
@@ -201,17 +201,17 @@ module Sys
     def account_type=(type)
       case type
         when TEMP_DUPLICATE
-        @account_type = 'duplicate'
+          @account_type = 'duplicate'
         when NORMAL
-        @account_type = 'normal'
+          @account_type = 'normal'
         when INTERDOMAIN_TRUST
-        @account_type = 'interdomain_trust'
+          @account_type = 'interdomain_trust'
         when WORKSTATION_TRUST
-        @account_type = 'workstation_trust'
+          @account_type = 'workstation_trust'
         when SERVER_TRUST
-        @account_type = 'server_trust'
+          @account_type = 'server_trust'
       else
-        @account_type = 'unknown'
+          @account_type = 'unknown'
       end
     end
 
@@ -237,25 +237,25 @@ module Sys
     def sid_type=(stype)
       case stype
         when Admin::SidTypeUser
-        @sid_type = 'user'
+          @sid_type = 'user'
         when Admin::SidTypeGroup
-        @sid_type = 'group'
+          @sid_type = 'group'
         when Admin::SidTypeDomain
-        @sid_type = 'domain'
+          @sid_type = 'domain'
         when Admin::SidTypeAlias
-        @sid_type = 'alias'
+          @sid_type = 'alias'
         when Admin::SidTypeWellKnownGroup
-        @sid_type = 'well_known_group'
+          @sid_type = 'well_known_group'
         when Admin::SidTypeDeletedAccount
-        @sid_type = 'deleted_account'
+          @sid_type = 'deleted_account'
         when Admin::SidTypeInvalid
-        @sid_type = 'invalid'
+          @sid_type = 'invalid'
         when Admin::SidTypeUnknown
-        @sid_type = 'unknown'
+          @sid_type = 'unknown'
         when Admin::SidTypeComputer
-        @sid_type = 'computer'
+          @sid_type = 'computer'
       else
-        @sid_type = 'unknown'
+          @sid_type = 'unknown'
       end
     end
 
