@@ -95,7 +95,7 @@ module Sys
             @sid_type = 'unknown'
           when Admin::SidTypeComputer
             @sid_type = 'computer'
-        else
+          else
             @sid_type = 'unknown'
         end
       end
@@ -210,7 +210,7 @@ module Sys
           @account_type = 'workstation_trust'
         when SERVER_TRUST
           @account_type = 'server_trust'
-      else
+        else
           @account_type = 'unknown'
       end
     end
@@ -254,7 +254,7 @@ module Sys
           @sid_type = 'unknown'
         when Admin::SidTypeComputer
           @sid_type = 'computer'
-      else
+        else
           @sid_type = 'unknown'
       end
     end
