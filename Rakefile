@@ -9,7 +9,7 @@ namespace :gem do
   desc "Create the sys-uname gem"
   task :create => [:clean] do
     require 'rubygems/package'
-    spec = eval(IO.read('sys-admin.gemspec'))
+    spec = Gem::Specification.load('sys-admin.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
     Gem::Package.build(spec)
   end
