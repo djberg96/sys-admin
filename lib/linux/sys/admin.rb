@@ -14,7 +14,6 @@ module Sys
     attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
     attach_function :close_c, :close, [:int], :int
 
-    attach_function :getlogin_r, [:pointer, :size_t], :int
     attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getpwent_r, [:pointer, :pointer, :size_t, :pointer], :int
@@ -22,7 +21,6 @@ module Sys
     attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
     attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
 
-    private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getpwent_r
     private_class_method :getgrent_r, :getgrnam_r, :getgrgid_r
     private_class_method :open_c, :pread_c, :close_c
 
