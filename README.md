@@ -4,6 +4,9 @@ The sys-admin library is a unified, cross platform replacement for the Etc modul
 ## Installation
 `gem install sys-admin`
 
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/sys-admin/main/certs/djberg96_pub.pem)`
+
 ## Synopsis
 ```ruby
 require 'sys/admin' # or sys-admin
