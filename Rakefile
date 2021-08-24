@@ -1,17 +1,17 @@
 require 'rake'
 require 'rake/clean'
-require 'rake/testtask'
+require 'rspec/core/rake_task'
 require 'rbconfig'
 
-CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core")
+CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core", "**/*.lock")
 
 namespace :gem do
   desc "Create the sys-uname gem"
   task :create => [:clean] do
     require 'rubygems/package'
-    spec = eval(IO.read('sys-admin.gemspec'))
+    spec = Gem::Specification.load('sys-admin.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
-    Gem::Package.build(spec, true)
+    Gem::Package.build(spec)
   end
 
   desc "Install the sys-uname gem"
@@ -21,27 +21,24 @@ namespace :gem do
   end
 end
 
-Rake::TestTask.new('test') do |t|
+desc "Run the specs for the sys-admin library"
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = 'spec/sys_admin_unix_spec.rb'
   case RbConfig::CONFIG['host_os']
   when /darwin|osx/i
-    t.libs << 'lib/darwin'
+    t.rspec_opts = '-Ilib/darwin'
   when /linux/i
-    t.libs << 'lib/linux'
+    t.rspec_opts = '-Ilib/linux'
   when /sunos|solaris/i
-    t.libs << 'lib/sunos'
+    t.rspec_opts = '-Ilib/sunos'
   when /bsd/i
-    t.libs << 'lib/bsd'
+    t.rspec_opts = '-Ilib/bsd'
   when /windows|win32|mingw|cygwin|dos/i
-    t.libs << 'lib/windows'
+    t.rspec_opts = '-Ilib/windows'
+    t.pattern = 'spec/sys_admin_unix_spec.rb'
   else
-    t.libs << 'lib/unix'
+    t.rspec_opts = '-Ilib/unix'
   end
-
-  t.warning = true
-  t.verbose = true
-
-  t.libs << 'test'
-  t.test_files = FileList['test/test_sys_admin.rb']
 end
 
-task :default => :test
+task :default => :spec

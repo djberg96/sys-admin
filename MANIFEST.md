@@ -1,9 +1,10 @@
 * sys-admin.gemspec
-* CHANGES.rdoc
+* CHANGES.md
 * LICENSE
-* MANIFEST.rdoc
+* MANIFEST.md
+* README.md
+* Gemfile
 * Rakefile
-* README.rdoc
 * certs/djberg96_pub.pem
 * examples/groups.rb
 * examples/users.rb

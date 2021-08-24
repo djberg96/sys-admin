@@ -5,8 +5,6 @@ require 'sys/admin/common'
 
 module Sys
   class Admin
-    private
-
     class PasswdStruct < FFI::Struct
       layout(
         :pw_name,   :string,
@@ -19,6 +17,8 @@ module Sys
       )
     end
 
+    private_constant :PasswdStruct
+
     class GroupStruct < FFI::Struct
       layout(
         :gr_name,   :string,
@@ -28,7 +28,7 @@ module Sys
       )
     end
 
-    public
+    private_constant :GroupStruct
 
     # Returns the login for the current process.
     #
@@ -133,8 +133,6 @@ module Sys
       groups
     end
 
-    private
-
     # Takes a GroupStruct and converts it to a Group object.
     def self.get_group_from_struct(grp)
       Group.new do |g|
@@ -144,6 +142,8 @@ module Sys
         g.members = grp[:gr_mem].read_array_of_string
       end
     end
+
+    private_class_method :get_group_from_struct
 
     # Takes a UserStruct and converts it to a User object.
     def self.get_user_from_struct(pwd)
@@ -159,5 +159,7 @@ module Sys
 
       user
     end
+
+    private_class_method :get_user_from_struct
   end
 end

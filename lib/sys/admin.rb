@@ -1,7 +1,7 @@
 module Sys
   class Admin
     # The version of the sys-admin library.
-    VERSION = '1.7.4'.freeze
+    VERSION = '1.7.6'.freeze
   end
 end
 

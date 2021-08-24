@@ -1,62 +1,71 @@
-== Description
+## Description
 The sys-admin library is a unified, cross platform replacement for the Etc module.
    
-== Installation
-  gem install sys-admin
+## Installation
+`gem install sys-admin`
 
-== Synopsis
-  require 'sys/admin' # or sys-admin
-  include Sys
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/sys-admin/main/certs/djberg96_pub.pem)`
 
-  # Returns an Array of User objects
-  a = Admin.users
+## Synopsis
+```ruby
+require 'sys/admin' # or sys-admin
+include Sys
 
-  # Returns an Array of Group objects
-  g = Admin.groups
+# Returns an Array of User objects
+a = Admin.users
 
-  # Get information about a particular user
-  p Admin.get_user("nobody")
-  p Admin.get_user("nobody", :localaccount => true)
+# Returns an Array of Group objects
+g = Admin.groups
 
-  # Get information about a particular group
-  p Admin.get_group("adm")
-  p Admin.get_group("adm", :localaccount => true)
+# Get information about a particular user
+p Admin.get_user("nobody")
+p Admin.get_user("nobody", :localaccount => true)
 
-== Admin
-  Admin.get_login
+# Get information about a particular group
+p Admin.get_group("adm")
+p Admin.get_group("adm", :localaccount => true)
+```
+
+## Admin
+  `Admin.get_login`
 
 Returns the user name (only) of the current login.
 
-  Admin.get_user(name, options = {})
-  Admin.get_user(uid, options = {})
+```
+Admin.get_user(name, options = {})
+Admin.get_user(uid, options = {})
+```
 
-Returns a User object based on +name+ or +uid+. The +options+ hash is
+Returns a User object based on `name` or `uid`. The `options` hash is
 for MS Windows only, and allows you to restrict the search based on the
 options you provide, e.g. 'domain' or 'localaccount'.
    
-  Admin.get_group(name, options = {})
-  Admin.get_group(gid, options = {})
+```
+Admin.get_group(name, options = {})
+Admin.get_group(gid, options = {})
+```
 
-Returns a Group object based on +name+ or +uid+. The +options+ hash is
+Returns a Group object based on `name` or `uid`. The `options` hash is
 for MS Windows only, and allows you to restrict the search based on the
 options you provide, e.g. 'domain' or 'localaccount'.
 
-  Admin.groups(options = {})
+`Admin.groups(options = {})`
 
 Returns an Array of Group objects.
 
-The +options+ hash is for MS Windows only, and allows you to restrict the
+The `options` hash is for MS Windows only, and allows you to restrict the
 search based on the options you provide, e.g. 'domain' or 'localaccount'.
 
-  Admin.users(options = {})
+`Admin.users(options = {})`
 
 Returns an Array of User objects.
    
-The +options+ hash is for MS Windows only, and allows you to restrict the
+The `options` hash is for MS Windows only, and allows you to restrict the
 search based on the options you provide, e.g. 'domain' or 'localaccount'.
    
-== User class
-=== User (Windows)
+## User class
+### User (Windows)
 The User class has the following attributes on MS Windows systems:
 	
   * account_type
@@ -78,7 +87,7 @@ The User class has the following attributes on MS Windows systems:
   * password_required?
   * uid
      
-=== User (Unix)
+### User (Unix)
 The User class has the following attributes on Unix systems:
 	
   * name
@@ -95,8 +104,8 @@ The User class has the following attributes on Unix systems:
   * change
   * expire
 
-== Group Classes
-=== Group (Windows)
+## Group Classes
+### Group (Windows)
 The Group class has the following attributes on MS Windows systems:
 	
   * caption
@@ -109,7 +118,7 @@ The Group class has the following attributes on MS Windows systems:
   * gid
   * local?
 	
-=== Group (Unix)
+### Group (Unix)
 The Group class has the following attributes on Unix systems:
 	
   * name
@@ -117,37 +126,37 @@ The Group class has the following attributes on Unix systems:
   * members
   * passwd
 
-== Error Classes
-  Admin::Error < StandardError
+## Error Classes
+`Admin::Error < StandardError`
 
 Raised if anything goes wrong with any of the above methods.
 
-== Developer's Notes
-=== MS Windows
+## Developer's Notes
+### MS Windows
 The Windows version now uses a win32ole + WMI approach to getting
 information.  This means that the WMI service must be running on the
 target machine in order to work (which it is, by default).
 	
-=== UNIX
+### UNIX
 The underlying implementation is similar to core Ruby's Etc implementation.
 But, in addition to the different interface, I use the re-entrant version
 of the appropriate functions when available.
 
-== Future Plans
+## Future Plans
 * Make the User and Group objects comparable.
 * Add ability to add, configure and delete users on Unix platforms.
 
-== Known Bugs
+## Known Bugs
 None that I'm aware of. If you find any, please log them on the project page at:
 
   https://github.com/djberg96/sys-admin
 
-== License
+## License
 Apache-2.0
 
-== Copyright
+## Copyright
 (C) 2005-2020, Daniel J. Berger
 All Rights Reserved
 
-== Author
+## Author
 Daniel J. Berger
