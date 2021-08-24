@@ -41,4 +41,4 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   end
 end
 
-task :default => :test
+task :default => :spec
