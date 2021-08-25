@@ -56,40 +56,39 @@ RSpec.describe Sys::Admin, :windows do
     end
   end
 
-=begin
+  describe "add, configure and delete group", :order => :defined do
+    example "add group" do
+      skip "requires elevated privileges" unless elevated
+      expect(described_class).to respond_to(:add_group)
+      expect{ described_class.add_group(:name => 'bar') }.not_to raise_error
+    end
 
-  def test_01_add_group
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:add_group)
-    expect{ described_class.add_group(:name => 'bar') }.not_to raise_error
-  end
+    example "configure group" do
+      skip "requires elevated privileges" unless elevated
+      expect(described_class).to respond_to(:configure_group)
+      assert_nothing_raised{
+        described_class.configure_group(:name => 'bar', :description => 'delete me')
+      }
+    end
 
-  def test_02_configure_group
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:configure_group)
-    assert_nothing_raised{
-      described_class.configure_group(:name => 'bar', :description => 'delete me')
-    }
-  end
+    example "add group member" do
+      skip "requires elevated privileges" unless elevated
+      expect(described_class).to respond_to(:add_group_member)
+      expect{ described_class.add_group_member('foo', 'bar') }.not_to raise_error
+    end
 
-  def test_03_add_group_member
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:add_group_member)
-    expect{ described_class.add_group_member('foo', 'bar') }.not_to raise_error
-  end
+    example "remove group member" do
+      skip "requires elevated privileges" unless elevated
+      expect(described_class).to respond_to(:remove_group_member)
+      expect{ described_class.remove_group_member('foo', 'bar') }.not_to raise_error
+    end
 
-  def test_04_remove_group_member
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:remove_group_member)
-    expect{ described_class.remove_group_member('foo', 'bar') }.not_to raise_error
+    example "delete group" do
+      skip "requires elevated privileges" unless elevated
+      expect(described_class).to respond_to(:delete_group)
+      expect{ described_class.delete_group('bar') }.not_to raise_error
+    end
   end
-
-  def test_05_delete_group
-    omit_unless(@@elevated)
-    expect(described_class).to respond_to(:delete_group)
-    expect{ described_class.delete_group('bar') }.not_to raise_error
-  end
-=end
 
   context "singleton methods" do
     describe "get_login" do
