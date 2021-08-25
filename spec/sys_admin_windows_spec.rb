@@ -25,13 +25,17 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  # TODO: should probably use an exclusion filter
+  # TODO: should probably use an exclusion filter instead of skip
   describe "add, configure and delete user", :order => :defined do
+    before do
+      @username = "foo"
+    end
+
     example "add user" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:add_user)
-      expect{ described_class.add_user(:name => 'foo', :password => 'a1b2c3D4') }.not_to raise_error
-      expect(described_class.users.map(&:name)).to include('foo')
+      expect{ described_class.add_user(:name => @username, :password => 'a1b2c3D4') }.not_to raise_error
+      expect{ described_class.get_user(@username) }.not_to raise_error
     end
 
     example "configure user" do
@@ -39,54 +43,57 @@ RSpec.describe Sys::Admin, :windows do
       expect(described_class).to respond_to(:configure_user)
       expect{
         described_class.configure_user(
-          :name        => 'foo',
+          :name        => @username,
           :description => 'delete me',
           :fullname    => 'fubar',
           :password    => 'd1c2b3A4'
         )
       }.not_to raise_error
-      expect(described_class.get_user('foo').description).to eq('delete me')
+      expect(described_class.get_user(@username).description).to eq('delete me')
     end
 
     example "delete user" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:delete_user)
-      expect{ described_class.delete_user('foo') }.not_to raise_error
-      expect(described_class.users.map(&:name)).not_to include('foo')
+      expect{ described_class.delete_user(@username) }.not_to raise_error
+      expect{ described_class.get_user(@username) }.to raise_error
     end
   end
 
   describe "add, configure and delete group", :order => :defined do
+    before do
+      @username = "foo"
+      @groupname = "bar"
+    end
+
     example "add group" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:add_group)
-      expect{ described_class.add_group(:name => 'bar') }.not_to raise_error
+      expect{ described_class.add_group(:name => @groupname) }.not_to raise_error
     end
 
     example "configure group" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:configure_group)
-      expect{
-        described_class.configure_group(:name => 'bar', :description => 'delete me')
-      }.not_to raise_error
+      expect{ described_class.configure_group(:name => @groupname, :description => 'delete me') }.not_to raise_error
     end
 
     example "add group member" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:add_group_member)
-      expect{ described_class.add_group_member('foo', 'bar') }.not_to raise_error
+      expect{ described_class.add_group_member(@username, @groupname) }.not_to raise_error
     end
 
     example "remove group member" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:remove_group_member)
-      expect{ described_class.remove_group_member('foo', 'bar') }.not_to raise_error
+      expect{ described_class.remove_group_member(@username, @groupname) }.not_to raise_error
     end
 
     example "delete group" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:delete_group)
-      expect{ described_class.delete_group('bar') }.not_to raise_error
+      expect{ described_class.delete_group(@groupname) }.not_to raise_error
     end
   end
 
