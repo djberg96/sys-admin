@@ -150,7 +150,6 @@ RSpec.describe Sys::Admin, :windows do
       end
     end
 
-=begin
     describe "get_group" do
       example "get_group basic functionality" do
         expect(described_class).to respond_to(:get_group)
@@ -158,18 +157,18 @@ RSpec.describe Sys::Admin, :windows do
 
       example "get_group method returns expected results with a string argument" do
         expect{ described_class.get_group(@group_name, :localaccount => true) }.not_to raise_error
-        expect( described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
       end
 
       example "get_group method returns expected results with an integer argument" do
         expect{ described_class.get_group(@group_id, :localaccount => true) }.not_to raise_error
-        expect( described_class.get_group(@group_id, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(@group_id, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
       end
 
-      # TODO: Update
       example "get_group method accepts a hash of options" do
-        expect{ described_class.get_group(@group_name, :localaccount => true) }.not_to raise_error
-        expect( described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+        options = {:host => host, :localaccount => true}
+        expect{ described_class.get_group(@group_name, options) }.not_to raise_error
+        expect(described_class.get_group(@group_name, options)).to be_kind_of(Sys::Admin::Group)
       end
 
       example "get_group method requires an argument" do
@@ -184,11 +183,11 @@ RSpec.describe Sys::Admin, :windows do
       end
 
       example "groups method returns an array of Group objects" do
-        expect( described_class.groups(:localaccount => true)).to be_kind_of(Array)
-        expect( described_class.groups(:localaccount => true).first).to be_kind_of(Sys::Admin::Group)
+        groups = described_class.groups(:localaccount => true)
+        expect(groups).to be_kind_of(Array)
+        expect(groups).to all(be_kind_of(Sys::Admin::Group))
       end
     end
-=end
   end
 
 =begin
