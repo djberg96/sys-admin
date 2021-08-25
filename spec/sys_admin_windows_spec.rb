@@ -190,99 +190,99 @@ RSpec.describe Sys::Admin, :windows do
     end
   end
 
+  context "User class" do
+    example "caption accessor for User class" do
+      expect(@user).to respond_to(:caption)
+      expect(@user).to respond_to(:caption=)
+    end
+
+    example "description accessor for User class" do
+      expect(@user).to respond_to(:description)
+      expect(@user).to respond_to(:description=)
+    end
+
+    example "domain accessor for User class" do
+      expect(@user).to respond_to(:domain)
+      expect(@user).to respond_to(:domain=)
+    end
+
+    example "password accessor for User class" do
+      expect(@user).to respond_to(:password)
+      expect(@user).to respond_to(:password=)
+    end
+
+    example "full_name accessor for User class" do
+      expect(@user).to respond_to(:full_name)
+      expect(@user).to respond_to(:full_name=)
+    end
+
+    example "name accessor for User class" do
+      expect(@user).to respond_to(:name)
+      expect(@user).to respond_to(:name=)
+    end
+
+    example "sid accessor for User class" do
+      expect(@user).to respond_to(:sid)
+      expect(@user).to respond_to(:sid=)
+    end
+
+    example "status accessor for User class" do
+      expect(@user).to respond_to(:status)
+      expect(@user).to respond_to(:status=)
+    end
+
+    example "disabled accessor for User class" do
+      expect(@user).to respond_to(:disabled?)
+      expect(@user).to respond_to(:disabled=)
+    end
+
+    example "local accessor for User class" do
+      expect(@user).to respond_to(:local?)
+      expect(@user).to respond_to(:local=)
+    end
+
+    example "lockout accessor for User class" do
+      expect(@user).to respond_to(:lockout?)
+      expect(@user).to respond_to(:lockout=)
+    end
+
+    example "password_changeable accessor for User class" do
+      expect(@user).to respond_to(:password_changeable?)
+      expect(@user).to respond_to(:password_changeable=)
+    end
+
+    example "password_expires accessor for User class" do
+      expect(@user).to respond_to(:password_expires?)
+      expect(@user).to respond_to(:password_expires=)
+    end
+
+    example "password_required accessor for User class" do
+      expect(@user).to respond_to(:password_required?)
+      expect(@user).to respond_to(:password_required=)
+    end
+
+    example "account_type accessor for User class" do
+      expect(@user).to respond_to(:account_type)
+      expect(@user).to respond_to(:account_type=)
+    end
+
+    example "uid accessor for User class" do
+      expect(@user).to respond_to(:uid)
+      expect(@user).to respond_to(:uid=)
+    end
+
+    example "dir accessor for User class" do
+      expect(@user).to respond_to(:dir)
+      expect(@user).to respond_to(:dir=)
+    end
+
+    example "dir method returns either a string or nil" do
+      expect{ @user = described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
+      expect(@user.dir).to be_kind_of(String).or be_kind_of(NilClass)
+    end
+  end
+
 =begin
-  # User class
-
-  example "caption accessor for User class" do
-    expect(@user).to respond_to(:caption)
-    expect(@user).to respond_to(:caption=)
-  end
-
-  example "description accessor for User class" do
-    expect(@user).to respond_to(:description)
-    expect(@user).to respond_to(:description=)
-  end
-
-  example "domain accessor for User class" do
-    expect(@user).to respond_to(:domain)
-    expect(@user).to respond_to(:domain=)
-  end
-
-  example "password accessor for User class" do
-    expect(@user).to respond_to(:password)
-    expect(@user).to respond_to(:password=)
-  end
-
-  example "full_name accessor for User class" do
-    expect(@user).to respond_to(:full_name)
-    expect(@user).to respond_to(:full_name=)
-  end
-
-  example "name accessor for User class" do
-    expect(@user).to respond_to(:name)
-    expect(@user).to respond_to(:name=)
-  end
-
-  example "sid accessor for User class" do
-    expect(@user).to respond_to(:sid)
-    expect(@user).to respond_to(:sid=)
-  end
-
-  example "status accessor for User class" do
-    expect(@user).to respond_to(:status)
-    expect(@user).to respond_to(:status=)
-  end
-
-  example "disabled accessor for User class" do
-    expect(@user).to respond_to(:disabled?)
-    expect(@user).to respond_to(:disabled=)
-  end
-
-  example "local accessor for User class" do
-    expect(@user).to respond_to(:local?)
-    expect(@user).to respond_to(:local=)
-  end
-
-  example "lockout accessor for User class" do
-    expect(@user).to respond_to(:lockout?)
-    expect(@user).to respond_to(:lockout=)
-  end
-
-  example "password_changeable accessor for User class" do
-    expect(@user).to respond_to(:password_changeable?)
-    expect(@user).to respond_to(:password_changeable=)
-  end
-
-  example "password_expires accessor for User class" do
-    expect(@user).to respond_to(:password_expires?)
-    expect(@user).to respond_to(:password_expires=)
-  end
-
-  example "password_required accessor for User class" do
-    expect(@user).to respond_to(:password_required?)
-    expect(@user).to respond_to(:password_required=)
-  end
-
-  example "account_type accessor for User class" do
-    expect(@user).to respond_to(:account_type)
-    expect(@user).to respond_to(:account_type=)
-  end
-
-  example "uid accessor for User class" do
-    expect(@user).to respond_to(:uid)
-    expect(@user).to respond_to(:uid=)
-  end
-
-  example "dir accessor for User class" do
-    expect(@user).to respond_to(:dir)
-    expect(@user).to respond_to(:dir=)
-  end
-
-  example "dir method returns either a string or nil" do
-    expect{ @user = described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
-    expect( @user.dir).to be_kind_of([String, NilClass])
-  end
-
   # Group class
 
   example "caption accessor for Group class" do
