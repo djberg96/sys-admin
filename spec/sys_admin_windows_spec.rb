@@ -137,7 +137,6 @@ RSpec.describe Sys::Admin, :windows do
       end
     end
 
-=begin
     describe "users" do
       example "users method basic functionality" do
         expect(described_class).to respond_to(:users)
@@ -145,11 +144,13 @@ RSpec.describe Sys::Admin, :windows do
       end
 
       example "users method returns an array of User objects" do
-        expect( described_class.users(:localaccount => true)).to be_kind_of(Array)
-        expect( described_class.users(:localaccount => true).first).to be_kind_of(Sys::Admin::User)
+        users = described_class.users(:localaccount => true)
+        expect(users).to be_kind_of(Array)
+        expect(users).to all(be_kind_of(Sys::Admin::User))
       end
     end
 
+=begin
     describe "get_group" do
       example "get_group basic functionality" do
         expect(described_class).to respond_to(:get_group)
