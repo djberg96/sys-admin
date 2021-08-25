@@ -282,57 +282,55 @@ RSpec.describe Sys::Admin, :windows do
     end
   end
 
-=begin
-  # Group class
+  context "Group class" do
+    example "caption accessor for Group class" do
+      expect(@group).to respond_to(:caption)
+      expect(@group).to respond_to(:caption=)
+    end
 
-  example "caption accessor for Group class" do
-    expect(@group).to respond_to(:caption)
-    expect(@group).to respond_to(:caption=)
-  end
+    example "description accessor for Group class" do
+      expect(@group).to respond_to(:description)
+      expect(@group).to respond_to(:description=)
+    end
 
-  example "description accessor for Group class" do
-    expect(@group).to respond_to(:description)
-    expect(@group).to respond_to(:description=)
-  end
+    example "domain accessor for Group class" do
+      expect(@group).to respond_to(:domain)
+      expect(@group).to respond_to(:domain=)
+    end
 
-  example "domain accessor for Group class" do
-    expect(@group).to respond_to(:domain)
-    expect(@group).to respond_to(:domain=)
-  end
+    example "install_date accessor for Group class" do
+      expect(@group).to respond_to(:install_date)
+      expect(@group).to respond_to(:install_date=)
+    end
 
-  example "install_date accessor for Group class" do
-    expect(@group).to respond_to(:install_date)
-    expect(@group).to respond_to(:install_date=)
-  end
+    example "name accessor for Group class" do
+      expect(@group).to respond_to(:name)
+      expect(@group).to respond_to(:name)
+    end
 
-  example "name accessor for Group class" do
-    expect(@group).to respond_to(:name)
-    expect(@group).to respond_to(:name)
-  end
+    example "gid accessor for Group class" do
+      expect(@group).to respond_to(:gid)
+      expect(@group).to respond_to(:gid=)
+    end
 
-  example "gid accessor for Group class" do
-    expect(@group).to respond_to(:gid)
-    expect(@group).to respond_to(:gid=)
-  end
+    example "status accessor for Group class" do
+      expect(@group).to respond_to(:status)
+      expect(@group).to respond_to(:status=)
+    end
 
-  example "status accessor for Group class" do
-    expect(@group).to respond_to(:status)
-    expect(@group).to respond_to(:status=)
-  end
+    example "sid accessor for Group class" do
+      expect(@group).to respond_to(:sid)
+      expect(@group).to respond_to(:sid=)
+    end
 
-  example "sid accessor for Group class" do
-    expect(@group).to respond_to(:sid)
-    expect(@group).to respond_to(:sid=)
-  end
+    example "sid_type accessor for Group class" do
+      expect(@group).to respond_to(:sid_type)
+      expect(@group).to respond_to(:sid_type=)
+    end
 
-  example "sid_type accessor for Group class" do
-    expect(@group).to respond_to(:sid_type)
-    expect(@group).to respond_to(:sid_type=)
+    example "local accessor for Group class" do
+      expect(@group).to respond_to(:local?)
+      expect(@group).to respond_to(:local=)
+    end
   end
-
-  example "local accessor for Group class" do
-    expect(@group).to respond_to(:local?)
-    expect(@group).to respond_to(:local=)
-  end
-=end
 end
