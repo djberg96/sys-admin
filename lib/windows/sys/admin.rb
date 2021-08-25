@@ -420,9 +420,17 @@ module Sys
       }
 
       if usr.kind_of?(Numeric)
-        query << " and sid like '%-#{usr}'"
+        if i == 0
+          query << " where sid like '%-#{usr}'"
+        else
+          query << " and sid like '%-#{usr}'"
+        end
       else
-        query << " and name = '#{usr}'"
+        if i == 0
+          query << " where name = '#{usr}'"
+        else
+          query << " and name = '#{usr}'"
+        end
       end
 
       domain = options[:domain] || host
@@ -601,9 +609,17 @@ module Sys
       }
 
       if grp.kind_of?(Integer)
-        query << " and sid like '%-#{grp}'"
+        if i == 0
+          query << " where sid like '%-#{grp}'"
+        else
+          query << " and sid like '%-#{grp}'"
+        end
       else
-        query << " and name = '#{grp}'"
+        if i == 0
+          query << " where name = '#{grp}'"
+        else
+          query << " and name = '#{grp}'"
+        end
       end
 
       domain = options[:domain] || host
