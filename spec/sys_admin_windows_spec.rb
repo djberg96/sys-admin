@@ -25,15 +25,17 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-=begin
-  context "add, configure, delete user", :order => :defined, :skip_unless => elevated do
-    describe "add_user" do
+  # TODO: should probably use an exclusion filter
+  describe "add, configure and delete user", :order => :defined do
+    example "add user" do
+      skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:add_user)
       expect{ described_class.add_user(:name => 'foo', :password => 'a1b2c3D4') }.not_to raise_error
       expect(described_class.users.map(&:name)).to include('foo')
     end
 
-    describe "configure_user" do
+    example "configure user" do
+      skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:configure_user)
       expect{
         described_class.configure_user(
@@ -41,17 +43,18 @@ RSpec.describe Sys::Admin, :windows do
           :description => 'delete me',
           :fullname    => 'fubar',
           :password    => 'd1c2b3A4'
+        )
       }.not_to raise_error
       expect(described_class.get_user('foo').description).to eq('delete me')
     end
 
-    describe "delete_user" do
+    example "delete user" do
+      skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:delete_user)
       expect{ described_class.delete_user('foo') }.not_to raise_error
       expect(described_class.users.map(&:name)).not_to include('foo')
     end
   end
-=end
 
 =begin
 
