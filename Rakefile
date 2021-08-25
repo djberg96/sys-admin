@@ -35,7 +35,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
     t.rspec_opts = '-Ilib/bsd'
   when /windows|win32|mingw|cygwin|dos/i
     t.rspec_opts = '-Ilib/windows'
-    t.pattern = 'spec/sys_admin_unix_spec.rb'
+    t.pattern = 'spec/sys_admin_windows_spec.rb'
   else
     t.rspec_opts = '-Ilib/unix'
   end
