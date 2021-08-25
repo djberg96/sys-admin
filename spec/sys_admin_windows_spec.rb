@@ -66,9 +66,9 @@ RSpec.describe Sys::Admin, :windows do
     example "configure group" do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:configure_group)
-      assert_nothing_raised{
+      expect{
         described_class.configure_group(:name => 'bar', :description => 'delete me')
-      }
+      }.not_to raise_error
     end
 
     example "add group member" do
