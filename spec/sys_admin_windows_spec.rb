@@ -25,9 +25,8 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  # TODO: should probably use an exclusion filter instead of skip
   describe "add, configure and delete user", :order => :defined do
-    before do
+    before(:all) do
       @local_user = "foo"
     end
 
@@ -56,14 +55,19 @@ RSpec.describe Sys::Admin, :windows do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:delete_user)
       expect{ described_class.delete_user(@local_user) }.not_to raise_error
-      expect{ described_class.get_user(@local_user) }.to raise_error
+      expect{ described_class.get_user(@local_user) }.to raise_error(Sys::Admin::Error)
     end
   end
 
   describe "add, configure and delete group", :order => :defined do
-    before do
+    before(:all) do
       @local_user = "foo"
       @local_group = "bar"
+      described_class.add_user(:name => @local_user)
+    end
+
+    after(:all) do
+      described_class.delete_user(@local_user)
     end
 
     example "add group" do
@@ -82,6 +86,7 @@ RSpec.describe Sys::Admin, :windows do
       skip "requires elevated privileges" unless elevated
       expect(described_class).to respond_to(:add_group_member)
       expect{ described_class.add_group_member(@local_user, @local_group) }.not_to raise_error
+      expect(described_class.get_group(@local_group, :localaccount => true).members).to include(@local_user)
     end
 
     example "remove group member" do
