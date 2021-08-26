@@ -19,11 +19,12 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency('rspec', '~> 3.9')
   spec.add_development_dependency('rake')
+  spec.add_development_dependency('win32-security')
 
   spec.metadata = {
     'homepage_uri'      => 'https://github.com/djberg96/sys-admin',
     'bug_tracker_uri'   => 'https://github.com/djberg96/sys-admin/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/sys-admin/blob/ffi/CHANGES.md',
+    'changelog_uri'     => 'https://github.com/djberg96/sys-admin/blob/main/CHANGES.md',
     'documentation_uri' => 'https://github.com/djberg96/sys-admin/wiki',
     'source_code_uri'   => 'https://github.com/djberg96/sys-admin',
     'wiki_uri'          => 'https://github.com/djberg96/sys-admin/wiki'
