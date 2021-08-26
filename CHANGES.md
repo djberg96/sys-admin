@@ -1,3 +1,11 @@
+## 1.7.6 - 24-Mar-2021
+* Changed the implementation for `Admin.get_login` on Linux since the
+  underlying `getlogin` C function is unreliable, especially in certain
+  virtualized environments.
+* Added win32-security back to the gemspec as a dependency for Windows.
+  I'm not sure why I removed it, and bundler definitely needs it.
+* Fixed some private access modifiers that weren't actually doing anything.
+
 ## 1.7.5 - 30-Dec-2020
 * Switched from rdoc to markdown since github isn't rendering rdoc properly.
 
