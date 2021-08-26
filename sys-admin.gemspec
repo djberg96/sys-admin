@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email      = 'djberg96@gmail.com'
   spec.homepage   = 'http://www.github.com/djberg96/sys-admin'
   spec.summary    = 'A unified, cross platform replacement for the "etc" library.'
-  spec.test_files = File['spec/*_spec.rb']
+  spec.test_files = Dir['spec/*.rb']
   spec.files      = Dir['**/*'].reject{ |f| f.include?('git') }
   spec.cert_chain = ['certs/djberg96_pub.pem']
 
