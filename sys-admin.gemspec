@@ -16,7 +16,11 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = Dir['*.rdoc']
 	
   spec.add_dependency('ffi', '~> 1.1')
-  spec.add_dependency('win32-security', '~> 0.5') if Gem.win_platform?
+
+  if Gem.win_platform?
+    spec.platform = Gem::Platform.new(['universal', 'mingw32'])
+    spec.add_dependency('win32-security', '~> 0.5')
+  end
 
   spec.add_development_dependency('rspec', '~> 3.9')
   spec.add_development_dependency('rake')
