@@ -1,3 +1,11 @@
+## 1.8.0 - 26-Aug-2021
+* Switched from test-unit to rspec, with some tests refactored. The Rakefile
+  and gemspec files were updated accordingly.
+* The User and Group classes for the Windows implementation are now properly
+  scoped under Sys::Admin instead of just Sys.
+* Fixed a bug in the get_user and get_group methods on Winodws where the WQL
+  it generates internally might not be correct.
+
 ## 1.7.6 - 24-Mar-2021
 * Changed the implementation for `Admin.get_login` on Linux since the
   underlying `getlogin` C function is unreliable, especially in certain
