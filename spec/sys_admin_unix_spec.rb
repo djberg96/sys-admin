@@ -21,7 +21,7 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example "get_login returns a string" do
-        expect( described_class.get_login).to be_kind_of(String)
+        expect(described_class.get_login).to be_kind_of(String)
         expect(described_class.get_login.length).to be > 0
       end
     end
@@ -34,11 +34,11 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example "get_user with a string argument works as expected" do
-        expect( described_class.get_user(user)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(user)).to be_kind_of(Sys::Admin::User)
       end
 
       example "get_user with an integer argument works as expected" do
-        expect( described_class.get_user(user_id)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(user_id)).to be_kind_of(Sys::Admin::User)
       end
 
       example "get_user requires one argument only" do
@@ -63,8 +63,8 @@ RSpec.describe Sys::Admin, :unix do
 
       example "users returns an array of User objects" do
         users = described_class.users
-        expect( users).to be_kind_of(Array)
-        expect( users.first).to be_kind_of(Sys::Admin::User)
+        expect(users).to be_kind_of(Array)
+        expect(users).to all(be_kind_of(Sys::Admin::User))
       end
 
       example "users does not accept any arguments" do
@@ -80,11 +80,11 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example "get_group accepts a string argument" do
-        expect( described_class.get_group(group)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(group)).to be_kind_of(Sys::Admin::Group)
       end
 
       example "get_group accepts an integer argument" do
-        expect( described_class.get_group(group_id)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(group_id)).to be_kind_of(Sys::Admin::Group)
       end
 
       example "get_group requires one argument only" do
@@ -109,8 +109,8 @@ RSpec.describe Sys::Admin, :unix do
 
       example "groups returns an array of Group objects" do
         groups = described_class.groups
-        expect( groups).to be_kind_of(Array)
-        expect( groups.first).to be_kind_of(Sys::Admin::Group)
+        expect(groups).to be_kind_of(Array)
+        expect(groups).to all(be_kind_of(Sys::Admin::Group))
       end
 
       example "groups method does not accept any arguments" do
