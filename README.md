@@ -1,3 +1,5 @@
+[![Ruby](https://github.com/djberg96/sys-admin/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/sys-admin/actions/workflows/ruby.yml)
+
 ## Description
 The sys-admin library is a unified, cross platform replacement for the Etc module.
    
