@@ -67,8 +67,11 @@ RSpec.describe Sys::Admin, :unix do
         expect(users).to all(be_kind_of(Sys::Admin::User))
       end
 
-      example "users does not accept any arguments" do
-        expect{ described_class.users(user_id) }.to raise_error(ArgumentError)
+      example "users accepts an optional lastlog argument" do
+        users = described_class.users(lastlog: false)
+        expect(users).to be_kind_of(Array)
+        expect(users).to all(be_kind_of(Sys::Admin::User))
+        expect(users.first.login_time).to be_nil
       end
     end
 
