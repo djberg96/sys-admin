@@ -81,7 +81,7 @@ module Sys
     #    Sys::Admin.get_user('joe')
     #    Sys::Admin.get_user(501)
     #
-    def self.get_user(uid, lastlog: true)
+    def self.get_user(uid, options = {})
       buf  = FFI::MemoryPointer.new(:char, 1024)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
       temp = PasswdStruct.new
@@ -103,7 +103,7 @@ module Sys
       end
 
       pwd = PasswdStruct.new(ptr)
-      get_user_from_struct(pwd, lastlog: lastlog)
+      get_user_from_struct(pwd, options)
     end
 
     # Returns a Group object for the given name or uid. Raises an error
@@ -152,7 +152,7 @@ module Sys
     # This method is somewhat slow on OSX because of the call to get
     # lastlog information. I'm not sure why.
     #
-    def self.users(lastlog: true)
+    def self.users(options = {})
       users = []
 
       begin
@@ -160,7 +160,7 @@ module Sys
 
         until (ptr = getpwent()).null?
           pwd = PasswdStruct.new(ptr)
-          users << get_user_from_struct(pwd, lastlog: lastlog)
+          users << get_user_from_struct(pwd, options)
         end
       ensure
         endpwent()
@@ -201,7 +201,7 @@ module Sys
     private_class_method :get_group_from_struct
 
     # Takes a UserStruct and converts it to a User object.
-    def self.get_user_from_struct(pwd, lastlog: true)
+    def self.get_user_from_struct(pwd, options)
       user = User.new do |u|
         u.name         = pwd[:pw_name]
         u.passwd       = pwd[:pw_passwd]
@@ -215,7 +215,7 @@ module Sys
         u.expire       = Time.at(pwd[:pw_expire])
       end
 
-      if lastlog
+      unless options[:lastlog] == false
         log = get_lastlog_info(user.uid)
 
         if log

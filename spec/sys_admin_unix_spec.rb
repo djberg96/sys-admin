@@ -41,9 +41,8 @@ RSpec.describe Sys::Admin, :unix do
         expect(described_class.get_user(user_id)).to be_kind_of(Sys::Admin::User)
       end
 
-      example "get_user requires one argument only" do
+      example "get_user requires at least one argument" do
         expect{ described_class.get_user }.to raise_error(ArgumentError)
-        expect{ described_class.get_user(user, user) }.to raise_error(ArgumentError)
       end
 
       example "get_user requires a string or integer argument" do
@@ -68,7 +67,7 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example "users accepts an optional lastlog argument" do
-        users = described_class.users(lastlog: false)
+        users = described_class.users(:lastlog => false)
         expect(users).to be_kind_of(Array)
         expect(users).to all(be_kind_of(Sys::Admin::User))
         expect(users.first.login_time).to be_nil
