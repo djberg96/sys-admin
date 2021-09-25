@@ -66,7 +66,7 @@ RSpec.describe Sys::Admin, :unix do
         expect(users).to all(be_kind_of(Sys::Admin::User))
       end
 
-      example "users accepts an optional lastlog argument" do
+      example "users accepts an optional lastlog argument on darwin", :darwin => true do
         users = described_class.users(:lastlog => false)
         expect(users).to be_kind_of(Array)
         expect(users).to all(be_kind_of(Sys::Admin::User))
