@@ -4,7 +4,7 @@
 # Test suite for the Unix version of sys-admin. This test should be run
 # via the 'rake spec' task.
 ###############################################################################
-require 'rspec'
+require 'spec_helper'
 require 'sys/admin'
 
 RSpec.describe Sys::Admin, :unix do
@@ -41,9 +41,8 @@ RSpec.describe Sys::Admin, :unix do
         expect(described_class.get_user(user_id)).to be_kind_of(Sys::Admin::User)
       end
 
-      example "get_user requires one argument only" do
+      example "get_user requires at least one argument" do
         expect{ described_class.get_user }.to raise_error(ArgumentError)
-        expect{ described_class.get_user(user, user) }.to raise_error(ArgumentError)
       end
 
       example "get_user requires a string or integer argument" do
@@ -67,8 +66,11 @@ RSpec.describe Sys::Admin, :unix do
         expect(users).to all(be_kind_of(Sys::Admin::User))
       end
 
-      example "users does not accept any arguments" do
-        expect{ described_class.users(user_id) }.to raise_error(ArgumentError)
+      example "users accepts an optional lastlog argument on darwin", :darwin => true do
+        users = described_class.users(:lastlog => false)
+        expect(users).to be_kind_of(Array)
+        expect(users).to all(be_kind_of(Sys::Admin::User))
+        expect(users.first.login_time).to be_nil
       end
     end
 
