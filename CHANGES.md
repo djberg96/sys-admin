@@ -1,9 +1,14 @@
+## 1.8.1 - 25-Sep-2021
+* The users and get_user methods on Darwin now take an optional :lastlog key
+  that you can set to false in order to significantly speed up those methods
+  at the expense of taking away lastlog information.
+
 ## 1.8.0 - 26-Aug-2021
 * Switched from test-unit to rspec, with some tests refactored. The Rakefile
   and gemspec files were updated accordingly.
 * The User and Group classes for the Windows implementation are now properly
   scoped under Sys::Admin instead of just Sys.
-* Fixed a bug in the get_user and get_group methods on Winodws where the WQL
+* Fixed a bug in the get_user and get_group methods on Windows where the WQL
   it generates internally might not be correct.
 
 ## 1.7.6 - 24-Mar-2021
