@@ -80,6 +80,7 @@ module Sys
     #
     #    Sys::Admin.get_user('joe')
     #    Sys::Admin.get_user(501)
+    #    Sys::Admin.get_user('joe', :lastlog => false) # Less info but faster
     #
     # Set the :lastlog option to false if you want to ignore lastlog
     # information and speed this method up considerably.
@@ -150,6 +151,11 @@ module Sys
     end
 
     # Returns an array of User objects for each user on the system.
+    #
+    # Examples:
+    #
+    #   Sys::Admin.users
+    #   Sys::Admin.users(:lastlog => false) # Less info but faster
     #
     # Note that on Darwin this method can be very slow. If you want to
     # speed it up considerably by ignoring lastlog information then set
