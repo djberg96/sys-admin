@@ -7,10 +7,7 @@
 #
 # It is assumed that these specs will be run via the 'rake spec' task.
 ###############################################################################
-require 'rspec'
-require 'sys/admin'
-require 'win32/security'
-require 'socket'
+require 'spec_helper'
 
 RSpec.describe Sys::Admin, :windows do
   let(:host) { Socket.gethostname }
