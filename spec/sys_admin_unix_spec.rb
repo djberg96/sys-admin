@@ -5,7 +5,6 @@
 # via the 'rake spec' task.
 ###############################################################################
 require 'spec_helper'
-require 'sys/admin'
 
 RSpec.describe Sys::Admin, :unix do
   let(:user)     { 'nobody' }
