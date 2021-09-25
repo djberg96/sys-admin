@@ -4,7 +4,7 @@
 # Test suite for the Unix version of sys-admin. This test should be run
 # via the 'rake spec' task.
 ###############################################################################
-require 'rspec'
+require 'spec_helper'
 require 'sys/admin'
 
 RSpec.describe Sys::Admin, :unix do
