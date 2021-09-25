@@ -81,6 +81,9 @@ module Sys
     #    Sys::Admin.get_user('joe')
     #    Sys::Admin.get_user(501)
     #
+    # Set the :lastlog option to false if you want to ignore lastlog
+    # information and speed this method up considerably.
+    #
     def self.get_user(uid, options = {})
       buf  = FFI::MemoryPointer.new(:char, 1024)
       pbuf = FFI::MemoryPointer.new(PasswdStruct)
@@ -148,6 +151,9 @@ module Sys
 
     # Returns an array of User objects for each user on the system.
     #
+    # Note that on Darwin this method can be very slow. If you want to
+    # speed it up considerably by ignoring lastlog information then set
+    # the :lastlog option to false as part of the +options+ hash.
     #--
     # This method is somewhat slow on OSX because of the call to get
     # lastlog information. I'm not sure why.
