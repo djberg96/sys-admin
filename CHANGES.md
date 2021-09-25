@@ -2,6 +2,7 @@
 * The users and get_user methods on Darwin now take an optional :lastlog key
   that you can set to false in order to significantly speed up those methods
   at the expense of taking away lastlog information.
+* Some internal rspec refactoring.
 
 ## 1.8.0 - 26-Aug-2021
 * Switched from test-unit to rspec, with some tests refactored. The Rakefile
