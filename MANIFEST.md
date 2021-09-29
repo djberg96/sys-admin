@@ -15,6 +15,7 @@
 * lib/sunos/sys/admin.rb
 * lib/sys/admin/common.rb
 * lib/sys/admin/custom.rb
-* test/test_sys_admin.rb
-* test/test_sys_admin_unix.rb
-* test/test_sys_admin_windows.rb
+* spec/spec_helper.rb
+* spec/sys_admin_universal_spec.rb
+* spec/sys_admin_unix_spec.rb
+* spec/sys_admin_windows_spec.rb
