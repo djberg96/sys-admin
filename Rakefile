@@ -6,7 +6,7 @@ require 'rbconfig'
 CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core", "**/*.lock")
 
 namespace :gem do
-  desc "Create the sys-uname gem"
+  desc "Create the sys-admin gem"
   task :create => [:clean] do
     require 'rubygems/package'
     spec = Gem::Specification.load('sys-admin.gemspec')
@@ -14,7 +14,7 @@ namespace :gem do
     Gem::Package.build(spec)
   end
 
-  desc "Install the sys-uname gem"
+  desc "Install the sys-admin gem"
   task :install => [:create] do
     file = Dir["*.gem"].first
     sh "gem install -l #{file}"
