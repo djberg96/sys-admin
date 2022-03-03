@@ -506,8 +506,8 @@ module Sys
 
       begin
         wmi = WIN32OLE.connect(cs)
-      rescue WIN32OLERuntimeError => e
-        raise Error, e
+      rescue WIN32OLERuntimeError => err
+        raise Error, err
       end
 
       query = 'select * from win32_useraccount'
