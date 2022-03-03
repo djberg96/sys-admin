@@ -1008,7 +1008,7 @@ module Sys
               @sid_type = 'unknown'
             when Admin::SidTypeComputer
               @sid_type = 'computer'
-             else
+            else
               @sid_type = 'unknown'
           end
         end
