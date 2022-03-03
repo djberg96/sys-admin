@@ -1008,8 +1008,6 @@ module Sys
               @sid_type = 'unknown'
           end
         end
-
-        @sid_type
       end
     end
   end

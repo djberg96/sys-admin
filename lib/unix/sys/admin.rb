@@ -55,7 +55,7 @@ module Sys
         raise Error, "no user found for: #{uid}"
       end
 
-      user = User.new do |u|
+      User.new do |u|
         u.name   = pwd[:pw_name]
         u.passwd = pwd[:pw_passwd]
         u.uid    = pwd[:pw_uid]
@@ -64,8 +64,6 @@ module Sys
         u.dir    = pwd[:pw_dir]
         u.shell  = pwd[:pw_shell]
       end
-
-      user
     end
 
     # Returns a Group object for the given name or uid. Raises an error
