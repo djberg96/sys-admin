@@ -23,6 +23,8 @@ Style/ConditionalAssignment:
   Enabled: false
 Style/IfUnlessModifier:
   Enabled: false
+Style/NumericLiterals:
+  Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
