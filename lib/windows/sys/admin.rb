@@ -841,9 +841,7 @@ module Sys
 
       # Returns the SID type as a human readable string.
       #
-      def sid_type
-        @sid_type
-      end
+      attr_reader :sid_type
 
       # Sets the SID (Security Identifier) type to +stype+, which can be
       # one of the following constant values:
@@ -968,9 +966,7 @@ module Sys
 
       # Returns the type of SID (Security Identifier) as a stringified value.
       #
-      def sid_type
-        @sid_type
-      end
+      attr_reader :sid_type
 
       # Sets the SID (Security Identifier) type to +stype+, which can be
       # one of the following constant values:
