@@ -100,7 +100,7 @@ module Sys
         array = []
 
         Sys::Admin.groups.each do |grp|
-          array << grp.name if grp.members.include?(self.name)
+          array << grp.name if grp.members.include?(name)
         end
 
         array
