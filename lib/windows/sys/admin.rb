@@ -277,7 +277,7 @@ module Sys
     # Adds +user+ to +group+ on the specified +domain+, or the localhost
     # if no domain is specified.
     #
-    def self.add_group_member(user, group, domain=nil)
+    def self.add_group_member(user, group, domain = nil)
       domain ||= Socket.gethostname
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
       adsi.Add("WinNT://#{domain}/#{user}")
@@ -288,7 +288,7 @@ module Sys
     # Removes +user+ from +group+ on the specified +domain+, or the localhost
     # if no domain is specified.
     #
-    def self.remove_group_member(user, group, domain=nil)
+    def self.remove_group_member(user, group, domain = nil)
       domain ||= Socket.gethostname
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
       adsi.Remove("WinNT://#{domain}/#{user}")
