@@ -9,12 +9,12 @@ module Sys
     BUF_MAX = 65536 # Max buf size for retry.
     private_constant :BUF_MAX
 
-    attach_function :getlogin_r, [:pointer, :int], :int
-    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getlastlogx, [:long, :pointer], :pointer
+    attach_function :getlogin_r, %i[pointer int], :int
+    attach_function :getpwnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getpwuid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getgrnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getgrgid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getlastlogx, %i[long pointer], :pointer
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r
     private_class_method :getgrnam_r, :getgrgid_r, :getlastlogx

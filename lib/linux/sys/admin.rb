@@ -10,16 +10,16 @@ module Sys
     private_constant :BUF_MAX
 
     # I'm making some aliases here to prevent potential conflicts
-    attach_function :open_c, :open, [:string, :int], :int
-    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :open_c, :open, %i[string int], :int
+    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :size_t
     attach_function :close_c, :close, [:int], :int
 
-    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getpwent_r, [:pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrent_r, [:pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getpwnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getpwuid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getpwent_r, %i[pointer pointer size_t pointer], :int
+    attach_function :getgrent_r, %i[pointer pointer size_t pointer], :int
+    attach_function :getgrnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getgrgid_r, %i[long pointer pointer size_t pointer], :int
 
     private_class_method :getgrent_r, :getgrnam_r, :getgrgid_r
     private_class_method :open_c, :pread_c, :close_c

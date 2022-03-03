@@ -13,6 +13,7 @@ module Sys
     #
     class Error < StandardError; end
 
+    # rubocop:disable Naming/ConstantName
     SidTypeUser           = 1
     SidTypeGroup          = 2
     SidTypeDomain         = 3
@@ -22,6 +23,7 @@ module Sys
     SidTypeInvalid        = 7
     SidTypeUnknown        = 8
     SidTypeComputer       = 9
+    # rubocop:enable Naming/ConstantName
 
     HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'
     private_constant :HKEY
@@ -96,7 +98,7 @@ module Sys
 
     # Used by the get_login method
     ffi_lib :advapi32
-    attach_function :GetUserNameW, [:pointer, :pointer], :bool
+    attach_function :GetUserNameW, %i[pointer pointer], :bool
     private_class_method :GetUserNameW
 
     # Creates the given +user+. If no domain option is specified,
