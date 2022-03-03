@@ -421,7 +421,7 @@ module Sys
         end
       end
 
-      if usr.kind_of?(Numeric)
+      if usr.is_a?(Numeric)
         if i == 0
           query << " where sid like '%-#{usr}'"
         else
@@ -442,7 +442,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if usr.kind_of?(Numeric)
+        if usr.is_a?(Numeric)
           next if usr != uid
         end
 
@@ -610,7 +610,7 @@ module Sys
         end
       end
 
-      if grp.kind_of?(Integer)
+      if grp.is_a?(Integer)
         if i == 0
           query << " where sid like '%-#{grp}'"
         else
@@ -631,7 +631,7 @@ module Sys
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if grp.kind_of?(Integer)
+        if grp.is_a?(Integer)
           next if grp != gid
         end
 
@@ -986,7 +986,7 @@ module Sys
       # * Admin::SidTypeComputer
       #
       def sid_type=(stype)
-        if stype.kind_of?(String)
+        if stype.is_a?(String)
           @sid_type = stype.downcase
         else
           case stype
