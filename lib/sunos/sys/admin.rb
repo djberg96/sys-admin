@@ -74,7 +74,7 @@ module Sys
       ptr = getlogin_r(buf, buf.size)
 
       if ptr.null?
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
+        raise Error, 'getlogin_r function failed: ' + strerror(FFI.errno)
       end
 
       buf.read_string
@@ -99,7 +99,7 @@ module Sys
       end
 
       if ptr.null?
-        raise Error, "getpwnam_r or getpwuid_r function failed: " + strerror(FFI.errno)
+        raise Error, 'getpwnam_r or getpwuid_r function failed: ' + strerror(FFI.errno)
       end
 
       pwd = PasswdStruct.new(ptr)
@@ -251,7 +251,7 @@ module Sys
         if fd != -1
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
-            raise Error, "pread function failed: " + strerror(FFI.errno)
+            raise Error, 'pread function failed: ' + strerror(FFI.errno)
           end
         else
           nil # Ignore, improper permissions

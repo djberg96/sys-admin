@@ -23,7 +23,7 @@ module Sys
     SidTypeUnknown        = 8
     SidTypeComputer       = 9
 
-    HKEY = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\"
+    HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'
     private_constant :HKEY
 
     # Retrieves the user's home directory. For local accounts query the
@@ -397,7 +397,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -406,7 +406,7 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_useraccount"
+      query = 'select * from win32_useraccount'
 
       i = 0
 
@@ -499,7 +499,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -508,7 +508,7 @@ module Sys
         raise Error, e
       end
 
-      query = "select * from win32_useraccount"
+      query = 'select * from win32_useraccount'
 
       i = 0
 
@@ -586,7 +586,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -595,7 +595,7 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_group"
+      query = 'select * from win32_group'
 
       i = 0
 
@@ -625,7 +625,7 @@ module Sys
       domain = options[:domain] || host
 
       wmi.execquery(query).each{ |group|
-        gid = group.sid.split("-").last.to_i
+        gid = group.sid.split('-').last.to_i
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
@@ -678,7 +678,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -687,7 +687,7 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_group"
+      query = 'select * from win32_group'
 
       i = 0
 
@@ -708,7 +708,7 @@ module Sys
           g.caption      = group.caption
           g.description  = group.description
           g.domain       = group.domain
-          g.gid          = group.sid.split("-").last.to_i
+          g.gid          = group.sid.split('-').last.to_i
           g.install_date = group.installdate
           g.local        = group.localaccount
           g.name         = group.name
@@ -989,25 +989,25 @@ module Sys
         else
           case stype
              when Admin::SidTypeUser
-               @sid_type = "user"
+               @sid_type = 'user'
              when Admin::SidTypeGroup
-               @sid_type = "group"
+               @sid_type = 'group'
              when Admin::SidTypeDomain
-               @sid_type = "domain"
+               @sid_type = 'domain'
              when Admin::SidTypeAlias
-               @sid_type = "alias"
+               @sid_type = 'alias'
              when Admin::SidTypeWellKnownGroup
-               @sid_type = "well_known_group"
+               @sid_type = 'well_known_group'
              when Admin::SidTypeDeletedAccount
-               @sid_type = "deleted_account"
+               @sid_type = 'deleted_account'
              when Admin::SidTypeInvalid
-               @sid_type = "invalid"
+               @sid_type = 'invalid'
              when Admin::SidTypeUnknown
-               @sid_type = "unknown"
+               @sid_type = 'unknown'
              when Admin::SidTypeComputer
-               @sid_type = "computer"
+               @sid_type = 'computer'
              else
-               @sid_type = "unknown"
+               @sid_type = 'unknown'
           end
         end
 
