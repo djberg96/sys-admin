@@ -988,23 +988,23 @@ module Sys
           @sid_type = stype.downcase
         else
           case stype
-             when Admin::SidTypeUser
+            when Admin::SidTypeUser
                @sid_type = 'user'
-             when Admin::SidTypeGroup
+            when Admin::SidTypeGroup
                @sid_type = 'group'
-             when Admin::SidTypeDomain
+            when Admin::SidTypeDomain
                @sid_type = 'domain'
-             when Admin::SidTypeAlias
+            when Admin::SidTypeAlias
                @sid_type = 'alias'
-             when Admin::SidTypeWellKnownGroup
+            when Admin::SidTypeWellKnownGroup
                @sid_type = 'well_known_group'
-             when Admin::SidTypeDeletedAccount
+            when Admin::SidTypeDeletedAccount
                @sid_type = 'deleted_account'
-             when Admin::SidTypeInvalid
+            when Admin::SidTypeInvalid
                @sid_type = 'invalid'
-             when Admin::SidTypeUnknown
+            when Admin::SidTypeUnknown
                @sid_type = 'unknown'
-             when Admin::SidTypeComputer
+            when Admin::SidTypeComputer
                @sid_type = 'computer'
              else
                @sid_type = 'unknown'
