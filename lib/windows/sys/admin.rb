@@ -989,25 +989,25 @@ module Sys
         else
           case stype
             when Admin::SidTypeUser
-               @sid_type = 'user'
+              @sid_type = 'user'
             when Admin::SidTypeGroup
-               @sid_type = 'group'
+              @sid_type = 'group'
             when Admin::SidTypeDomain
-               @sid_type = 'domain'
+              @sid_type = 'domain'
             when Admin::SidTypeAlias
-               @sid_type = 'alias'
+              @sid_type = 'alias'
             when Admin::SidTypeWellKnownGroup
-               @sid_type = 'well_known_group'
+              @sid_type = 'well_known_group'
             when Admin::SidTypeDeletedAccount
-               @sid_type = 'deleted_account'
+              @sid_type = 'deleted_account'
             when Admin::SidTypeInvalid
-               @sid_type = 'invalid'
+              @sid_type = 'invalid'
             when Admin::SidTypeUnknown
-               @sid_type = 'unknown'
+              @sid_type = 'unknown'
             when Admin::SidTypeComputer
-               @sid_type = 'computer'
+              @sid_type = 'computer'
              else
-               @sid_type = 'unknown'
+              @sid_type = 'unknown'
           end
         end
 
