@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'ffi'
 require 'win32ole'
 require 'win32/security'
