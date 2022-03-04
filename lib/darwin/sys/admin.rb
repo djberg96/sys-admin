@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sys/admin/custom'
 require 'sys/admin/common'
 
@@ -9,12 +11,12 @@ module Sys
     BUF_MAX = 65536 # Max buf size for retry.
     private_constant :BUF_MAX
 
-    attach_function :getlogin_r, [:pointer, :int], :int
-    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getlastlogx, [:long, :pointer], :pointer
+    attach_function :getlogin_r, %i[pointer int], :int
+    attach_function :getpwnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getpwuid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getgrnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getgrgid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getlastlogx, %i[long pointer], :pointer
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r
     private_class_method :getgrnam_r, :getgrgid_r, :getlastlogx
@@ -67,7 +69,7 @@ module Sys
       buf = FFI::MemoryPointer.new(:char, 256)
 
       if getlogin_r(buf, buf.size) != 0
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
+        raise Error, "getlogin_r function failed: #{strerror(FFI.errno)}"
       end
 
       buf.read_string
@@ -92,11 +94,11 @@ module Sys
 
       if uid.is_a?(String)
         if getpwnam_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwnam_r function failed: " + strerror(FFI.errno)
+          raise Error, "getpwnam_r function failed: #{strerror(FFI.errno)}"
         end
       else
         if getpwuid_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwuid_r function failed: " + strerror(FFI.errno)
+          raise Error, "getpwuid_r function failed: #{strerror(FFI.errno)}"
         end
       end
 

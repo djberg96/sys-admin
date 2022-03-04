@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sys/admin/custom'
 require 'sys/admin/common'
 
@@ -10,17 +12,17 @@ module Sys
     private_constant :BUF_MAX
 
     # I'm making some aliases here to prevent potential conflicts
-    attach_function :open_c, :open, [:string, :int], :int
-    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :open_c, :open, %i[string int], :int
+    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :size_t
     attach_function :close_c, :close, [:int], :int
 
-    attach_function :getlogin_r, [:pointer, :size_t], :pointer
-    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t], :pointer
-    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t], :pointer
-    attach_function :getpwent_r, [:pointer, :pointer, :int], :pointer
-    attach_function :getgrent_r, [:pointer, :pointer, :int], :pointer
-    attach_function :getgrnam_r, [:string, :pointer, :pointer, :int], :pointer
-    attach_function :getgrgid_r, [:long, :pointer, :pointer, :int], :pointer
+    attach_function :getlogin_r, %i[pointer size_t], :pointer
+    attach_function :getpwnam_r, %i[string pointer pointer size_t], :pointer
+    attach_function :getpwuid_r, %i[long pointer pointer size_t], :pointer
+    attach_function :getpwent_r, %i[pointer pointer int], :pointer
+    attach_function :getgrent_r, %i[pointer pointer int], :pointer
+    attach_function :getgrnam_r, %i[string pointer pointer int], :pointer
+    attach_function :getgrgid_r, %i[long pointer pointer int], :pointer
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getpwent_r
     private_class_method :getgrent_r, :getgrnam_r, :getgrgid_r
@@ -74,7 +76,7 @@ module Sys
       ptr = getlogin_r(buf, buf.size)
 
       if ptr.null?
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
+        raise Error, "getlogin_r function failed: #{strerror(FFI.errno)}"
       end
 
       buf.read_string
@@ -99,7 +101,7 @@ module Sys
       end
 
       if ptr.null?
-        raise Error, "getpwnam_r or getpwuid_r function failed: " + strerror(FFI.errno)
+        raise Error, "getpwnam_r or getpwuid_r function failed: #{strerror(FFI.errno)}"
       end
 
       pwd = PasswdStruct.new(ptr)
@@ -251,7 +253,7 @@ module Sys
         if fd != -1
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
-            raise Error, "pread function failed: " + strerror(FFI.errno)
+            raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
         else
           nil # Ignore, improper permissions

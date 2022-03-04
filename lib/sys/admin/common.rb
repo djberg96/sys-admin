@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ffi'
 
 # The Sys module serves as a namespace only.
@@ -99,9 +101,9 @@ module Sys
       def groups
         array = []
 
-        Sys::Admin.groups.each{ |grp|
-          array << grp.name if grp.members.include?(self.name)
-        }
+        Sys::Admin.groups.each do |grp|
+          array << grp.name if grp.members.include?(name)
+        end
 
         array
       end

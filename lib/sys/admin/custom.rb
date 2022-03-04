@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ffi'
 
 class FFI::Pointer
@@ -7,8 +9,8 @@ class FFI::Pointer
     loc = self
 
     until ((element = loc.read_pointer).null?)
-     elements << element.read_string
-     loc += FFI::Type::POINTER.size
+      elements << element.read_string
+      loc += FFI::Type::POINTER.size
     end
 
     elements

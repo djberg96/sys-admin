@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sys/admin/custom'
 require 'sys/admin/common'
 require 'rbconfig'
@@ -11,32 +13,32 @@ module Sys
     private_constant :BUF_MAX
 
     # I'm making some aliases here to prevent potential conflicts
-    attach_function :open_c, :open, [:string, :int], :int
-    attach_function :pread_c, :pread, [:int, :pointer, :size_t, :off_t], :size_t
+    attach_function :open_c, :open, %i[string int], :int
+    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :size_t
     attach_function :close_c, :close, [:int], :int
 
-    attach_function :getlogin_r, [:pointer, :int], :int
-    attach_function :getpwnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getpwuid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrnam_r, [:string, :pointer, :pointer, :size_t, :pointer], :int
-    attach_function :getgrgid_r, [:long, :pointer, :pointer, :size_t, :pointer], :int
+    attach_function :getlogin_r, %i[pointer int], :int
+    attach_function :getpwnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getpwuid_r, %i[long pointer pointer size_t pointer], :int
+    attach_function :getgrnam_r, %i[string pointer pointer size_t pointer], :int
+    attach_function :getgrgid_r, %i[long pointer pointer size_t pointer], :int
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r, :getgrgid_r
     private_class_method :open_c, :pread_c, :close_c
 
     # struct passwd from /usr/include/pwd.h
     class PasswdStruct < FFI::Struct
-      fields = [
-        :pw_name, :string,
-        :pw_passwd, :string,
-        :pw_uid, :uid_t,
-        :pw_gid, :gid_t,
-        :pw_change, :time_t,
-        :pw_class, :string,
-        :pw_gecos, :string,
-        :pw_dir, :string,
-        :pw_shell, :string,
-        :pw_expire, :time_t
+      fields = %i[
+        pw_name string
+        pw_passwd string
+        pw_uid uid_t
+        pw_gid gid_t
+        pw_change time_t
+        pw_class string
+        pw_gecos string
+        pw_dir string
+        pw_shell string
+        pw_expire time_t
       ]
 
       if RbConfig::CONFIG['host_os'] =~ /freebsd/i
@@ -77,7 +79,7 @@ module Sys
       buf = FFI::MemoryPointer.new(:char, 256)
 
       if getlogin_r(buf, buf.size) != 0
-        raise Error, "getlogin_r function failed: " + strerror(FFI.errno)
+        raise Error, "getlogin_r function failed: #{strerror(FFI.errno)}"
       end
 
       buf.read_string
@@ -98,11 +100,11 @@ module Sys
 
       if uid.is_a?(String)
         if getpwnam_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwnam_r function failed: " + strerror(FFI.errno)
+          raise Error, "getpwnam_r function failed: #{strerror(FFI.errno)}"
         end
       else
         if getpwuid_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwuid_r function failed: " + strerror(FFI.errno)
+          raise Error, "getpwuid_r function failed: #{strerror(FFI.errno)}"
         end
       end
 
@@ -245,7 +247,7 @@ module Sys
         if fd != -1
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
-            raise Error, "pread function failed: " + strerror(FFI.errno)
+            raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
         else
           nil # Ignore, improper permissions

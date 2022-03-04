@@ -13,6 +13,7 @@ module Sys
     #
     class Error < StandardError; end
 
+    # rubocop:disable Naming/ConstantName
     SidTypeUser           = 1
     SidTypeGroup          = 2
     SidTypeDomain         = 3
@@ -22,8 +23,9 @@ module Sys
     SidTypeInvalid        = 7
     SidTypeUnknown        = 8
     SidTypeComputer       = 9
+    # rubocop:enable Naming/ConstantName
 
-    HKEY = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\"
+    HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'
     private_constant :HKEY
 
     # Retrieves the user's home directory. For local accounts query the
@@ -59,10 +61,10 @@ module Sys
     def self.munge_options(opts)
       rhash = {}
 
-      opts.each{ |k, v|
+      opts.each do |k, v|
         k = k.to_s.downcase.to_sym
         rhash[k] = v
-      }
+      end
 
       rhash
     end
@@ -96,7 +98,7 @@ module Sys
 
     # Used by the get_login method
     ffi_lib :advapi32
-    attach_function :GetUserNameW, [:pointer, :pointer], :bool
+    attach_function :GetUserNameW, %i[pointer pointer], :bool
     private_class_method :GetUserNameW
 
     # Creates the given +user+. If no domain option is specified,
@@ -146,13 +148,13 @@ module Sys
         adsi = WIN32OLE.connect(moniker)
         user = adsi.create('user', name)
 
-        options.each{ |option, value|
+        options.each do |option, value|
           if option.to_s == 'password'
             user.setpassword(value)
           else
             user.put(option.to_s, value)
           end
-        }
+        end
 
         user.setinfo
       rescue WIN32OLERuntimeError => err
@@ -199,13 +201,13 @@ module Sys
       begin
         adsi = WIN32OLE.connect("WinNT://#{domain}/#{name},user")
 
-        options.each{ |option, value|
+        options.each do |option, value|
           if option.to_s == 'password'
             adsi.setpassword(value)
           else
             adsi.put(option.to_s, value)
           end
-        }
+        end
 
         adsi.setinfo
       rescue WIN32OLERuntimeError => err
@@ -277,7 +279,7 @@ module Sys
     # Adds +user+ to +group+ on the specified +domain+, or the localhost
     # if no domain is specified.
     #
-    def self.add_group_member(user, group, domain=nil)
+    def self.add_group_member(user, group, domain = nil)
       domain ||= Socket.gethostname
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
       adsi.Add("WinNT://#{domain}/#{user}")
@@ -288,7 +290,7 @@ module Sys
     # Removes +user+ from +group+ on the specified +domain+, or the localhost
     # if no domain is specified.
     #
-    def self.remove_group_member(user, group, domain=nil)
+    def self.remove_group_member(user, group, domain = nil)
       domain ||= Socket.gethostname
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{group},group")
       adsi.Remove("WinNT://#{domain}/#{user}")
@@ -397,7 +399,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -406,20 +408,20 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_useraccount"
+      query = 'select * from win32_useraccount'
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
-      if usr.kind_of?(Numeric)
+      if usr.is_a?(Numeric)
         if i == 0
           query << " where sid like '%-#{usr}'"
         else
@@ -435,12 +437,12 @@ module Sys
 
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |user|
+      wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if usr.kind_of?(Numeric)
+        if usr.is_a?(Numeric)
           next if usr != uid
         end
 
@@ -470,7 +472,7 @@ module Sys
         end
 
         return user_object
-      }
+      end
 
       # If we're here, it means it wasn't found.
       raise Error, "no user found for '#{usr}'"
@@ -499,32 +501,32 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
-      rescue WIN32OLERuntimeError => e
-        raise Error, e
+      rescue WIN32OLERuntimeError => err
+        raise Error, err
       end
 
-      query = "select * from win32_useraccount"
+      query = 'select * from win32_useraccount'
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       array = []
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |user|
+      wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
         usr = User.new do |u|
@@ -550,7 +552,7 @@ module Sys
         end
 
         array.push(usr)
-      }
+      end
 
       array
     end
@@ -586,7 +588,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -595,20 +597,20 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_group"
+      query = 'select * from win32_group'
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
-      if grp.kind_of?(Integer)
+      if grp.is_a?(Integer)
         if i == 0
           query << " where sid like '%-#{grp}'"
         else
@@ -624,12 +626,12 @@ module Sys
 
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |group|
-        gid = group.sid.split("-").last.to_i
+      wmi.execquery(query).each do |group|
+        gid = group.sid.split('-').last.to_i
 
         # Because our 'like' query isn't fulproof, let's parse
         # the SID again to make sure
-        if grp.kind_of?(Integer)
+        if grp.is_a?(Integer)
           next if grp != gid
         end
 
@@ -648,7 +650,7 @@ module Sys
         end
 
         return group_object
-      }
+      end
 
       # If we're here, it means it wasn't found.
       raise Error, "no group found for '#{grp}'"
@@ -678,7 +680,7 @@ module Sys
       options = munge_options(options)
 
       host = options.delete(:host) || Socket.gethostname
-      cs = "winmgmts:{impersonationLevel=impersonate}!"
+      cs = 'winmgmts:{impersonationLevel=impersonate}!'
       cs << "//#{host}/root/cimv2"
 
       begin
@@ -687,28 +689,28 @@ module Sys
         raise Error, err
       end
 
-      query = "select * from win32_group"
+      query = 'select * from win32_group'
 
       i = 0
 
-      options.each{ |opt, val|
+      options.each do |opt, val|
         if i == 0
           query << " where #{opt} = '#{val}'"
           i += 1
         else
           query << " and #{opt} = '#{val}'"
         end
-      }
+      end
 
       array = []
       domain = options[:domain] || host
 
-      wmi.execquery(query).each{ |group|
+      wmi.execquery(query).each do |group|
         grp = Group.new do |g|
           g.caption      = group.caption
           g.description  = group.description
           g.domain       = group.domain
-          g.gid          = group.sid.split("-").last.to_i
+          g.gid          = group.sid.split('-').last.to_i
           g.install_date = group.installdate
           g.local        = group.localaccount
           g.name         = group.name
@@ -719,7 +721,7 @@ module Sys
         end
 
         array.push(grp)
-      }
+      end
 
       array
     end
@@ -839,9 +841,7 @@ module Sys
 
       # Returns the SID type as a human readable string.
       #
-      def sid_type
-        @sid_type
-      end
+      attr_reader :sid_type
 
       # Sets the SID (Security Identifier) type to +stype+, which can be
       # one of the following constant values:
@@ -961,14 +961,12 @@ module Sys
       # Returns whether or not the group is a local group.
       #
       def local?
-         @local
+        @local
       end
 
       # Returns the type of SID (Security Identifier) as a stringified value.
       #
-      def sid_type
-         @sid_type
-      end
+      attr_reader :sid_type
 
       # Sets the SID (Security Identifier) type to +stype+, which can be
       # one of the following constant values:
@@ -984,34 +982,32 @@ module Sys
       # * Admin::SidTypeComputer
       #
       def sid_type=(stype)
-        if stype.kind_of?(String)
+        if stype.is_a?(String)
           @sid_type = stype.downcase
         else
           case stype
-             when Admin::SidTypeUser
-                @sid_type = "user"
-             when Admin::SidTypeGroup
-                @sid_type = "group"
-             when Admin::SidTypeDomain
-                @sid_type = "domain"
-             when Admin::SidTypeAlias
-                @sid_type = "alias"
-             when Admin::SidTypeWellKnownGroup
-                @sid_type = "well_known_group"
-             when Admin::SidTypeDeletedAccount
-                @sid_type = "deleted_account"
-             when Admin::SidTypeInvalid
-                @sid_type = "invalid"
-             when Admin::SidTypeUnknown
-                @sid_type = "unknown"
-             when Admin::SidTypeComputer
-                @sid_type = "computer"
-             else
-                @sid_type = "unknown"
+            when Admin::SidTypeUser
+              @sid_type = 'user'
+            when Admin::SidTypeGroup
+              @sid_type = 'group'
+            when Admin::SidTypeDomain
+              @sid_type = 'domain'
+            when Admin::SidTypeAlias
+              @sid_type = 'alias'
+            when Admin::SidTypeWellKnownGroup
+              @sid_type = 'well_known_group'
+            when Admin::SidTypeDeletedAccount
+              @sid_type = 'deleted_account'
+            when Admin::SidTypeInvalid
+              @sid_type = 'invalid'
+            when Admin::SidTypeUnknown
+              @sid_type = 'unknown'
+            when Admin::SidTypeComputer
+              @sid_type = 'computer'
+            else
+              @sid_type = 'unknown'
           end
         end
-
-        @sid_type
       end
     end
   end
