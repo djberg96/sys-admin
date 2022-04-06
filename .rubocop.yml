@@ -11,8 +11,15 @@ RSpec/InstanceVariable:
 
 AllCops:
   NewCops: enable
+  Exclude:
+  - 'sys-admin.gemspec'
+  - 'Rakefile'
+  - 'Gemfile'
 Lint/AssignmentInCondition:
   Enabled: false
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
 Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 Style/NumericPredicate:
