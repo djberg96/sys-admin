@@ -2,6 +2,7 @@ require 'rake'
 require 'rake/clean'
 require 'rspec/core/rake_task'
 require 'rbconfig'
+require 'rubocop/rake_task'
 
 CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core", "**/*.lock")
 
@@ -38,5 +39,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
     t.rspec_opts = '-Ilib/unix'
   end
 end
+
+RuboCop::RakeTask.new
 
 task :default => :spec
