@@ -107,7 +107,7 @@ RSpec.describe Sys::Admin, :windows do
       end
 
       example 'get_login returns a string' do
-        expect( described_class.get_login).to be_kind_of(String)
+        expect(described_class.get_login).to be_kind_of(String)
         expect(described_class.get_login.size).to be > 0
       end
 
@@ -123,24 +123,24 @@ RSpec.describe Sys::Admin, :windows do
 
       example 'get_user with string argument works as expected' do
         expect{ described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
-        expect( described_class.get_user(@user_name, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_name, :localaccount => true)).to be_kind_of(Sys::Admin::User)
       end
 
       example 'get user with integer argument works as expected' do
         expect{ described_class.get_user(@user_id, :localaccount => true) }.not_to raise_error
-        expect( described_class.get_user(@user_id, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_id, :localaccount => true)).to be_kind_of(Sys::Admin::User)
       end
 
       example 'get_user method by string accepts a hash of options' do
         options = {:host => host, :localaccount => true}
         expect{ described_class.get_user(@user_name, options) }.not_to raise_error
-        expect( described_class.get_user(@user_name, options)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_name, options)).to be_kind_of(Sys::Admin::User)
       end
 
       example 'get_user method by uid accepts a hash of options' do
         options = {:host => host, :localaccount => true}
         expect{ described_class.get_user(@user_id, options) }.not_to raise_error
-        expect( described_class.get_user(@user_id, options)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_id, options)).to be_kind_of(Sys::Admin::User)
       end
 
       example 'get_user method requires an argument' do
