@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ###############################################################################
 # sys_admin_windows_spec.rb
 #
@@ -37,14 +39,14 @@ RSpec.describe Sys::Admin, :windows do
     example 'configure user' do
       skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:configure_user)
-      expect{
+      expect do
         described_class.configure_user(
           :name        => @local_user,
           :description => 'delete me',
           :fullname    => 'fubar',
           :password    => 'd1c2b3A4'
         )
-      }.not_to raise_error
+      end.not_to raise_error
       expect(described_class.get_user(@local_user).description).to eq('delete me')
     end
 
