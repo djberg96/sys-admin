@@ -15,6 +15,7 @@ AllCops:
   - 'sys-admin.gemspec'
   - 'Rakefile'
   - 'Gemfile'
+  - 'examples/*.rb'
 Lint/AssignmentInCondition:
   Enabled: false
 Layout/HashAlignment:
