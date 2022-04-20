@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+# The Sys modules serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # The version of the sys-admin library.
     VERSION = '1.8.1'

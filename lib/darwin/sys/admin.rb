@@ -5,7 +5,9 @@ require 'sys/admin/common'
 
 # The Darwin specific code.
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # :no-doc:
     BUF_MAX = 65536 # Max buf size for retry.

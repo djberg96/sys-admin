@@ -4,7 +4,9 @@ require 'win32/security'
 require 'win32/registry'
 require 'socket'
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     extend FFI::Library
 
@@ -726,6 +728,7 @@ module Sys
       array
     end
 
+    # The User class encapsulates the information typically found within an /etc/passwd entry.
     class User
       # An account for users whose primary account is in another domain.
       TEMP_DUPLICATE = 0x0100
@@ -918,6 +921,7 @@ module Sys
       end
     end
 
+    # The Group class encapsulates the information typically found within an /etc/group entry.
     class Group
       # Short description of the object.
       attr_accessor :caption

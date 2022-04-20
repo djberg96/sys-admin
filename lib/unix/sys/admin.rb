@@ -5,7 +5,9 @@ require 'sys/admin/common'
 
 # Code used as a fallback for UNIX platforms.
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     class PasswdStruct < FFI::Struct
       layout(
