@@ -880,7 +880,7 @@ module Sys
           when Admin::SidTypeComputer
             @sid_type = 'computer'
           else
-            @sid_type = 'unknown'
+            @sid_type = 'not_found'
         end
       end
 
@@ -1009,7 +1009,7 @@ module Sys
             when Admin::SidTypeComputer
               @sid_type = 'computer'
             else
-              @sid_type = 'unknown'
+              @sid_type = 'not_found'
           end
         end
       end
