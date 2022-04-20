@@ -8,7 +8,7 @@ class FFI::Pointer
 
     loc = self
 
-    until ((element = loc.read_pointer).null?)
+    until (element = loc.read_pointer).null?
       elements << element.read_string
       loc += FFI::Type::POINTER.size
     end
