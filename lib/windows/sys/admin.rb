@@ -628,11 +628,8 @@ module Sys
       wmi.execquery(query).each do |group|
         gid = group.sid.split('-').last.to_i
 
-        # Because our 'like' query isn't fulproof, let's parse
-        # the SID again to make sure
-        if grp.is_a?(Integer)
-          next if grp != gid
-        end
+        # Because our 'like' query isn't fulproof, let's parse the SID again to make sure
+        next if grp.is_a?(Integer) && grp != gid
 
         group_object = Group.new do |g|
           g.caption      = group.caption
