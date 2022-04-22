@@ -5,7 +5,7 @@
 #
 # Test suite for the MS Windows version of sys-admin. Note that some of the
 # are ordered. That way I can add test users before configuring or deleting
-# them.
+# them. These tests require admin privileges, otherwise they are skipped.
 #
 # It is assumed that these specs will be run via the 'rake spec' task.
 ###############################################################################
@@ -13,7 +13,6 @@ require 'spec_helper'
 
 RSpec.describe Sys::Admin, :windows do
   let(:host) { Socket.gethostname }
-  let(:elevated) { Win32::Security.elevated_security? }
 
   before do
     @user       = Sys::Admin::User.new
@@ -24,20 +23,18 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  describe 'add, configure and delete user', :order => :defined do
+  describe 'add, configure and delete user', :order => :defined, :requires_elevated => true do
     before(:all) do
       @local_user = 'foo'
     end
 
     example 'add user' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:add_user)
       expect{ described_class.add_user(:name => @local_user, :password => 'a1b2c3D4') }.not_to raise_error
       expect{ described_class.get_user(@local_user) }.not_to raise_error
     end
 
     example 'configure user' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:configure_user)
       expect do
         described_class.configure_user(
@@ -51,51 +48,45 @@ RSpec.describe Sys::Admin, :windows do
     end
 
     example 'delete user' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:delete_user)
       expect{ described_class.delete_user(@local_user) }.not_to raise_error
       expect{ described_class.get_user(@local_user) }.to raise_error(Sys::Admin::Error)
     end
   end
 
-  describe 'add, configure and delete group', :order => :defined do
+  describe 'add, configure and delete group', :order => :defined, :requires_elevated => true do
     before(:all) do
       @local_user = 'foo'
       @local_group = 'bar'
-      described_class.add_user(:name => @local_user)
+      described_class.add_user(:name => @local_user) if Win32::Security.elevated_security?
     end
 
     after(:all) do
-      described_class.delete_user(@local_user)
+      described_class.delete_user(@local_user) if Win32::Security.elevated_security?
     end
 
     example 'add group' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:add_group)
       expect{ described_class.add_group(:name => @local_group) }.not_to raise_error
     end
 
     example 'configure group' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:configure_group)
       expect{ described_class.configure_group(:name => @local_group, :description => 'delete me') }.not_to raise_error
     end
 
     example 'add group member' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:add_group_member)
       expect{ described_class.add_group_member(@local_user, @local_group) }.not_to raise_error
       expect(described_class.get_group(@local_group, :localaccount => true).members).to include(@local_user)
     end
 
     example 'remove group member' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:remove_group_member)
       expect{ described_class.remove_group_member(@local_user, @local_group) }.not_to raise_error
     end
 
     example 'delete group' do
-      skip 'requires elevated privileges' unless elevated
       expect(described_class).to respond_to(:delete_group)
       expect{ described_class.delete_group(@local_group) }.not_to raise_error
     end
