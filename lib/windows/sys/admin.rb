@@ -4,7 +4,9 @@ require 'win32/security'
 require 'win32/registry'
 require 'socket'
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     extend FFI::Library
 
@@ -25,7 +27,7 @@ module Sys
     SidTypeComputer       = 9
     # rubocop:enable Naming/ConstantName
 
-    HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'
+    HKEY = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\'.freeze
     private_constant :HKEY
 
     # Retrieves the user's home directory. For local accounts query the
@@ -437,14 +439,12 @@ module Sys
 
       domain = options[:domain] || host
 
+      # rubocop:disable Metrics/BlockLength
       wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
-        # Because our 'like' query isn't fulproof, let's parse
-        # the SID again to make sure
-        if usr.is_a?(Numeric)
-          next if usr != uid
-        end
+        # Because our 'like' query isn't fulproof, let's parse the SID again to make sure
+        next if usr.is_a?(Numeric) && usr != uid
 
         groups, primary_group = *get_groups(domain, user.name)
 
@@ -473,6 +473,7 @@ module Sys
 
         return user_object
       end
+      # rubocop:enable Metrics/BlockLength
 
       # If we're here, it means it wasn't found.
       raise Error, "no user found for '#{usr}'"
@@ -629,11 +630,8 @@ module Sys
       wmi.execquery(query).each do |group|
         gid = group.sid.split('-').last.to_i
 
-        # Because our 'like' query isn't fulproof, let's parse
-        # the SID again to make sure
-        if grp.is_a?(Integer)
-          next if grp != gid
-        end
+        # Because our 'like' query isn't fulproof, let's parse the SID again to make sure
+        next if grp.is_a?(Integer) && grp != gid
 
         group_object = Group.new do |g|
           g.caption      = group.caption
@@ -726,6 +724,7 @@ module Sys
       array
     end
 
+    # The User class encapsulates the information typically found within an /etc/passwd entry.
     class User
       # An account for users whose primary account is in another domain.
       TEMP_DUPLICATE = 0x0100
@@ -877,7 +876,7 @@ module Sys
           when Admin::SidTypeComputer
             @sid_type = 'computer'
           else
-            @sid_type = 'unknown'
+            @sid_type = 'not_found'
         end
       end
 
@@ -918,6 +917,7 @@ module Sys
       end
     end
 
+    # The Group class encapsulates the information typically found within an /etc/group entry.
     class Group
       # Short description of the object.
       attr_accessor :caption
@@ -1005,7 +1005,7 @@ module Sys
             when Admin::SidTypeComputer
               @sid_type = 'computer'
             else
-              @sid_type = 'unknown'
+              @sid_type = 'not_found'
           end
         end
       end

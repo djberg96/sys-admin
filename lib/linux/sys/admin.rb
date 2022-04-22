@@ -5,7 +5,9 @@ require 'sys/admin/common'
 
 # The Linux specific code.
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # :no-doc:
     BUF_MAX = 65536 # Absolute max buffer size for retry attempts.
@@ -241,7 +243,7 @@ module Sys
 
     private_class_method :get_user_from_struct
 
-    # Note: it seems that Linux, or at least Ubuntu, does not track logins
+    # NOTE: It seems that Linux, or at least Ubuntu, does not track logins
     # via GDM (Gnome Display Manager) for some reason, so this may not return
     # anything useful.
     #
@@ -254,13 +256,13 @@ module Sys
       begin
         fd = open_c(logfile, File::RDONLY)
 
-        if fd != -1
+        if fd >= 0
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
             raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
         else
-          nil # Ignore, improper permissions
+          lastlog = nil # Ignore, most likely improper permissions
         end
       ensure
         close_c(fd) if fd && fd >= 0

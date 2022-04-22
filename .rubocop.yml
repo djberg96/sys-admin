@@ -8,6 +8,10 @@ RSpec/FilePath:
   SpecSuffixOnly: true
 RSpec/InstanceVariable:
   Enabled: false
+RSpec/ExampleLength:
+  Max: 10
+RSpec/BeforeAfterAll:
+  Enabled: false
 
 AllCops:
   NewCops: enable
@@ -15,6 +19,8 @@ AllCops:
   - 'sys-admin.gemspec'
   - 'Rakefile'
   - 'Gemfile'
+  - 'examples/*.rb'
+  - 'lib/sunos/sys/admin.rb'
 Lint/AssignmentInCondition:
   Enabled: false
 Layout/HashAlignment:
@@ -28,9 +34,15 @@ Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 Style/NumericPredicate:
   Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/ConditionalAssignment:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/IfInsideElse:
   Enabled: false
 Style/IfUnlessModifier:
   Enabled: false

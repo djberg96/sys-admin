@@ -6,7 +6,9 @@ require 'rbconfig'
 
 # The BSD specific code.
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # :no-doc:
     BUF_MAX = 65536 # Max buffer for retry
@@ -244,13 +246,13 @@ module Sys
       begin
         fd = open_c(logfile, File::RDONLY)
 
-        if fd != -1
+        if fd >= 0
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
             raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
         else
-          nil # Ignore, improper permissions
+          lastlog = nil # Ignore, most likely improper permissions
         end
       ensure
         close_c(fd) if fd && fd >= 0

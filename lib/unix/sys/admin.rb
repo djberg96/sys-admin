@@ -5,7 +5,9 @@ require 'sys/admin/common'
 
 # Code used as a fallback for UNIX platforms.
 
+# The Sys module serves as a namespace only.
 module Sys
+  # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     class PasswdStruct < FFI::Struct
       layout(
@@ -147,7 +149,7 @@ module Sys
 
     # Takes a UserStruct and converts it to a User object.
     def self.get_user_from_struct(pwd)
-      user = User.new do |u|
+      User.new do |u|
         u.name         = pwd[:pw_name]
         u.passwd       = pwd[:pw_passwd]
         u.uid          = pwd[:pw_uid]
@@ -156,8 +158,6 @@ module Sys
         u.dir          = pwd[:pw_dir]
         u.shell        = pwd[:pw_shell]
       end
-
-      user
     end
 
     private_class_method :get_user_from_struct
