@@ -18,6 +18,7 @@ AllCops:
   - 'Rakefile'
   - 'Gemfile'
   - 'examples/*.rb'
+  - 'lib/sunos/sys/admin.rb'
 Lint/AssignmentInCondition:
   Enabled: false
 Layout/HashAlignment:
