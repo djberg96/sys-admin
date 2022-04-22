@@ -31,6 +31,8 @@ Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 Style/NumericPredicate:
   Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/ConditionalAssignment:

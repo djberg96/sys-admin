@@ -439,6 +439,7 @@ module Sys
 
       domain = options[:domain] || host
 
+      # rubocop:disable Metrics/BlockLength
       wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
@@ -472,6 +473,7 @@ module Sys
 
         return user_object
       end
+      # rubocop:enable Metrics/BlockLength
 
       # If we're here, it means it wasn't found.
       raise Error, "no user found for '#{usr}'"
