@@ -252,7 +252,7 @@ module Sys
             raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
         else
-          nil # Ignore, improper permissions
+          lastlog = nil # Ignore, most likely improper permissions
         end
       ensure
         close_c(fd) if fd && fd >= 0
