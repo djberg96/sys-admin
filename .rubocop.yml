@@ -35,6 +35,8 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
 Style/IfInsideElse:
   Enabled: false
 Style/IfUnlessModifier:
