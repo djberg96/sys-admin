@@ -2,6 +2,7 @@
 
 require 'ffi'
 
+# Re-open the FFI::Pointer class to add a custom method.
 class FFI::Pointer
   def read_array_of_string
     elements = []
