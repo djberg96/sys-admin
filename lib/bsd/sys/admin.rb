@@ -246,7 +246,7 @@ module Sys
       begin
         fd = open_c(logfile, File::RDONLY)
 
-        if fd != -1
+        if fd >= 0
           bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
           if bytes < 0
             raise Error, "pread function failed: #{strerror(FFI.errno)}"
