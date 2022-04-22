@@ -13,8 +13,8 @@ RSpec.configure do |config|
 
     config.filter_run_excluding(:unix)
 
-    config.before(:each, :requires_elevated => true) do |example|
-      skip "skipped unless administrator privileges" unless Win32::Security.elevated_security?
+    config.before(:each, :requires_elevated => true) do
+      skip 'skipped unless administrator privileges' unless Win32::Security.elevated_security?
     end
   end
 end
