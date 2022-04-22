@@ -442,11 +442,8 @@ module Sys
       wmi.execquery(query).each do |user|
         uid = user.sid.split('-').last.to_i
 
-        # Because our 'like' query isn't fulproof, let's parse
-        # the SID again to make sure
-        if usr.is_a?(Numeric)
-          next if usr != uid
-        end
+        # Because our 'like' query isn't fulproof, let's parse the SID again to make sure
+        next if usr.is_a?(Numeric) && usr != uid
 
         groups, primary_group = *get_groups(domain, user.name)
 
