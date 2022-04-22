@@ -144,6 +144,11 @@ The underlying implementation is similar to core Ruby's Etc implementation.
 But, in addition to the different interface, I use the re-entrant version
 of the appropriate functions when available.
 
+### OSX
+The slowdown for collecting lastlog information on OSX seems to have gotten
+progressively worse over time. Do not be surprised by significant slowdowns
+if you opt to collect it.
+
 ## Future Plans
 * Make the User and Group objects comparable.
 * Add ability to add, configure and delete users on Unix platforms.
