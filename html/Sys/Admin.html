@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Sys::Admin - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+<div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  <p class="link">Object
+</div>
+
+    
+    
+<div id="extends-section" class="nav-section">
+  <h3>Extended With Modules</h3>
+
+  <ul class="link-list">
+    <li><span class="extend">FFI::Library</span>
+    <li><span class="extend">FFI::Library</span>
+  </ul>
+</div>
+
+    
+<!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    <li ><a href="#method-c-add_group">::add_group</a>
+    <li ><a href="#method-c-add_group_member">::add_group_member</a>
+    <li ><a href="#method-c-add_user">::add_user</a>
+    <li ><a href="#method-c-configure_group">::configure_group</a>
+    <li ><a href="#method-c-configure_user">::configure_user</a>
+    <li ><a href="#method-c-delete_group">::delete_group</a>
+    <li ><a href="#method-c-delete_user">::delete_user</a>
+    <li ><a href="#method-c-get_group">::get_group</a>
+    <li ><a href="#method-c-get_login">::get_login</a>
+    <li ><a href="#method-c-get_user">::get_user</a>
+    <li ><a href="#method-c-groups">::groups</a>
+    <li ><a href="#method-c-remove_group_member">::remove_group_member</a>
+    <li ><a href="#method-c-users">::users</a>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Sys::Admin">
+  <h1 id="class-Sys::Admin" class="class">
+    class Sys::Admin
+  </h1>
+
+  <section class="description">
+    
+<p>The <a href="Admin.html"><code>Admin</code></a> class provides a unified, cross platform replacement for the Etc module.</p>
+
+  </section>
+
+  <section id="5Buntitled-5D" class="documentation-section">
+
+
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+        <dt id="SidTypeAlias">SidTypeAlias
+        <dd>
+        <dt id="SidTypeComputer">SidTypeComputer
+        <dd>
+        <dt id="SidTypeDeletedAccount">SidTypeDeletedAccount
+        <dd>
+        <dt id="SidTypeDomain">SidTypeDomain
+        <dd>
+        <dt id="SidTypeGroup">SidTypeGroup
+        <dd>
+        <dt id="SidTypeInvalid">SidTypeInvalid
+        <dd>
+        <dt id="SidTypeUnknown">SidTypeUnknown
+        <dd>
+        <dt id="SidTypeUser">SidTypeUser
+        <dd><p>rubocop:disable Naming/ConstantName</p>
+        <dt id="SidTypeWellKnownGroup">SidTypeWellKnownGroup
+        <dd>
+        <dt id="VERSION">VERSION
+        <dd><p>The version of the sys-admin library.</p>
+      </dl>
+    </section>
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+      <div id="method-c-add_group" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">add_group</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Create a new <code>group</code> using <code>options</code>. If no domain option is specified then a local group is created instead.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Create a local group with no options</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_group</span>(<span class="ruby-value">:name</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Dudes&#39;</span>)
+
+<span class="ruby-comment"># Create a local group with options</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_group</span>(<span class="ruby-value">:name</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Dudes&#39;</span>, <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Boys&#39;</span>)
+
+<span class="ruby-comment"># Create a group on a specific domain</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_group</span>(
+   <span class="ruby-value">:name</span>        <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Ladies&#39;</span>,
+   <span class="ruby-value">:domain</span>      <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;XYZ&#39;</span>,
+   <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Girls&#39;</span>
+)
+</pre>
+
+          <div class="method-source-code" id="add_group-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 258</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_group</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">munge_options</span>(<span class="ruby-identifier">options</span>)
+
+  <span class="ruby-identifier">group</span>  = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:name</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&#39;No name given&#39;</span>
+  <span class="ruby-identifier">domain</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:domain</span>]
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">domain</span>  = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain},Computer&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">moniker</span>)
+    <span class="ruby-identifier">group</span> = <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">create</span>(<span class="ruby-string">&#39;group&#39;</span>, <span class="ruby-identifier">group</span>)
+    <span class="ruby-identifier">group</span>.<span class="ruby-identifier">setinfo</span>
+    <span class="ruby-identifier">configure_group</span>(<span class="ruby-identifier">options</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-add_group_member" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">add_group_member</span><span
+            class="method-args">(user, group, domain = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Adds <code>user</code> to <code>group</code> on the specified <code>domain</code>, or the localhost if no domain is specified.</p>
+
+          <div class="method-source-code" id="add_group_member-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 284</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_group_member</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">domain</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">domain</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+  <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{group},group&quot;</span>)
+  <span class="ruby-identifier">adsi</span>.<span class="ruby-constant">Add</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{user}&quot;</span>)
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-add_user" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">add_user</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Creates the given <code>user</code>. If no domain option is specified, then it defaults to your local host, i.e. a local account is created.</p>
+
+<p>Any options provided are treated as IADsUser interface methods and are called before SetInfo is finally called.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Create a local user with no options</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_user</span>(<span class="ruby-value">:name</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;asmith&#39;</span>)
+
+<span class="ruby-comment"># Create a local user with options</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_user</span>(
+   <span class="ruby-value">:name</span>        <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;asmith&#39;</span>,
+   <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Really cool guy&#39;</span>,
+   <span class="ruby-value">:password</span>    <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;abc123&#39;</span>
+)
+
+<span class="ruby-comment"># Create a user on a specific domain</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">add_user</span>(
+   <span class="ruby-value">:name</span>     <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;asmith&#39;</span>,
+   <span class="ruby-value">:domain</span>   <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;XX&#39;</span>,
+   <span class="ruby-value">:fullname</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Al Smith&#39;</span>
+)
+</pre>
+
+          <div class="method-source-code" id="add_user-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 136</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_user</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">munge_options</span>(<span class="ruby-identifier">options</span>)
+
+  <span class="ruby-identifier">name</span>   = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:name</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&#39;No user given&#39;</span>
+  <span class="ruby-identifier">domain</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:domain</span>]
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">domain</span>  = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain},Computer&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">moniker</span>)
+    <span class="ruby-identifier">user</span> = <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">create</span>(<span class="ruby-string">&#39;user&#39;</span>, <span class="ruby-identifier">name</span>)
+
+    <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">option</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;password&#39;</span>
+        <span class="ruby-identifier">user</span>.<span class="ruby-identifier">setpassword</span>(<span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">user</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">option</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">user</span>.<span class="ruby-identifier">setinfo</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-configure_group" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">configure_group</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Configures the <code>group</code> using <code>options</code>. If no domain option is specified then your local host is used, i.e. you are configuring a local group.</p>
+
+<p>See <a href="http://tinyurl.com/cjkzl">tinyurl.com/cjkzl</a> for a list of valid options.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Configure a local group.</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">configure_group</span>(<span class="ruby-value">:name</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Abba&#39;</span>, <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Swedish&#39;</span>)
+
+<span class="ruby-comment"># Configure a group on a specific domain.</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">configure_group</span>(
+   <span class="ruby-value">:name</span>        <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Web Team&#39;</span>,
+   <span class="ruby-value">:domain</span>      <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Foo&#39;</span>,
+   <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Web programming cowboys&#39;</span>
+)
+</pre>
+
+          <div class="method-source-code" id="configure_group-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 321</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure_group</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">munge_options</span>(<span class="ruby-identifier">options</span>)
+
+  <span class="ruby-identifier">group</span>  = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:name</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&#39;No name given&#39;</span>
+  <span class="ruby-identifier">domain</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:domain</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{group},group&quot;</span>)
+    <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">option</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">option</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">value</span>) }
+    <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">setinfo</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-configure_user" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">configure_user</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Configures the <code>user</code> using <code>options</code>. If no domain option is specified then your local host is used, i.e. you are configuring a local user account.</p>
+
+<p>See <a href="http://tinyurl.com/3hjv9">tinyurl.com/3hjv9</a> for a list of valid options.</p>
+
+<p>In the case of a password change, pass a two element array as the old value and new value.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Configure a local user</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">configure_user</span>(
+   <span class="ruby-value">:name</span>        <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;djberge&#39;</span>,
+   <span class="ruby-value">:description</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Awesome&#39;</span>
+)
+
+<span class="ruby-comment"># Change the password</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">configure_user</span>(
+   <span class="ruby-value">:name</span>     <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;asmith&#39;</span>,
+   <span class="ruby-value">:password</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;new_password&#39;</span>
+)
+
+<span class="ruby-comment"># Configure a user on a specific domain</span>
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">configure_user</span>(
+   <span class="ruby-value">:name</span>      <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;jsmrz&#39;</span>,
+   <span class="ruby-value">:domain</span>    <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;XX&#39;</span>,
+   <span class="ruby-value">:firstname</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;Jo&#39;</span>
+)
+</pre>
+
+          <div class="method-source-code" id="configure_user-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 197</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure_user</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">munge_options</span>(<span class="ruby-identifier">options</span>)
+
+  <span class="ruby-identifier">name</span>   = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:name</span>) <span class="ruby-keyword">or</span> <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&#39;No name given&#39;</span>
+  <span class="ruby-identifier">domain</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:domain</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{name},user&quot;</span>)
+
+    <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">option</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">option</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;password&#39;</span>
+        <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">setpassword</span>(<span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">put</span>(<span class="ruby-identifier">option</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">setinfo</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-delete_group" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">delete_group</span><span
+            class="method-args">(group, domain = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Delete the <code>group</code> from <code>domain</code>. If no domain is specified, then you are deleting a local group.</p>
+
+          <div class="method-source-code" id="delete_group-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 339</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">delete_group</span>(<span class="ruby-identifier">group</span>, <span class="ruby-identifier">domain</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">domain</span> = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain},Computer&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">moniker</span>)
+    <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&#39;group&#39;</span>, <span class="ruby-identifier">group</span>)
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-delete_user" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">delete_user</span><span
+            class="method-args">(user, domain = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Deletes the given <code>user</code> on <code>domain</code>. If no domain is specified, then it defaults to your local host, i.e. a local account is deleted.</p>
+
+          <div class="method-source-code" id="delete_user-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 224</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">delete_user</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">domain</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">domain</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">domain</span>  = <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain},Computer&quot;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">moniker</span> = <span class="ruby-node">&quot;WinNT://#{domain}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-identifier">moniker</span>)
+    <span class="ruby-identifier">adsi</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&#39;user&#39;</span>, <span class="ruby-identifier">user</span>)
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-get_group" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">get_group</span><span
+            class="method-args">(gid)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns a <a href="Admin/Group.html"><code>Group</code></a> object for the given name or uid. Raises an error if a group cannot be found.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">get_group</span>(<span class="ruby-string">&#39;admin&#39;</span>)
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">get_group</span>(<span class="ruby-value">101</span>)
+</pre>
+
+          <div class="method-source-code" id="get_group-source">
+            <pre><span class="ruby-comment"># File lib/bsd/sys/admin.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">get_group</span>(<span class="ruby-identifier">gid</span>)
+  <span class="ruby-identifier">size</span> = <span class="ruby-value">1024</span>
+  <span class="ruby-identifier">buf</span>  = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:char</span>, <span class="ruby-identifier">size</span>)
+  <span class="ruby-identifier">pbuf</span> = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">PasswdStruct</span>)
+  <span class="ruby-identifier">temp</span> = <span class="ruby-constant">GroupStruct</span>.<span class="ruby-identifier">new</span>
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">gid</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+      <span class="ruby-identifier">val</span> = <span class="ruby-identifier">getgrnam_r</span>(<span class="ruby-identifier">gid</span>, <span class="ruby-identifier">temp</span>, <span class="ruby-identifier">buf</span>, <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">pbuf</span>)
+      <span class="ruby-identifier">fun</span> = <span class="ruby-string">&#39;getgrnam_r&#39;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">val</span> = <span class="ruby-identifier">getgrgid_r</span>(<span class="ruby-identifier">gid</span>, <span class="ruby-identifier">temp</span>, <span class="ruby-identifier">buf</span>, <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">pbuf</span>)
+      <span class="ruby-identifier">fun</span> = <span class="ruby-string">&#39;getgrgid_r&#39;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">SystemCallError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">fun</span>, <span class="ruby-identifier">val</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">val</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ERANGE</span>
+    <span class="ruby-identifier">size</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1024</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">BUF_MAX</span>
+    <span class="ruby-identifier">buf</span> = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:char</span>, <span class="ruby-identifier">size</span>)
+    <span class="ruby-keyword">retry</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">ptr</span> = <span class="ruby-identifier">pbuf</span>.<span class="ruby-identifier">read_pointer</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ptr</span>.<span class="ruby-identifier">null?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;no group found for &#39;#{gid}&#39;&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">grp</span> = <span class="ruby-constant">GroupStruct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ptr</span>)
+  <span class="ruby-identifier">get_group_from_struct</span>(<span class="ruby-identifier">grp</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-get_login" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">get_login</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns the login for the current process.</p>
+
+          <div class="method-source-code" id="get_login-source">
+            <pre><span class="ruby-comment"># File lib/bsd/sys/admin.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">get_login</span>
+  <span class="ruby-identifier">buf</span> = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:char</span>, <span class="ruby-value">256</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">getlogin_r</span>(<span class="ruby-identifier">buf</span>, <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;getlogin_r function failed: #{strerror(FFI.errno)}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">read_string</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-get_user" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">get_user</span><span
+            class="method-args">(uid)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns a <a href="Admin/User.html"><code>User</code></a> object for the given name or uid. Raises an error if a user cannot be found.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">get_user</span>(<span class="ruby-string">&#39;joe&#39;</span>)
+<span class="ruby-constant">Sys</span><span class="ruby-operator">::</span><span class="ruby-constant">Admin</span>.<span class="ruby-identifier">get_user</span>(<span class="ruby-value">501</span>)
+</pre>
+
+          <div class="method-source-code" id="get_user-source">
+            <pre><span class="ruby-comment"># File lib/bsd/sys/admin.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">get_user</span>(<span class="ruby-identifier">uid</span>)
+  <span class="ruby-identifier">buf</span>  = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:char</span>, <span class="ruby-value">1024</span>)
+  <span class="ruby-identifier">pbuf</span> = <span class="ruby-constant">FFI</span><span class="ruby-operator">::</span><span class="ruby-constant">MemoryPointer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">PasswdStruct</span>)
+  <span class="ruby-identifier">temp</span> = <span class="ruby-constant">PasswdStruct</span>.<span class="ruby-identifier">new</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">uid</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">getpwnam_r</span>(<span class="ruby-identifier">uid</span>, <span class="ruby-identifier">temp</span>, <span class="ruby-identifier">buf</span>, <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">pbuf</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;getpwnam_r function failed: #{strerror(FFI.errno)}&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">getpwuid_r</span>(<span class="ruby-identifier">uid</span>, <span class="ruby-identifier">temp</span>, <span class="ruby-identifier">buf</span>, <span class="ruby-identifier">buf</span>.<span class="ruby-identifier">size</span>, <span class="ruby-identifier">pbuf</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;getpwuid_r function failed: #{strerror(FFI.errno)}&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">ptr</span> = <span class="ruby-identifier">pbuf</span>.<span class="ruby-identifier">read_pointer</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ptr</span>.<span class="ruby-identifier">null?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;no user found for #{uid}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">pwd</span> = <span class="ruby-constant">PasswdStruct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ptr</span>)
+  <span class="ruby-identifier">get_user_from_struct</span>(<span class="ruby-identifier">pwd</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-groups" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">groups</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns an array of <a href="Admin/Group.html"><code>Group</code></a> objects for each user on the system.</p>
+
+          <div class="method-source-code" id="groups-source">
+            <pre><span class="ruby-comment"># File lib/bsd/sys/admin.rb, line 184</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">groups</span>
+  <span class="ruby-identifier">groups</span> = []
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">setgrent</span>()
+
+    <span class="ruby-keyword">until</span> (<span class="ruby-identifier">ptr</span> = <span class="ruby-identifier">getgrent</span>()).<span class="ruby-identifier">null?</span>
+      <span class="ruby-identifier">grp</span> = <span class="ruby-constant">GroupStruct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ptr</span>)
+      <span class="ruby-identifier">groups</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">get_group_from_struct</span>(<span class="ruby-identifier">grp</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">ensure</span>
+    <span class="ruby-identifier">endgrent</span>()
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">groups</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-remove_group_member" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">remove_group_member</span><span
+            class="method-args">(user, group, domain = nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Removes <code>user</code> from <code>group</code> on the specified <code>domain</code>, or the localhost if no domain is specified.</p>
+
+          <div class="method-source-code" id="remove_group_member-source">
+            <pre><span class="ruby-comment"># File lib/windows/sys/admin.rb, line 295</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">remove_group_member</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">domain</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">domain</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Socket</span>.<span class="ruby-identifier">gethostname</span>
+  <span class="ruby-identifier">adsi</span> = <span class="ruby-constant">WIN32OLE</span>.<span class="ruby-identifier">connect</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{group},group&quot;</span>)
+  <span class="ruby-identifier">adsi</span>.<span class="ruby-constant">Remove</span>(<span class="ruby-node">&quot;WinNT://#{domain}/#{user}&quot;</span>)
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">WIN32OLERuntimeError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">err</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-identifier">err</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-c-users" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">users</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns an array of <a href="Admin/User.html"><code>User</code></a> objects for each user on the system.</p>
+
+          <div class="method-source-code" id="users-source">
+            <pre><span class="ruby-comment"># File lib/bsd/sys/admin.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">users</span>
+  <span class="ruby-identifier">users</span> = []
+
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">setpwent</span>()
+
+    <span class="ruby-keyword">until</span> (<span class="ruby-identifier">ptr</span> = <span class="ruby-identifier">getpwent</span>()).<span class="ruby-identifier">null?</span>
+      <span class="ruby-identifier">pwd</span> = <span class="ruby-constant">PasswdStruct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ptr</span>)
+      <span class="ruby-identifier">users</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">get_user_from_struct</span>(<span class="ruby-identifier">pwd</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">ensure</span>
+    <span class="ruby-identifier">endpwent</span>()
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">users</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.4.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

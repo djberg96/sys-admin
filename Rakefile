@@ -3,6 +3,7 @@ require 'rake/clean'
 require 'rspec/core/rake_task'
 require 'rbconfig'
 require 'rubocop/rake_task'
+require 'rdoc/task'
 
 CLEAN.include("**/*.gem", "**/*.rbx", "**/*.rbc", "ruby.core", "**/*.lock")
 
@@ -38,6 +39,11 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   else
     t.rspec_opts = '-Ilib/unix'
   end
+end
+
+RDoc::Task.new do |rdoc|
+  rdoc.main = 'README.md'
+  rdoc.rdoc_files.include('README.md', 'lib/**/*.rb')
 end
 
 RuboCop::RakeTask.new
