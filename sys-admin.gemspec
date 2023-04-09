@@ -3,7 +3,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name       = 'sys-admin'
-  spec.version    = '1.8.1'
+  spec.version    = '1.8.2'
   spec.author     = 'Daniel J. Berger'
   spec.license    = 'Apache-2.0'
   spec.email      = 'djberg96@gmail.com'
@@ -34,7 +34,8 @@ Gem::Specification.new do |spec|
     'documentation_uri'     => 'https://github.com/djberg96/sys-admin/wiki',
     'source_code_uri'       => 'https://github.com/djberg96/sys-admin',
     'wiki_uri'              => 'https://github.com/djberg96/sys-admin/wiki',
-    'rubygems_mfa_required' => 'true'
+    'rubygems_mfa_required' => 'true',
+    'github_repo'           => 'https://github.com/djberg96/sys-admin'
   }
 
   spec.description = <<-EOF

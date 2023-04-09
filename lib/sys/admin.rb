@@ -5,7 +5,7 @@ module Sys
   # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # The version of the sys-admin library.
-    VERSION = '1.8.1'
+    VERSION = '1.8.2'
 
     private_class_method :new
   end

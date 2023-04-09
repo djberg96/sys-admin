@@ -1,3 +1,10 @@
+## 1.8.2 - 9-Apr-2023
+* Lots of rubocop related updates.
+* Refactored specs to use shared specs.
+* The lastlog key will return nil instead of an empty struct if it can't be read.
+* Added more information to the gemspec metadata.
+* The rubocop and rubocop-rspec gems are now development dependencies.
+
 ## 1.8.1 - 25-Sep-2021
 * The users and get_user methods on Darwin now take an optional :lastlog key
   that you can set to false in order to significantly speed up those methods
