@@ -125,9 +125,24 @@ module Sys
 
       begin
         if gid.is_a?(String)
-          getgrnam_r(gid, temp, buf, buf.size, pbuf)
+          val = getgrnam_r(gid, temp, buf, buf.size, pbuf)
+          fun = 'getgrnam_r'
         else
-          getgrgid_r(gid, temp, buf, buf.size, pbuf)
+          val = getgrgid_r(gid, temp, buf, buf.size, pbuf)
+          fun = 'getgrgid_r'
+        end
+
+        error = SystemCallError.new(fun, val) if val != 0
+
+        if error
+          case error
+          when Errno::ERANGE
+            raise error # Let retry block below handle it
+          when Errno::ENOENT, Errno::ESRCH
+            raise Error, "no group found for '#{gid}'"
+          else
+            raise Error, "unexpected error for '#{gid}'"
+          end
         end
       rescue Errno::ERANGE # Large groups
         size += 1024
