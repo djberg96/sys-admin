@@ -100,6 +100,7 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_group raises an Error if the group cannot be found' do
+        expect{ described_class.get_group(123456789) }.to raise_error(Sys::Admin::Error)
         expect{ described_class.get_group('foofoofoo') }.to raise_error(Sys::Admin::Error)
       end
     end

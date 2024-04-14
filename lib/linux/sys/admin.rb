@@ -125,13 +125,10 @@ module Sys
 
       begin
         if gid.is_a?(String)
-          val = getgrnam_r(gid, temp, buf, buf.size, pbuf)
-          fun = 'getgrnam_r'
+          getgrnam_r(gid, temp, buf, buf.size, pbuf)
         else
-          val = getgrgid_r(gid, temp, buf, buf.size, pbuf)
-          fun = 'getgrgid_r'
+          getgrgid_r(gid, temp, buf, buf.size, pbuf)
         end
-        raise SystemCallError.new(fun, val) if val != 0
       rescue Errno::ERANGE # Large groups
         size += 1024
         raise if size > BUF_MAX
