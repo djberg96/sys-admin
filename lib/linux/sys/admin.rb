@@ -120,7 +120,7 @@ module Sys
     def self.get_group(gid)
       size = 1024
       buf  = FFI::MemoryPointer.new(:char, size)
-      pbuf = FFI::MemoryPointer.new(PasswdStruct)
+      pbuf = FFI::MemoryPointer.new(GroupStruct)
       temp = GroupStruct.new
 
       begin
@@ -131,7 +131,14 @@ module Sys
           val = getgrgid_r(gid, temp, buf, buf.size, pbuf)
           fun = 'getgrgid_r'
         end
-        raise SystemCallError.new(fun, val) if val != 0
+
+        if pbuf.null?
+          if val != 0
+            raise SystemCallError.new(fun, val)
+          else
+            raise Error, "group '#{gid}' not found"
+          end
+        end
       rescue Errno::ERANGE # Large groups
         size += 1024
         raise if size > BUF_MAX

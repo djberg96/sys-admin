@@ -76,6 +76,12 @@ RSpec.describe Sys::Admin, :unix do
     end
 
     describe 'get_group' do
+      before do
+        described_class.class_eval do
+          public :getgrgid_r
+        end
+      end
+
       example 'get_group basic functionality' do
         expect(described_class).to respond_to(:get_group)
         expect{ described_class.get_group(group) }.not_to raise_error
@@ -100,7 +106,30 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_group raises an Error if the group cannot be found' do
+        expect{ described_class.get_group(123456789) }.to raise_error(Sys::Admin::Error)
         expect{ described_class.get_group('foofoofoo') }.to raise_error(Sys::Admin::Error)
+      end
+
+      example 'get_group handles large groups and will retry an ERANGE' do
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(34)
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_call_original
+        expect{ described_class.get_group(group_id) }.not_to raise_error
+      end
+
+      example 'get_group will raise the expected error for an ENOENT' do
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(2)
+        expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
+      end
+
+      example 'get_group will raise the expected error for a failed getgrxxx function call' do
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(22)
+        allow_any_instance_of(FFI::MemoryPointer).to receive(:null?).and_return(true)
+        expect{ described_class.get_group(group_id) }.to raise_error(Errno::EINVAL)
+      end
+
+      example 'get_group will not retry failures other than an ERANGE' do
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(35)
+        expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
       end
     end
 
