@@ -121,6 +121,12 @@ RSpec.describe Sys::Admin, :unix do
         expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
       end
 
+      example 'get_group will raise the expected error for a failed getgrxxx function call' do
+        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(22)
+        allow_any_instance_of(FFI::MemoryPointer).to receive(:null?).and_return(true)
+        expect{ described_class.get_group(group_id) }.to raise_error(Errno::EINVAL)
+      end
+
       example 'get_group will not retry failures other than an ERANGE' do
         allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(35)
         expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
