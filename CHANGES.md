@@ -1,3 +1,10 @@
+## 1.8.3 - 20-Apr-2024
+* Fixed up the get_group method on most platforms. Previously it was allocating
+  slightly more memory than it needed (wrong struct, oops). In addition, the
+  error handling wasn't consistent because I can't read a man page properly.
+* More specs were added to properly test the get_group updates.
+* The github actions test matrix was updated.
+
 ## 1.8.2 - 9-Apr-2023
 * Lots of rubocop related updates.
 * Refactored specs to use shared specs.

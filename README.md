@@ -162,7 +162,7 @@ None that I'm aware of. If you find any, please log them on the project page at:
 Apache-2.0
 
 ## Copyright
-(C) 2005-2020, Daniel J. Berger
+(C) 2005-2024, Daniel J. Berger
 All Rights Reserved
 
 ## Author
