@@ -43,7 +43,7 @@ module Sys
         pw_expire time_t
       ]
 
-      if RbConfig::CONFIG['host_os'] =~ /freebsd/i
+      if RbConfig::CONFIG['host_os'] =~ /freebsd|dragonfly/i
         fields.push(:pw_fields, :int)
       end
 

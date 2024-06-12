@@ -5,7 +5,7 @@ module Sys
   # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
     # The version of the sys-admin library.
-    VERSION = '1.8.3'
+    VERSION = '1.8.4'
 
     private_class_method :new
   end
@@ -23,7 +23,7 @@ case RbConfig::CONFIG['host_os']
     require 'windows/sys/admin'
   when /darwin|mach/i
     require 'darwin/sys/admin'
-  when /bsd/i
+  when /bsd|dragonfly/i
     require 'bsd/sys/admin'
   else
     require 'unix/sys/admin'

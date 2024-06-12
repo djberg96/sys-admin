@@ -1,3 +1,6 @@
+## 1.8.4 - 12-Jun-2024
+* Fixes for DragonFly BSD support.
+
 ## 1.8.3 - 20-Apr-2024
 * Fixed up the get_group method on most platforms. Previously it was allocating
   slightly more memory than it needed (wrong struct, oops). In addition, the
