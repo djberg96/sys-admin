@@ -31,7 +31,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
     t.rspec_opts = '-Ilib/linux'
   when /sunos|solaris/i
     t.rspec_opts = '-Ilib/sunos'
-  when /bsd/i
+  when /bsd|dragonfly/i
     t.rspec_opts = '-Ilib/bsd'
   when /windows|win32|mingw|cygwin|dos/i
     t.rspec_opts = '-Ilib/windows'
