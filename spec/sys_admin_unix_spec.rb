@@ -22,7 +22,7 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_login returns a string' do
-        expect(described_class.get_login).to be_kind_of(String)
+        expect(described_class.get_login).to be_a(String)
         expect(described_class.get_login.length).to be > 0
       end
     end
@@ -35,11 +35,11 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_user with a string argument works as expected' do
-        expect(described_class.get_user(user)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(user)).to be_a(Sys::Admin::User)
       end
 
       example 'get_user with an integer argument works as expected' do
-        expect(described_class.get_user(user_id)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(user_id)).to be_a(Sys::Admin::User)
       end
 
       example 'get_user requires at least one argument' do
@@ -63,14 +63,14 @@ RSpec.describe Sys::Admin, :unix do
 
       example 'users returns an array of User objects' do
         users = described_class.users
-        expect(users).to be_kind_of(Array)
-        expect(users).to all(be_kind_of(Sys::Admin::User))
+        expect(users).to be_a(Array)
+        expect(users).to all(be_a(Sys::Admin::User))
       end
 
-      example 'users accepts an optional lastlog argument on darwin', :darwin => true do
+      example 'users accepts an optional lastlog argument on darwin', :darwin do
         users = described_class.users(:lastlog => false)
-        expect(users).to be_kind_of(Array)
-        expect(users).to all(be_kind_of(Sys::Admin::User))
+        expect(users).to be_a(Array)
+        expect(users).to all(be_a(Sys::Admin::User))
         expect(users.first.login_time).to be_nil
       end
     end
@@ -89,11 +89,11 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_group accepts a string argument' do
-        expect(described_class.get_group(group)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(group)).to be_a(Sys::Admin::Group)
       end
 
       example 'get_group accepts an integer argument' do
-        expect(described_class.get_group(group_id)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(group_id)).to be_a(Sys::Admin::Group)
       end
 
       example 'get_group requires one argument only' do
@@ -111,24 +111,24 @@ RSpec.describe Sys::Admin, :unix do
       end
 
       example 'get_group handles large groups and will retry an ERANGE' do
-        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(34)
-        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_call_original
+        allow(described_class).to receive(:getgrgid_r).with(any_args).and_return(34)
+        allow(described_class).to receive(:getgrgid_r).with(any_args).and_call_original
         expect{ described_class.get_group(group_id) }.not_to raise_error
       end
 
       example 'get_group will raise the expected error for an ENOENT' do
-        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(2)
+        allow(described_class).to receive(:getgrgid_r).with(any_args).and_return(2)
         expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
       end
 
       example 'get_group will raise the expected error for a failed getgrxxx function call' do
-        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(22)
+        allow(described_class).to receive(:getgrgid_r).with(any_args).and_return(22)
         allow_any_instance_of(FFI::MemoryPointer).to receive(:null?).and_return(true)
         expect{ described_class.get_group(group_id) }.to raise_error(Errno::EINVAL)
       end
 
       example 'get_group will not retry failures other than an ERANGE' do
-        allow(Sys::Admin).to receive(:getgrgid_r).with(any_args).and_return(35)
+        allow(described_class).to receive(:getgrgid_r).with(any_args).and_return(35)
         expect{ described_class.get_group(group_id) }.to raise_error(Sys::Admin::Error)
       end
     end
@@ -141,8 +141,8 @@ RSpec.describe Sys::Admin, :unix do
 
       example 'groups returns an array of Group objects' do
         groups = described_class.groups
-        expect(groups).to be_kind_of(Array)
-        expect(groups).to all(be_kind_of(Sys::Admin::Group))
+        expect(groups).to be_a(Array)
+        expect(groups).to all(be_a(Sys::Admin::Group))
       end
 
       example 'groups method does not accept any arguments' do
@@ -156,103 +156,103 @@ RSpec.describe Sys::Admin, :unix do
       example 'user.name behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:name)
-        expect(user.name).to be_kind_of(String)
+        expect(user.name).to be_a(String)
       end
 
       example 'user.passwd behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:passwd)
-        expect(user.passwd).to be_kind_of(String)
+        expect(user.passwd).to be_a(String)
       end
 
       example 'user.uid behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:uid)
-        expect(user.uid).to be_kind_of(Integer)
+        expect(user.uid).to be_a(Integer)
       end
 
       example 'user.gid behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:gid)
-        expect(user.gid).to be_kind_of(Integer)
+        expect(user.gid).to be_a(Integer)
       end
 
       example 'user.dir behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:dir)
-        expect(user.dir).to be_kind_of(String)
+        expect(user.dir).to be_a(String)
       end
 
       example 'user.shell behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:shell)
-        expect(user.shell).to be_kind_of(String)
+        expect(user.shell).to be_a(String)
       end
 
       example 'user.gecos behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:gecos)
-        expect(user.gecos).to be_kind_of(String).or be_nil
+        expect(user.gecos).to be_a(String).or be_nil
       end
 
       example 'user.quota behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:quota)
-        expect(user.quota).to be_kind_of(Integer).or be_nil
+        expect(user.quota).to be_a(Integer).or be_nil
       end
 
       example 'user.age behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:age)
-        expect(user.age).to be_kind_of(Integer).or be_nil
+        expect(user.age).to be_a(Integer).or be_nil
       end
 
       example 'user.access behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:access_class)
-        expect(user.access_class).to be_kind_of(String).or be_nil
+        expect(user.access_class).to be_a(String).or be_nil
       end
 
       example 'user.comment behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:comment)
-        expect(user.comment).to be_kind_of(String).or be_nil
+        expect(user.comment).to be_a(String).or be_nil
       end
 
       example 'user.expire behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:expire)
-        expect(user.expire).to be_kind_of(Time).or be_nil
+        expect(user.expire).to be_a(Time).or be_nil
       end
 
       example 'user.change behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:change)
-        expect(user.change).to be_kind_of(Time).or be_nil
+        expect(user.change).to be_a(Time).or be_nil
       end
 
       example 'user.login_time behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:login_time)
-        expect(user.login_time).to be_kind_of(Time).or be_nil
+        expect(user.login_time).to be_a(Time).or be_nil
       end
 
       example 'user.login_device behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:login_device)
-        expect(user.login_device).to be_kind_of(String).or be_nil
+        expect(user.login_device).to be_a(String).or be_nil
       end
 
       example 'user.login_host behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:login_host)
-        expect(user.login_host).to be_kind_of(String).or be_nil
+        expect(user.login_host).to be_a(String).or be_nil
       end
 
       example 'user.groups behaves as expected' do
         user = described_class.get_user(user_id)
         expect(user).to respond_to(:groups)
-        expect(user.groups).to be_kind_of(Array)
+        expect(user.groups).to be_a(Array)
       end
     end
 
@@ -260,25 +260,25 @@ RSpec.describe Sys::Admin, :unix do
       example 'group.name behaves as expected' do
         group = described_class.get_group(group_id)
         expect(group).to respond_to(:name)
-        expect(group.name).to be_kind_of(String)
+        expect(group.name).to be_a(String)
       end
 
       example 'group.gid behaves as expected' do
         group = described_class.get_group(group_id)
         expect(group).to respond_to(:gid)
-        expect(group.gid).to be_kind_of(Integer)
+        expect(group.gid).to be_a(Integer)
       end
 
       example 'group.members behaves as expected' do
         group = described_class.get_group(group_id)
         expect(group).to respond_to(:members)
-        expect(group.members).to be_kind_of(Array)
+        expect(group.members).to be_a(Array)
       end
 
       example 'group.passwd behaves as expected' do
         group = described_class.get_group(group_id)
         expect(group).to respond_to(:passwd)
-        expect(group.passwd).to be_kind_of(String)
+        expect(group.passwd).to be_a(String)
       end
     end
   end

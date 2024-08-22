@@ -138,11 +138,8 @@ module Sys
         end
 
         if pbuf.null?
-          if val != 0
-            raise SystemCallError.new(fun, val)
-          else
-            raise Error, "group '#{gid}' not found"
-          end
+          raise SystemCallError.new(fun, val) if val != 0
+          raise Error, "group '#{gid}' not found"
         end
       rescue Errno::ERANGE
         size += 1024

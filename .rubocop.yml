@@ -4,13 +4,13 @@ RSpec/MultipleExpectations:
   Max: 4
 RSpec/ContextWording:
   Enabled: false
-RSpec/FilePath:
-  SpecSuffixOnly: true
 RSpec/InstanceVariable:
   Enabled: false
 RSpec/ExampleLength:
   Max: 10
 RSpec/BeforeAfterAll:
+  Enabled: false
+RSpec/SpecFilePathFormat:
   Enabled: false
 
 AllCops:
@@ -47,6 +47,10 @@ Style/IfInsideElse:
 Style/IfUnlessModifier:
   Enabled: false
 Style/NumericLiterals:
+  Enabled: false
+Style/NegatedIfElseCondition:
+  Enabled: false
+Style/MapIntoArray:
   Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false

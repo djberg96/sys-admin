@@ -23,7 +23,7 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  describe 'add, configure and delete user', :order => :defined, :requires_elevated => true do
+  describe 'add, configure and delete user', :requires_elevated, :order => :defined do
     before(:all) do
       @local_user = 'foo'
     end
@@ -54,7 +54,7 @@ RSpec.describe Sys::Admin, :windows do
     end
   end
 
-  describe 'add, configure and delete group', :order => :defined, :requires_elevated => true do
+  describe 'add, configure and delete group', :requires_elevated, :order => :defined do
     before(:all) do
       @local_user = 'foo'
       @local_group = 'bar'
@@ -100,7 +100,7 @@ RSpec.describe Sys::Admin, :windows do
       end
 
       example 'get_login returns a string' do
-        expect(described_class.get_login).to be_kind_of(String)
+        expect(described_class.get_login).to be_a(String)
         expect(described_class.get_login.size).to be > 0
       end
 
@@ -116,24 +116,24 @@ RSpec.describe Sys::Admin, :windows do
 
       example 'get_user with string argument works as expected' do
         expect{ described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
-        expect(described_class.get_user(@user_name, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_name, :localaccount => true)).to be_a(Sys::Admin::User)
       end
 
       example 'get user with integer argument works as expected' do
         expect{ described_class.get_user(@user_id, :localaccount => true) }.not_to raise_error
-        expect(described_class.get_user(@user_id, :localaccount => true)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_id, :localaccount => true)).to be_a(Sys::Admin::User)
       end
 
       example 'get_user method by string accepts a hash of options' do
         options = {:host => host, :localaccount => true}
         expect{ described_class.get_user(@user_name, options) }.not_to raise_error
-        expect(described_class.get_user(@user_name, options)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_name, options)).to be_a(Sys::Admin::User)
       end
 
       example 'get_user method by uid accepts a hash of options' do
         options = {:host => host, :localaccount => true}
         expect{ described_class.get_user(@user_id, options) }.not_to raise_error
-        expect(described_class.get_user(@user_id, options)).to be_kind_of(Sys::Admin::User)
+        expect(described_class.get_user(@user_id, options)).to be_a(Sys::Admin::User)
       end
 
       example 'get_user method requires an argument' do
@@ -149,8 +149,8 @@ RSpec.describe Sys::Admin, :windows do
 
       example 'users method returns an array of User objects' do
         users = described_class.users(:localaccount => true)
-        expect(users).to be_kind_of(Array)
-        expect(users).to all(be_kind_of(Sys::Admin::User))
+        expect(users).to be_a(Array)
+        expect(users).to all(be_a(Sys::Admin::User))
       end
     end
 
@@ -161,18 +161,18 @@ RSpec.describe Sys::Admin, :windows do
 
       example 'get_group method returns expected results with a string argument' do
         expect{ described_class.get_group(@group_name, :localaccount => true) }.not_to raise_error
-        expect(described_class.get_group(@group_name, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(@group_name, :localaccount => true)).to be_a(Sys::Admin::Group)
       end
 
       example 'get_group method returns expected results with an integer argument' do
         expect{ described_class.get_group(@group_id, :localaccount => true) }.not_to raise_error
-        expect(described_class.get_group(@group_id, :localaccount => true)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(@group_id, :localaccount => true)).to be_a(Sys::Admin::Group)
       end
 
       example 'get_group method accepts a hash of options' do
         options = {:host => host, :localaccount => true}
         expect{ described_class.get_group(@group_name, options) }.not_to raise_error
-        expect(described_class.get_group(@group_name, options)).to be_kind_of(Sys::Admin::Group)
+        expect(described_class.get_group(@group_name, options)).to be_a(Sys::Admin::Group)
       end
 
       example 'get_group method requires an argument' do
@@ -188,8 +188,8 @@ RSpec.describe Sys::Admin, :windows do
 
       example 'groups method returns an array of Group objects' do
         groups = described_class.groups(:localaccount => true)
-        expect(groups).to be_kind_of(Array)
-        expect(groups).to all(be_kind_of(Sys::Admin::Group))
+        expect(groups).to be_a(Array)
+        expect(groups).to all(be_a(Sys::Admin::Group))
       end
     end
   end
@@ -282,7 +282,7 @@ RSpec.describe Sys::Admin, :windows do
 
     example 'dir method returns either a string or nil' do
       expect{ @user = described_class.get_user(@user_name, :localaccount => true) }.not_to raise_error
-      expect(@user.dir).to be_kind_of(String).or be_kind_of(NilClass)
+      expect(@user.dir).to be_a(String).or be_a(NilClass)
     end
   end
 
