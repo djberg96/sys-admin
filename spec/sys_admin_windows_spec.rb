@@ -23,7 +23,7 @@ RSpec.describe Sys::Admin, :windows do
     @group_id   = 546        # best guess, may fail
   end
 
-  describe 'add, configure and delete user', :order => :defined, :requires_elevated => true do
+  describe 'add, configure and delete user', :requires_elevated, :order => :defined do
     before(:all) do
       @local_user = 'foo'
     end
@@ -54,7 +54,7 @@ RSpec.describe Sys::Admin, :windows do
     end
   end
 
-  describe 'add, configure and delete group', :order => :defined, :requires_elevated => true do
+  describe 'add, configure and delete group', :requires_elevated, :order => :defined do
     before(:all) do
       @local_user = 'foo'
       @local_group = 'bar'
