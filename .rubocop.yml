@@ -50,6 +50,8 @@ Style/NumericLiterals:
   Enabled: false
 Style/NegatedIfElseCondition:
   Enabled: false
+Style/MapIntoArray:
+  Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
