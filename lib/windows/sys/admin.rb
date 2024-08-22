@@ -78,9 +78,8 @@ module Sys
     # the second member is the primary group ID.
     #
     def self.get_groups(domain, user)
-      array = []
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{user},user")
-      adsi.groups.each{ |g| array << g.name }
+      array = adsi.groups.map(&:name)
       [array, adsi.PrimaryGroupId]
     end
 
@@ -90,10 +89,8 @@ module Sys
     # any particular group.
     #
     def self.get_members(domain, group)
-      array = []
       adsi = WIN32OLE.connect("WinNT://#{domain}/#{group}")
-      adsi.members.each{ |g| array << g.name }
-      array
+      adsi.members.map(&:name)
     end
 
     private_class_method :get_members
