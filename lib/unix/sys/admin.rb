@@ -9,6 +9,7 @@ require 'sys/admin/common'
 module Sys
   # The Admin class provides a unified, cross platform replacement for the Etc module.
   class Admin
+    # Private wrapper class for a struct passwd.
     class PasswdStruct < FFI::Struct
       layout(
         :pw_name,   :string,
@@ -23,6 +24,7 @@ module Sys
 
     private_constant :PasswdStruct
 
+    # Private wrapper class for a struct group.
     class GroupStruct < FFI::Struct
       layout(
         :gr_name,   :string,
