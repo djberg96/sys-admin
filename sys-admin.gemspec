@@ -35,7 +35,8 @@ Gem::Specification.new do |spec|
     'source_code_uri'       => 'https://github.com/djberg96/sys-admin',
     'wiki_uri'              => 'https://github.com/djberg96/sys-admin/wiki',
     'rubygems_mfa_required' => 'true',
-    'github_repo'           => 'https://github.com/djberg96/sys-admin'
+    'github_repo'           => 'https://github.com/djberg96/sys-admin',
+    'funding_uri'           => 'https://github.com/sponsors/djberg96'
   }
 
   spec.description = <<-EOF
