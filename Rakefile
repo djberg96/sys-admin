@@ -38,6 +38,9 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   else
     t.rspec_opts = '-Ilib/unix'
   end
+
+  t.verbose = true
+  t.rspec_opts << ' -f documentation'
 end
 
 RuboCop::RakeTask.new
