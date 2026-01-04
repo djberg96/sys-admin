@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   if Gem.win_platform?
     spec.platform = Gem::Platform.new(['universal', 'mingw32'])
     spec.add_dependency('win32-security', '~> 0.5')
+    spec.add_dependency('win32ole')
   end
 
   spec.add_development_dependency('rspec', '~> 3.9')
