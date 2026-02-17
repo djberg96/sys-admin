@@ -1,6 +1,8 @@
 ## 1.9.0 - 17-Feb-2026
 * The win32ole and win32-registry gems are now dependencies for Windows since
   Ruby 4.x does not bundle those automatically.
+* Any << string operators were replaced with += to eliminate frozen string
+  warnings.
 
 ## 1.8.4 - 12-Jun-2024
 * Fixes for DragonFly BSD support.
