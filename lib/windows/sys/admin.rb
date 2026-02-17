@@ -402,7 +402,7 @@ module Sys
 
       host = options.delete(:host) || Socket.gethostname
       cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs += "//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -416,24 +416,24 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+          query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+          query += " and #{opt} = '#{val}'"
         end
       end
 
       if usr.is_a?(Numeric)
         if i == 0
-          query << " where sid like '%-#{usr}'"
+          query += " where sid like '%-#{usr}'"
         else
-          query << " and sid like '%-#{usr}'"
+          query += " and sid like '%-#{usr}'"
         end
       else
         if i == 0
-          query << " where name = '#{usr}'"
+          query += " where name = '#{usr}'"
         else
-          query << " and name = '#{usr}'"
+          query += " and name = '#{usr}'"
         end
       end
 
@@ -503,7 +503,7 @@ module Sys
 
       host = options.delete(:host) || Socket.gethostname
       cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs += "//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -517,10 +517,10 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+          query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+          query += " and #{opt} = '#{val}'"
         end
       end
 
@@ -590,7 +590,7 @@ module Sys
 
       host = options.delete(:host) || Socket.gethostname
       cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs += "//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -604,24 +604,24 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+          query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+          query += " and #{opt} = '#{val}'"
         end
       end
 
       if grp.is_a?(Integer)
         if i == 0
-          query << " where sid like '%-#{grp}'"
+          query += " where sid like '%-#{grp}'"
         else
-          query << " and sid like '%-#{grp}'"
+          query += " and sid like '%-#{grp}'"
         end
       else
         if i == 0
-          query << " where name = '#{grp}'"
+          query += " where name = '#{grp}'"
         else
-          query << " and name = '#{grp}'"
+          query += " and name = '#{grp}'"
         end
       end
 
@@ -679,7 +679,7 @@ module Sys
 
       host = options.delete(:host) || Socket.gethostname
       cs = 'winmgmts:{impersonationLevel=impersonate}!'
-      cs << "//#{host}/root/cimv2"
+      cs += "//#{host}/root/cimv2"
 
       begin
         wmi = WIN32OLE.connect(cs)
@@ -693,10 +693,10 @@ module Sys
 
       options.each do |opt, val|
         if i == 0
-          query << " where #{opt} = '#{val}'"
+          query += " where #{opt} = '#{val}'"
           i += 1
         else
-          query << " and #{opt} = '#{val}'"
+          query += " and #{opt} = '#{val}'"
         end
       end
 
