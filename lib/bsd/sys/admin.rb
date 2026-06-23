@@ -16,7 +16,7 @@ module Sys
 
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, %i[string int], :int
-    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :size_t
+    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :ssize_t
     attach_function :close_c, :close, [:int], :int
 
     attach_function :getlogin_r, %i[pointer int], :int
