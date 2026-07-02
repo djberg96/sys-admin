@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'sys/admin/custom'
-require 'sys/admin/common'
+require_relative '../../sys/admin/custom'
+require_relative '../../sys/admin/common'
 require 'rbconfig'
 
 # The BSD specific code.
@@ -14,9 +14,15 @@ module Sys
     BUF_MAX = 65536 # Max buffer for retry
     private_constant :BUF_MAX
 
+    FREEBSD_UTX = RbConfig::CONFIG['host_os'].match?(/freebsd/i)
+    UTXDB_LASTLOGIN = 1
+
+    private_constant :FREEBSD_UTX
+    private_constant :UTXDB_LASTLOGIN
+
     # I'm making some aliases here to prevent potential conflicts
     attach_function :open_c, :open, %i[string int], :int
-    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :size_t
+    attach_function :pread_c, :pread, %i[int pointer size_t off_t], :ssize_t
     attach_function :close_c, :close, [:int], :int
 
     attach_function :getlogin_r, %i[pointer int], :int
@@ -24,6 +30,14 @@ module Sys
     attach_function :getpwuid_r, %i[long pointer pointer size_t pointer], :int
     attach_function :getgrnam_r, %i[string pointer pointer size_t pointer], :int
     attach_function :getgrgid_r, %i[long pointer pointer size_t pointer], :int
+
+    if FREEBSD_UTX
+      attach_function :setutxdb, %i[int pointer], :int
+      attach_function :getutxuser, [:string], :pointer
+      attach_function :endutxent, [], :void
+
+      private_class_method :setutxdb, :getutxuser, :endutxent
+    end
 
     private_class_method :getlogin_r, :getpwnam_r, :getpwuid_r, :getgrnam_r, :getgrgid_r
     private_class_method :open_c, :pread_c, :close_c
@@ -75,13 +89,33 @@ module Sys
 
     private_constant :LastlogStruct
 
+    if FREEBSD_UTX
+      # struct utmpx from /usr/include/utmpx.h
+      class UtmpxStruct < FFI::Struct
+        layout(
+          :ut_type, :short,
+          :tv_sec, :time_t,
+          :tv_usec, :suseconds_t,
+          :ut_id, [:char, 8],
+          :ut_pid, :pid_t,
+          :ut_user, [:char, 32],
+          :ut_line, [:char, 16],
+          :ut_host, [:char, 128],
+          :ut_spare, [:char, 64]
+        )
+      end
+
+      private_constant :UtmpxStruct
+    end
+
     # Returns the login for the current process.
     #
     def self.get_login
       buf = FFI::MemoryPointer.new(:char, 256)
+      val = getlogin_r(buf, buf.size)
 
-      if getlogin_r(buf, buf.size) != 0
-        raise Error, "getlogin_r function failed: #{strerror(FFI.errno)}"
+      if val != 0
+        return get_user(geteuid()).name
       end
 
       buf.read_string
@@ -96,24 +130,10 @@ module Sys
     #    Sys::Admin.get_user(501)
     #
     def self.get_user(uid)
-      buf  = FFI::MemoryPointer.new(:char, 1024)
-      pbuf = FFI::MemoryPointer.new(PasswdStruct)
-      temp = PasswdStruct.new
-
       if uid.is_a?(String)
-        if getpwnam_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwnam_r function failed: #{strerror(FFI.errno)}"
-        end
+        ptr = lookup_user('getpwnam_r', uid) { |temp, buf, pbuf| getpwnam_r(uid, temp, buf, buf.size, pbuf) }
       else
-        if getpwuid_r(uid, temp, buf, buf.size, pbuf) != 0
-          raise Error, "getpwuid_r function failed: #{strerror(FFI.errno)}"
-        end
-      end
-
-      ptr = pbuf.read_pointer
-
-      if ptr.null?
-        raise Error, "no user found for #{uid}"
+        ptr = lookup_user('getpwuid_r', uid) { |temp, buf, pbuf| getpwuid_r(uid, temp, buf, buf.size, pbuf) }
       end
 
       pwd = PasswdStruct.new(ptr)
@@ -129,40 +149,69 @@ module Sys
     #    Sys::Admin.get_group(101)
     #
     def self.get_group(gid)
+      if gid.is_a?(String)
+        ptr = lookup_group('getgrnam_r', gid) { |temp, buf, pbuf| getgrnam_r(gid, temp, buf, buf.size, pbuf) }
+      else
+        ptr = lookup_group('getgrgid_r', gid) { |temp, buf, pbuf| getgrgid_r(gid, temp, buf, buf.size, pbuf) }
+      end
+
+      grp = GroupStruct.new(ptr)
+      get_group_from_struct(grp)
+    end
+
+    # Looks up a user with a retryable buffer for NSS-backed records.
+    def self.lookup_user(fun, id)
       size = 1024
       buf  = FFI::MemoryPointer.new(:char, size)
-      pbuf = FFI::MemoryPointer.new(GroupStruct)
-      temp = GroupStruct.new
+      pbuf = FFI::MemoryPointer.new(:pointer)
+      temp = PasswdStruct.new
 
       begin
-        if gid.is_a?(String)
-          val = getgrnam_r(gid, temp, buf, buf.size, pbuf)
-          fun = 'getgrnam_r'
-        else
-          val = getgrgid_r(gid, temp, buf, buf.size, pbuf)
-          fun = 'getgrgid_r'
-        end
+        pbuf.write_pointer(FFI::Pointer::NULL)
+        val = yield temp, buf, pbuf
+        ptr = pbuf.read_pointer
 
-        if pbuf.null?
-          raise SystemCallError.new(fun, val) if val != 0
-          raise Error, "group '#{gid}' not found"
-        end
+        raise Error, "no user found for #{id}" if val == 0 && ptr.null?
+        raise Error, "no user found for #{id}" if val == Errno::ENOENT::Errno
+        raise SystemCallError.new(fun, val) if val != 0
+
+        ptr
       rescue Errno::ERANGE
         size += 1024
         raise if size > BUF_MAX
         buf = FFI::MemoryPointer.new(:char, size)
         retry
       end
-
-      ptr = pbuf.read_pointer
-
-      if ptr.null?
-        raise Error, "no group found for '#{gid}'"
-      end
-
-      grp = GroupStruct.new(ptr)
-      get_group_from_struct(grp)
     end
+
+    private_class_method :lookup_user
+
+    # Looks up a group with a retryable buffer for large member lists.
+    def self.lookup_group(fun, id)
+      size = 1024
+      buf  = FFI::MemoryPointer.new(:char, size)
+      pbuf = FFI::MemoryPointer.new(:pointer)
+      temp = GroupStruct.new
+
+      begin
+        pbuf.write_pointer(FFI::Pointer::NULL)
+        val = yield temp, buf, pbuf
+        ptr = pbuf.read_pointer
+
+        raise Error, "no group found for '#{id}'" if val == 0 && ptr.null?
+        raise Error, "no group found for '#{id}'" if val == Errno::ENOENT::Errno
+        raise SystemCallError.new(fun, val) if val != 0
+
+        ptr
+      rescue Errno::ERANGE
+        size += 1024
+        raise if size > BUF_MAX
+        buf = FFI::MemoryPointer.new(:char, size)
+        retry
+      end
+    end
+
+    private_class_method :lookup_group
 
     # Returns an array of User objects for each user on the system.
     #
@@ -229,12 +278,24 @@ module Sys
         u.expire       = Time.at(pwd[:pw_expire])
       end
 
-      log = get_lastlog_info(user.uid)
+      log = get_lastlog_info(user)
 
       if log
-        user.login_time = Time.at(log[:ll_time])
-        user.login_device = log[:ll_line].to_s
-        user.login_host = log[:ll_host].to_s
+        if FREEBSD_UTX
+          login_device = log[:ut_line].to_s
+          login_host   = log[:ut_host].to_s
+
+          user.login_time   = Time.at(log[:tv_sec]) if log[:tv_sec] > 0
+          user.login_device = login_device unless login_device.empty?
+          user.login_host   = login_host unless login_host.empty?
+        else
+          login_device = log[:ll_line].to_s
+          login_host   = log[:ll_host].to_s
+
+          user.login_time   = Time.at(log[:ll_time]) if log[:ll_time] > 0
+          user.login_device = login_device unless login_device.empty?
+          user.login_host   = login_host unless login_host.empty?
+        end
       end
 
       user
@@ -243,7 +304,9 @@ module Sys
     private_class_method :get_user_from_struct
 
     # Get lastlog information for the given user.
-    def self.get_lastlog_info(uid)
+    def self.get_lastlog_info(user)
+      return get_utx_lastlogin_info(user.name) if FREEBSD_UTX
+
       logfile = '/var/log/lastlog'
       lastlog = LastlogStruct.new
 
@@ -251,7 +314,7 @@ module Sys
         fd = open_c(logfile, File::RDONLY)
 
         if fd >= 0
-          bytes = pread_c(fd, lastlog, lastlog.size, uid * lastlog.size)
+          bytes = pread_c(fd, lastlog, lastlog.size, user.uid * lastlog.size)
           if bytes < 0
             raise Error, "pread function failed: #{strerror(FFI.errno)}"
           end
@@ -266,5 +329,21 @@ module Sys
     end
 
     private_class_method :get_lastlog_info
+
+    if FREEBSD_UTX
+      # Gets last login information from FreeBSD's utx.lastlogin database.
+      def self.get_utx_lastlogin_info(name)
+        if setutxdb(UTXDB_LASTLOGIN, nil) != 0
+          return nil
+        end
+
+        ptr = getutxuser(name)
+        ptr.null? ? nil : UtmpxStruct.new(ptr)
+      ensure
+        endutxent()
+      end
+
+      private_class_method :get_utx_lastlogin_info
+    end
   end
 end
