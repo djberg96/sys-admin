@@ -7,12 +7,14 @@
 # via the 'rake spec' task.
 ###############################################################################
 require 'spec_helper'
+require 'etc'
 
 RSpec.describe Sys::Admin, :unix do
   let(:user)     { 'nobody' }
   let(:user_id)  { 0 }
-  let(:group)    { 'sys' }
-  let(:group_id) { 3 }
+  let(:primary_group) { Etc.getgrgid(Process.gid) }
+  let(:group)    { primary_group.name }
+  let(:group_id) { primary_group.gid }
 
   context 'singleton methods' do
     describe 'get_login' do
