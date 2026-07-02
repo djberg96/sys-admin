@@ -16,15 +16,15 @@ require 'rbconfig'
 
 case RbConfig::CONFIG['host_os']
   when /linux/i
-    require 'linux/sys/admin'
+    require_relative '../linux/sys/admin'
   when /sunos|solaris/i
-    require 'sunos/sys/admin'
+    require_relative '../sunos/sys/admin'
   when /cygwin|mingw|mswin|windows|dos/i
-    require 'windows/sys/admin'
+    require_relative '../windows/sys/admin'
   when /darwin|mach/i
-    require 'darwin/sys/admin'
+    require_relative '../darwin/sys/admin'
   when /bsd|dragonfly/i
-    require 'bsd/sys/admin'
+    require_relative '../bsd/sys/admin'
   else
-    require 'unix/sys/admin'
+    require_relative '../unix/sys/admin'
 end

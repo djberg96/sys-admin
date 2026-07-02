@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'sys/admin/custom'
-require 'sys/admin/common'
+require_relative '../../sys/admin/custom'
+require_relative '../../sys/admin/common'
 
 # The Linux specific code.
 
