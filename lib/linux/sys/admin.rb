@@ -132,10 +132,9 @@ module Sys
           fun = 'getgrgid_r'
         end
 
-        if pbuf.null?
-          raise SystemCallError.new(fun, val) if val != 0
-          raise Error, "group '#{gid}' not found"
-        end
+        raise Errno::ERANGE if val == Errno::ERANGE::Errno
+        raise Error, "group '#{gid}' not found" if val == Errno::ENOENT::Errno
+        raise SystemCallError.new(fun, val) if val != 0
       rescue Errno::ERANGE # Large groups
         size += 1024
         raise if size > BUF_MAX
